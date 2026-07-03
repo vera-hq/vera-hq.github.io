@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>DEED「D.D」アプリ ── 改善前と改善後</title>
+<style>
+  :root{
+    --bg:#141210;
+    --bg2:#1b1713;
+    --panel:#211c17;
+    --panel2:#2a231c;
+    --line:#3a3128;
+    --ink:#f4efe8;
+    --sub:#c7bcae;
+    --muted:#8d8378;
+    --accent:#E0662F;
+    --accent-dark:#b34a1e;
+    --accent-soft:#3a2418;
+    --good:#57b98a;
+    --good-soft:#16311f;
+    --bad:#cf5b40;
+    --bad-soft:#38201a;
+    --gold:#e0a95a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Helvetica Neue",Arial,"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;
+    line-height:1.8;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px;}
+  .demo-bar{background:var(--accent-soft);border-bottom:1px solid var(--line);color:var(--sub);
+    font-size:12px;text-align:center;padding:7px 12px;letter-spacing:.02em;}
+  .demo-bar b{color:var(--accent);}
+
+  /* HERO */
+  header.hero{padding:64px 0 46px;text-align:center;position:relative;
+    background:radial-gradient(1200px 400px at 50% -80px, rgba(224,102,47,.18), transparent 70%);}
+  .brandline{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:26px;}
+  .brandline .d{font-weight:800;letter-spacing:.22em;font-size:15px;}
+  .brandline .x{color:var(--muted);font-size:13px;}
+  .brandline .v{font-weight:800;letter-spacing:.22em;font-size:15px;color:var(--accent);}
+  .eyebrow{letter-spacing:.3em;font-size:11.5px;color:var(--accent);font-weight:700;text-transform:uppercase;}
+  h1{font-size:33px;line-height:1.35;margin:14px 0 12px;font-weight:800;letter-spacing:.01em;}
+  h1 .em{color:var(--accent);}
+  .hero p{color:var(--sub);font-size:15.5px;max-width:640px;margin:0 auto;}
+  .cta{display:inline-flex;align-items:center;gap:9px;margin-top:30px;background:var(--accent);color:#fff;
+    text-decoration:none;font-weight:800;font-size:15px;padding:14px 26px;border-radius:999px;
+    box-shadow:0 8px 26px rgba(224,102,47,.32);transition:transform .12s;}
+  .cta:hover{transform:translateY(-2px);}
+  .cta small{font-weight:600;opacity:.85;font-size:11.5px;}
+
+  section{padding:46px 0;border-top:1px solid var(--line);}
+  .kicker{color:var(--accent);font-weight:800;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;}
+  h2{font-size:24px;font-weight:800;margin:8px 0 6px;line-height:1.4;}
+  .lead{color:var(--sub);font-size:15px;margin:0 0 22px;}
+
+  .fig{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin:18px 0;}
+  .fig svg{display:block;width:100%;height:auto;}
+  .figcap{font-size:12px;color:var(--muted);margin-top:8px;text-align:center;}
+
+  /* before/after columns */
+  .ba{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0;}
+  @media(max-width:640px){.ba{grid-template-columns:1fr;}}
+  .col{border-radius:16px;padding:20px 18px;border:1px solid var(--line);}
+  .col.before{background:linear-gradient(180deg,var(--bad-soft),var(--panel));border-color:#5a3226;}
+  .col.after{background:linear-gradient(180deg,var(--good-soft),var(--panel));border-color:#2f5a41;}
+  .col .tag{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.12em;padding:3px 11px;border-radius:999px;margin-bottom:12px;}
+  .col.before .tag{background:var(--bad);color:#fff;}
+  .col.after .tag{background:var(--good);color:#08210f;}
+  .col h3{margin:0 0 14px;font-size:16px;}
+  .col ul{list-style:none;margin:0;padding:0;}
+  .col li{position:relative;padding:8px 0 8px 28px;font-size:14px;border-bottom:1px dashed var(--line);color:var(--sub);}
+  .col li:last-child{border-bottom:none;}
+  .col li::before{position:absolute;left:0;top:8px;font-weight:800;}
+  .col.before li::before{content:"✕";color:var(--bad);}
+  .col.after li::before{content:"✓";color:var(--good);}
+  .col li b{color:var(--ink);}
+
+  /* MTG mapping */
+  .map{display:flex;flex-direction:column;gap:12px;margin-top:6px;}
+  .row{display:grid;grid-template-columns:1fr auto 1.15fr;align-items:center;gap:12px;
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;}
+  @media(max-width:640px){.row{grid-template-columns:1fr;text-align:left;}}
+  .row .want{font-size:14px;}
+  .row .want b{color:var(--ink);}
+  .row .want span{color:var(--muted);font-size:12.5px;display:block;}
+  .row .arr{color:var(--accent);font-weight:800;font-size:18px;text-align:center;}
+  @media(max-width:640px){.row .arr{text-align:left;transform:rotate(90deg);width:20px;}}
+  .row .did{font-size:13.5px;color:var(--sub);background:var(--accent-soft);border:1px solid #4a2f1e;
+    border-radius:10px;padding:9px 12px;}
+  .row .did b{color:var(--accent);}
+
+  /* three steps */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px;}
+  @media(max-width:720px){.steps{grid-template-columns:1fr;}}
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 18px;position:relative;overflow:hidden;}
+  .step .n{font-size:40px;font-weight:800;color:var(--accent-soft);position:absolute;top:6px;right:14px;line-height:1;}
+  .step h3{margin:0 0 8px;font-size:16px;position:relative;}
+  .step p{margin:0;font-size:13.5px;color:var(--sub);position:relative;}
+
+  .points{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+  @media(max-width:640px){.points{grid-template-columns:1fr;}}
+  .pt{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:13.5px;color:var(--sub);}
+  .pt b{color:var(--ink);display:block;margin-bottom:3px;font-size:14px;}
+
+  /* honesty callout */
+  .honest{background:linear-gradient(180deg,var(--accent-soft),var(--panel));border:1px solid #5a3a24;
+    border-radius:16px;padding:22px;margin:20px 0;}
+  .honest .h{color:var(--accent);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;}
+  .honest p{margin:0;font-size:15px;color:var(--ink);line-height:1.85;}
+  .honest .q{color:var(--gold);font-weight:800;}
+
+  /* CTA block */
+  .ctablock{background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:34px 24px;text-align:center;margin-top:8px;}
+  .ctablock h2{margin-top:0;}
+  .ctablock .url{font-family:"SFMono-Regular",Consolas,monospace;font-size:13.5px;color:var(--accent);
+    background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:inline-block;margin:6px 0 4px;word-break:break-all;}
+  .ctablock .note{color:var(--muted);font-size:12.5px;margin-top:14px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px;}
+  .chip{font-size:12.5px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:6px 13px;}
+  .chip b{color:var(--good);}
+
+  /* future */
+  .future{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;}
+  @media(max-width:640px){.future{grid-template-columns:1fr;}}
+  .fcard{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:12px;padding:14px 16px;}
+  .fcard b{font-size:14px;}
+  .fcard span{display:block;color:var(--muted);font-size:12.5px;margin-top:3px;}
+
+  footer{padding:34px 0 60px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;text-align:center;}
+  footer b{color:var(--sub);}
+</style>
+</head>
+<body>
+
+<div class="demo-bar">🔍 <b>デモのご案内</b>：本ページ内の数値・画面はすべて<b>ダミー（体験用）</b>です。実際のデータではありません。</div>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="brandline"><span class="d">DEED</span><span class="x">×</span><span class="v">VERA</span></div>
+    <div class="eyebrow">「D.D」アプリ 改善レポート</div>
+    <h1>お預かりした試作を、<br><span class="em">会員にそのまま配れる形</span>へ。</h1>
+    <p>ご相談いただいた AIトレーナー「D.D」の試作を、実際に触って検証し、改善しました。<br>「何がどう変わったか」を、改善前・改善後で1枚にまとめています。</p>
+    <a class="cta" href="https://vera-hq.github.io/deed-dd-demo/" target="_blank" rel="noopener">
+      触れるデモを開く <small>スマホでそのまま・ログイン不要</small>
+    </a>
+  </header>
+
+  <!-- 1. 出発点 -->
+  <section>
+    <div class="kicker">01　出発点</div>
+    <h2>完成度は高い。でも「配れない」試作でした。</h2>
+    <p class="lead">見た目・入力体験・自動計算は、ほぼ製品級。ただ一点、<b>中核のAIが Claude というサービスにログインしないと動かない</b>作りで、会員さんに渡すとログインの壁とエラーで止まってしまう ── ここが最大の課題でした。</p>
+    <div class="fig">
+      <svg viewBox="0 0 900 250" role="img" xmlns="http://www.w3.org/2000/svg">
+        <rect x="30" y="95" width="200" height="60" rx="12" fill="#211c17" stroke="#3a3128" stroke-width="1.5"/>
+        <text x="130" y="122" font-size="15" font-weight="700" text-anchor="middle" fill="#f4efe8">会員さん</text>
+        <text x="130" y="142" font-size="11.5" text-anchor="middle" fill="#8d8378">アプリを開く</text>
+
+        <line x1="230" y1="125" x2="335" y2="125" stroke="#8d8378" stroke-width="2" stroke-dasharray="5 4"/>
+        <polygon points="335,120 348,125 335,130" fill="#8d8378"/>
+
+        <rect x="350" y="80" width="230" height="90" rx="12" fill="#38201a" stroke="#cf5b40" stroke-width="2"/>
+        <text x="465" y="112" font-size="15" font-weight="800" text-anchor="middle" fill="#cf5b40">🚧 Claudeログインの壁</text>
+        <text x="465" y="134" font-size="11.5" text-anchor="middle" fill="#c7bcae">アカウントが必要／</text>
+        <text x="465" y="152" font-size="11.5" text-anchor="middle" fill="#c7bcae">公開状態ではエラー</text>
+
+        <line x1="580" y1="125" x2="685" y2="125" stroke="#cf5b40" stroke-width="2"/>
+        <text x="632" y="115" font-size="20" text-anchor="middle" fill="#cf5b40">✕</text>
+
+        <rect x="690" y="95" width="185" height="60" rx="12" fill="#211c17" stroke="#3a3128" stroke-width="1.5"/>
+        <text x="782" y="122" font-size="14.5" font-weight="700" text-anchor="middle" fill="#8d8378">使えない</text>
+        <text x="782" y="142" font-size="11.5" text-anchor="middle" fill="#8d8378">＝会員に配れない</text>
+      </svg>
+      <div class="figcap">図1：元の試作 ── 中核AIが Claude 依存で、会員にそのまま渡せなかった</div>
+    </div>
+  </section>
+
+  <!-- 2. before/after -->
+  <section>
+    <div class="kicker">02　改善前 → 改善後</div>
+    <h2>「配れる・正直・見える化」へ。</h2>
+    <p class="lead">ガワ（画面・操作・計算）は活かしたまま、頭脳と仕組みを載せ替えました。左が改善前、右が改善後です。</p>
+    <div class="ba">
+      <div class="col before">
+        <span class="tag">改善前</span>
+        <h3>配れない・不透明</h3>
+        <ul>
+          <li><b>Claudeログインが必須</b>で、会員に配れない</li>
+          <li>「AIが算出」の<b>数字の根拠が不明</b>（運動習慣も訊かず勝手に想定）</li>
+          <li>身長の入力が途中で<b>壊れる不具合</b></li>
+          <li>スタッフは会員の状況を<b>見られない</b></li>
+          <li>食事・写真・継続の<b>接点がない</b></li>
+        </ul>
+      </div>
+      <div class="col after">
+        <span class="tag">改善後</span>
+        <h3>配れる・正直・伴走する</h3>
+        <ul>
+          <li><b>ログイン不要</b>・スマホで即・費用ゼロで動く</li>
+          <li>全数字に<b>「どこから来た数字か」を表示</b>。黙って想定した値はゼロ</li>
+          <li>入力の不具合を<b>解消</b>／不要項目（水分・骨量）を整理</li>
+          <li><b>スタッフ画面</b>で、会員の入力・食事・変化を確認できる</li>
+          <li><b>食事写真・厳しめAI・習慣・採寸</b>まで、毎日の伴走を実装</li>
+        </ul>
+      </div>
+    </div>
+    <div class="fig">
+      <svg viewBox="0 0 900 260" role="img" xmlns="http://www.w3.org/2000/svg">
+        <text x="30" y="34" font-size="14" font-weight="800" fill="#cf5b40">改善前</text>
+        <rect x="30" y="48" width="360" height="66" rx="12" fill="#38201a" stroke="#5a3226" stroke-width="1.5"/>
+        <text x="210" y="78" font-size="13.5" font-weight="700" text-anchor="middle" fill="#f4efe8">会員 → 🚧Claudeの壁 → 使えない</text>
+        <text x="210" y="98" font-size="11" text-anchor="middle" fill="#8d8378">頭脳が外部サービスに縛られている</text>
+
+        <text x="30" y="150" font-size="14" font-weight="800" fill="#57b98a">改善後</text>
+        <rect x="30" y="164" width="840" height="72" rx="12" fill="#16311f" stroke="#2f5a41" stroke-width="1.5"/>
+        <text x="120" y="196" font-size="13.5" font-weight="700" text-anchor="middle" fill="#f4efe8">会員のスマホ</text>
+        <text x="120" y="214" font-size="10.5" text-anchor="middle" fill="#8d8378">同意して開くだけ</text>
+        <line x1="210" y1="200" x2="255" y2="200" stroke="#57b98a" stroke-width="2"/><polygon points="255,195 268,200 255,205" fill="#57b98a"/>
+        <rect x="275" y="176" width="250" height="48" rx="9" fill="#211c17" stroke="#3a3128"/>
+        <text x="400" y="198" font-size="12.5" font-weight="700" text-anchor="middle" fill="#f4efe8">端末の中だけで完結</text>
+        <text x="400" y="215" font-size="10" text-anchor="middle" fill="#8d8378">外部に送信しない・費用ゼロ</text>
+        <line x1="525" y1="200" x2="570" y2="200" stroke="#57b98a" stroke-width="2"/><polygon points="570,195 583,200 570,205" fill="#57b98a"/>
+        <rect x="590" y="176" width="260" height="48" rx="9" fill="#3a2418" stroke="#b34a1e"/>
+        <text x="720" y="198" font-size="12.5" font-weight="800" text-anchor="middle" fill="#E0662F">そのまま会員に配れる</text>
+        <text x="720" y="215" font-size="10" text-anchor="middle" fill="#c7bcae">ログイン不要・スマホで即</text>
+      </svg>
+      <div class="figcap">図2：頭脳を「外部依存」から「端末内で完結」へ載せ替え ＝ 配れるアプリに</div>
+    </div>
+  </section>
+
+  <!-- 3. honesty -->
+  <section>
+    <div class="kicker">03　いちばん大事にしたこと</div>
+    <h2>数字は、すべて「出どころ」を見せる。</h2>
+    <p class="lead">お客様に渡すアプリで、根拠の見えない数字は不信のもと。だから改善後は、推奨カロリーもペースも、<b>一つひとつ「あなたの入力から／あなたが選んだ設定から／一般的な目安から」を明示</b>しています。</p>
+    <div class="honest">
+      <div class="h">アプリに実際に表示している一文</div>
+      <p>「数字は目安です。式と前提をすべて開示しています。<span class="q">黙って想定した値はありません。</span>」</p>
+    </div>
+    <div class="points">
+      <div class="pt"><b>活動係数</b>固定値をやめ、本人が4段階から選択。選んだ係数をそのまま計算に使い、画面にも表示。</div>
+      <div class="pt"><b>推奨カロリー</b>基礎代謝（身長・体重・年齢・性別から）× 選んだ活動係数 ± 目的補正、と式を全部開示。</div>
+      <div class="pt"><b>健康の安全</b>基礎代謝や下限を下回らせない。極端な減食は、むしろAIが「ちゃんと食べろ」と止める。</div>
+      <div class="pt"><b>“DEED式”に差し替え可</b>係数はコード1か所にまとめてあり、DEEDの正式な式が決まればそこを差し替えるだけ。</div>
+    </div>
+  </section>
+
+  <!-- 4. MTG mapping -->
+  <section>
+    <div class="kicker">04　MTGでいただいた声に、こう応えました</div>
+    <h2>「あったらいい」を、デモに入れました。</h2>
+    <p class="lead">先日の改善MTGで出た主な要望を、体験できる形で実装しています（デモの範囲）。</p>
+    <div class="map">
+      <div class="row">
+        <div class="want"><b>スタッフが会員の状況を見たい</b><span>見える化・最重要</span></div>
+        <div class="arr">→</div>
+        <div class="did"><b>スタッフ画面</b>：会員の入力・食事ログ・体重・達成状況を一覧。「次のセッション前に1分見るだけ」の導線つき。</div>
+      </div>
+      <div class="row">
+        <div class="want"><b>食事を写真で撮って添削</b><span>工数削減</span></div>
+        <div class="arr">→</div>
+        <div class="did"><b>写真アップ＋タグ添削</b>。※デモでは写真の中身は解析しません（本番はAIが解析）と正直に明示。</div>
+      </div>
+      <div class="row">
+        <div class="want"><b>厳しめのAIキャラ</b><span>指導品質</span></div>
+        <div class="arr">→</div>
+        <div class="did"><b>厳しめコメント</b>：食べ過ぎも、下げすぎも数字で指摘。ただし方向は常に「健康的に」。</div>
+      </div>
+      <div class="row">
+        <div class="want"><b>退会者は使えないように</b><span>運用</span></div>
+        <div class="arr">→</div>
+        <div class="did"><b>在籍⇄退会の切替</b>で、退会時は会員アプリをロック（スタッフ側から復帰も可）。</div>
+      </div>
+      <div class="row">
+        <div class="want"><b>変化を実感させたい</b><span>離脱防止</span></div>
+        <div class="arr">→</div>
+        <div class="did"><b>採寸（腹囲・胸囲）グラフ／ビフォーアフター写真／習慣ストリーク</b>。数字が動かない時期も変化が見える。</div>
+      </div>
+    </div>
+    <div class="fig">
+      <svg viewBox="0 0 900 210" role="img" xmlns="http://www.w3.org/2000/svg">
+        <rect x="30" y="70" width="250" height="70" rx="12" fill="#3a2418" stroke="#b34a1e" stroke-width="1.5"/>
+        <text x="155" y="100" font-size="14" font-weight="800" text-anchor="middle" fill="#E0662F">会員（毎日）</text>
+        <text x="155" y="120" font-size="11" text-anchor="middle" fill="#c7bcae">3タスク・食事・写真・体重</text>
+
+        <line x1="280" y1="105" x2="330" y2="105" stroke="#57b98a" stroke-width="2"/><polygon points="330,100 343,105 330,110" fill="#57b98a"/>
+
+        <rect x="345" y="60" width="210" height="90" rx="12" fill="#211c17" stroke="#3a3128" stroke-width="1.5"/>
+        <text x="450" y="92" font-size="13.5" font-weight="700" text-anchor="middle" fill="#f4efe8">D.D が伴走</text>
+        <text x="450" y="112" font-size="10.5" text-anchor="middle" fill="#8d8378">添削・励まし・厳しめ指摘</text>
+        <text x="450" y="130" font-size="10.5" text-anchor="middle" fill="#8d8378">（AIが一次対応＝工数削減）</text>
+
+        <line x1="555" y1="105" x2="605" y2="105" stroke="#57b98a" stroke-width="2"/><polygon points="605,100 618,105 605,110" fill="#57b98a"/>
+
+        <rect x="620" y="70" width="250" height="70" rx="12" fill="#16311f" stroke="#2f5a41" stroke-width="1.5"/>
+        <text x="745" y="100" font-size="14" font-weight="800" text-anchor="middle" fill="#57b98a">スタッフ</text>
+        <text x="745" y="120" font-size="11" text-anchor="middle" fill="#c7bcae">セッション前に“もう知っている”</text>
+      </svg>
+      <div class="figcap">図3：会員の毎日を D.D が受け止め、要点はスタッフへ ── 「AIに丸投げ」でなく“見える化”を両立</div>
+    </div>
+  </section>
+
+  <!-- 5. three steps summary -->
+  <section>
+    <div class="kicker">05　まとめると、3つの進化</div>
+    <h2>この順番で、良くなりました。</h2>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>配れる形に</h3><p>Claude依存を外し、ログイン不要・費用ゼロ・スマホで即動く独立アプリへ。</p></div>
+      <div class="step"><div class="n">2</div><h3>数字を正直に</h3><p>全部の数字に出どころを表示。運動習慣も本人に選ばせ、勝手な想定をなくした。</p></div>
+      <div class="step"><div class="n">3</div><h3>MTGの機能を追加</h3><p>スタッフ画面・食事写真・厳しめAI・退会ロック・採寸・写真比較まで実装。</p></div>
+    </div>
+  </section>
+
+  <!-- 6. CTA -->
+  <section>
+    <div class="ctablock">
+      <div class="kicker">06　実際に触ってみてください</div>
+      <h2>体験デモ（スマホでそのまま）</h2>
+      <div class="url">https://vera-hq.github.io/deed-dd-demo/</div>
+      <div class="chips">
+        <span class="chip"><b>✓</b> ログイン不要</span>
+        <span class="chip"><b>✓</b> 費用ゼロ</span>
+        <span class="chip"><b>✓</b> 端末内だけで完結</span>
+        <span class="chip"><b>✓</b> 数値はダミー</span>
+      </div>
+      <a class="cta" href="https://vera-hq.github.io/deed-dd-demo/" target="_blank" rel="noopener">デモを開く</a>
+      <div class="note">スタッフ画面もお試しいただけます（設定タブ → スタッフとして見る → 合言葉はご案内の通り）。</div>
+    </div>
+  </section>
+
+  <!-- 7. future -->
+  <section>
+    <div class="kicker">07　これから（ご相談）</div>
+    <h2>本番アプリにするなら。</h2>
+    <p class="lead">今回はあくまで“体験デモ”です。実際にDEEDの会員さんに提供する本番版にするなら、次の順でご一緒できます。</p>
+    <div class="future">
+      <div class="fcard"><b>① DEED式の反映</b><span>活動係数・推奨カロリー・AIの指導方針を、DEED（ディード）の正式な式に差し替え。</span></div>
+      <div class="fcard"><b>② スタッフ管理画面の本格化</b><span>全会員一覧・職員ごとの権限・サーバー保存で、店舗運用に耐える見える化へ。</span></div>
+      <div class="fcard"><b>③ 会員アカウント・在籍連携</b><span>簡単ログイン＋在籍/退会の状態管理を、実データと接続。</span></div>
+      <div class="fcard"><b>④ 継続の伴走・改善</b><span>使われ方を見ながら、食事DB・トレ提案・特典などを磨き続ける。</span></div>
+    </div>
+  </section>
+
+  <footer>
+    制作：<b>VERA</b>　／　DEED「D.D」アプリ 改善レポート　／　2026-07　<br>
+    本ページの数値・画面はすべてデモ用ダミーです。体験デモは端末内で完結し、外部送信はありません。
+  </footer>
+
+</div>
+</body>
+</html>
