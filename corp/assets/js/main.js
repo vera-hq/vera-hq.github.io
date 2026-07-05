@@ -907,35 +907,8 @@
         group.add(teePrivate); group.add(teeBusiness);
         scene.add(group);
 
-        // ---- 本物のTシャツ(tee.glb)をマネキンに着せる。成功したら手作りの服は隠す（＝板シャツ卒業） ----
+        // ---- Tシャツ表現は廃止：服は一切着せず、サンプルのマネキンのみを回す（morio指示 2026-07-06） ----
         var teeGlb = null, teeGlbMat = null;
-        import("three/addons/loaders/GLTFLoader.js").then(function (m) {
-          new m.GLTFLoader().load("assets/models/tee.glb", function (gltf) {
-            try {
-              var model = gltf.scene, mesh = null;
-              model.traverse(function (o) { if (o.isMesh && !mesh) mesh = o; });
-              if (!mesh) return;
-              teeGlbMat = new THREE.MeshStandardMaterial({ color: new THREE.Color(cColor()), roughness: 0.82, metalness: 0, envMapIntensity: 0.5, side: THREE.DoubleSide });
-              mesh.traverse(function (o) { if (o.isMesh) { o.material = teeGlbMat; o.castShadow = true; o.frustumCulled = false; } });
-              teeGlb = new THREE.Group(); teeGlb.add(model);
-              // 実寸へ：胴（肩2.23〜腰1.06）を覆う丈へ拡縮し、肩の高さに合わせて配置・正面(+Z)向き
-              var box = new THREE.Box3().setFromObject(teeGlb), size = box.getSize(new THREE.Vector3());
-              var sc = 2.05 / (size.y || 1); // Tシャツ丈≈2.05ユニット（肩上〜腿上・少しゆとり）
-              teeGlb.scale.setScalar(sc);
-              teeGlb.userData.baseX = sc; teeGlb.userData.baseZ = sc; // 幅の基準（applyStateでサイズ/ゆとりを掛ける）
-              box.setFromObject(teeGlb); var c = box.getCenter(new THREE.Vector3());
-              teeGlb.position.x -= c.x; teeGlb.position.z -= c.z;
-              teeGlb.position.y += 2.34 - box.max.y; // 肩(襟)の高さを約2.34へ
-              group.add(teeGlb);
-              // 左胸にVERAロゴ（teeGlbの子にすると二重変換されるのでgroup直下に置きワールド座標で配置）
-              var lb = new THREE.Box3().setFromObject(teeGlb), ls = lb.getSize(new THREE.Vector3());
-              var mark = new THREE.Mesh(new THREE.PlaneGeometry(0.17, 0.225), lineMat);
-              mark.position.set(ls.x * 0.19, lb.max.y - ls.y * 0.34, lb.max.z + 0.02);
-              mark.renderOrder = 999; group.add(mark);
-              applyState(); wake();
-            } catch (e) { /* 失敗時は手作りの服のまま */ }
-          }, undefined, function () {});
-        }).catch(function () {});
 
         // ---- 影だけを受ける透明の床（マネキンの足が乗る地面） ----
         var shadowCatcher = new THREE.Mesh(new THREE.PlaneGeometry(9, 9),
@@ -947,23 +920,9 @@
         // ガーメントは横方向(X/Z)だけ拡縮し縦(Y)は固定＝襟ぐり・裾の高さがマネキンからズレない
         var SIZE_SCALE = { S: 0.94, M: 1, L: 1.055, XL: 1.115 };
         function applyState() {
-          var st = cStyle(), sc = SIZE_SCALE[cSize()] || 1;
-          if (teeGlb) {
-            // 本物のTシャツを着せる。手作りの服は隠す。スタイル＝ゆとり量、サイズ＝横幅
-            teePrivate.visible = false; teeBusiness.visible = false;
-            teeGlb.visible = true;
-            var slack = st === "private" ? 1.12 : 1.0; // プライベート=オーバーサイズ
-            var baseY = teeGlb.scale.y; // 現在の丈スケール（fit時に設定済み）は触らず幅だけ変える
-            teeGlb.scale.x = teeGlb.userData.baseX * sc * slack;
-            teeGlb.scale.z = teeGlb.userData.baseZ * sc * slack;
-            if (teeGlbMat) teeGlbMat.color.set(cColor());
-          } else {
-            teePrivate.visible = st === "private";
-            teeBusiness.visible = st === "business";
-            teePrivate.scale.set(sc, 1, sc);
-            teeBusiness.scale.set(sc, 1, sc);
-            fabric.color.set(cColor());
-          }
+          // Tシャツ廃止：服は一切表示せず、サンプルのマネキンのみを見せる
+          teePrivate.visible = false; teeBusiness.visible = false;
+          if (teeGlb) teeGlb.visible = false;
         }
         applyState();
         if (studio && window.MutationObserver) {
