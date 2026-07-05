@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>株式会社VERA Holdings ｜ 守る、を、事業に。</title>
+<meta name="description" content="守る、を、事業に。縛らない。だから、選ばれる。中小企業の挑戦を、その先の暮らしまで――100年つづくブランドを、AIとともに、静かに支える。株式会社VERA Holdings（東京・2026年設立）。">
+<meta name="theme-color" content="#0f2546">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:title" content="株式会社VERA Holdings ｜ 守る、を、事業に。">
+<meta property="og:description" content="縛らない。だから、選ばれる。100年つづくブランドを、AIとともに、静かに支える。">
+<meta property="og:site_name" content="VERA Holdings">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://images.pexels.com/photos/8763752/pexels-photo-8763752.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="株式会社VERA Holdings ｜ 守る、を、事業に。">
+<meta name="twitter:description" content="縛らない。だから、選ばれる。100年つづくブランドを、AIとともに、静かに支える。">
+<meta name="twitter:image" content="https://images.pexels.com/photos/8763752/pexels-photo-8763752.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.pexels.com" crossorigin>
+<link rel="preload" as="image" fetchpriority="high" href="https://images.pexels.com/photos/8763752/pexels-photo-8763752.jpeg?auto=compress&cs=tinysrgb&w=1400" imagesrcset="https://images.pexels.com/photos/8763752/pexels-photo-8763752.jpeg?auto=compress&cs=tinysrgb&w=800 800w, https://images.pexels.com/photos/8763752/pexels-photo-8763752.jpeg?auto=compress&cs=tinysrgb&w=1400 1400w, https://images.pexels.com/photos/8763752/pexels-photo-8763752.jpeg?auto=compress&cs=tinysrgb&w=2000 2000w" imagesizes="100vw">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;500;700;900&family=Shippori+Mincho:wght@500;600;700&family=Noto+Sans+JP:wght@200;300;400;500;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.min.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}
+</script>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- ========== INTRO / LOADER (one cinematic cut) ========== -->
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro__mark"><span class="cor">VERA</span><i>Holdings</i></div>
+  <div class="intro__line"><span id="intro-line"></span></div>
+  <div class="intro__meta"><span id="intro-count">000</span><span class="intro__cap">THE UNBROKEN LINE</span></div>
+</div>
+<div class="veil" id="veil" aria-hidden="true"></div>
+
+<!-- ========== CUSTOM CURSOR ========== -->
+<div class="cursor" id="cursor" aria-hidden="true"><span class="cursor__ring" id="cursor-ring"><b id="cursor-label"></b></span><span class="cursor__dot" id="cursor-dot"></span></div>
+
+<!-- ========== NAV ========== -->
+<nav class="rnav" id="rnav">
+  <a class="rnav__brand" href="#r-hero" aria-label="VERA Holdings" data-cursor="view">
+    <img class="brand-logo lg-navy" src="assets/img/vera_logo_2color.svg" alt="VERA Holdings">
+    <img class="brand-logo lg-white" src="assets/img/vera_logo_whitered.svg" alt="" aria-hidden="true">
+  </a>
+  <ul class="rnav__menu" id="rnav-menu">
+    <li><a href="#r-concept" data-cursor="view">理念</a></li>
+    <li><a href="#r-story" data-cursor="view">物語</a></li>
+    <li><a href="#r-showcase" data-cursor="view">ショーケース</a></li>
+    <li><a href="#r-business" data-cursor="view">事業</a></li>
+    <li><a href="#r-company" data-cursor="view">会社情報</a></li>
+  </ul>
+  <button class="rnav__toggle" id="rnav-toggle" aria-label="メニュー" aria-expanded="false" aria-controls="rnav-menu"><span></span><span></span></button>
+  <div class="rnav__right">
+    <span class="rnav__idx" id="rnav-idx">01</span>
+    <span class="rnav__cap" id="rnav-cap">守る、を、事業に。</span>
+  </div>
+</nav>
+
+<main id="r-main">
+
+  <!-- THE THREAD -->
+  <svg class="thread" id="thread" aria-hidden="true" preserveAspectRatio="none">
+    <defs>
+      <filter id="halo" x="-60%" y="-60%" width="220%" height="220%">
+        <feDropShadow dx="0" dy="0" stdDeviation="2.8" flood-color="#c5201d" flood-opacity="0.24"/>
+      </filter>
+    </defs>
+    <path id="thread-track" fill="none" stroke="#c5201d" stroke-width="1.4" stroke-linecap="round"/>
+    <path id="thread-path" fill="none" stroke="#c5201d" stroke-width="3" stroke-linecap="round" filter="url(#halo)"/>
+    <g id="thread-nodes"></g>
+  </svg>
+
+  <!-- 01 HERO -->
+  <section class="r-hero" id="r-hero" data-cap="守る、を、事業に。" data-idx="01">
+    <div class="sunk" data-photo="hero" aria-hidden="true"><img class="sunk__img" src="https://images.pexels.com/photos/8763752/pexels-photo-8763752.jpeg?auto=compress&cs=tinysrgb&w=1400" srcset="https://images.pexels.com/photos/8763752/pexels-photo-8763752.jpeg?auto=compress&cs=tinysrgb&w=800 800w, https://images.pexels.com/photos/8763752/pexels-photo-8763752.jpeg?auto=compress&cs=tinysrgb&w=1400 1400w, https://images.pexels.com/photos/8763752/pexels-photo-8763752.jpeg?auto=compress&cs=tinysrgb&w=2000 2000w" sizes="100vw" alt="" fetchpriority="high" decoding="async"></div>
+    <div class="r-hero__grid">
+      <p class="r-eyebrow hero-r"><span class="dot"></span>CORPORATE ／ VERA Holdings</p>
+      <h1 class="r-hero__tag">
+        <span class="line"><span class="i" data-d="0">守る、を、</span></span>
+        <span class="line ind"><span class="i" data-d="1">事業に<span class="mk">。</span></span></span>
+      </h1>
+      <p class="r-hero__lead hero-r" data-d="2">中小企業の挑戦を、その先の暮らしまで。<br>100年つづくブランドを、AIとともに、静かに支える。</p>
+      <div class="r-hero__cta hero-r" data-d="3">
+        <a class="magnetic" href="#r-showcase" data-cursor="view"><span class="mag-in" data-scramble>ショーケースを見る</span><i class="arw" aria-hidden="true">↧</i></a>
+      </div>
+    </div>
+    <p class="r-tate hero-r">縛らない。だから、選ばれる。</p>
+    <div class="r-hero__foot">
+      <span class="en">EST. 2026 ／ TOKYO</span>
+      <span class="scroll" aria-hidden="true">SCROLL<i></i></span>
+    </div>
+  </section>
+
+  <!-- 02 BACKBONE -->
+  <section class="r-back dark" id="r-backbone" data-cap="背骨の一文" data-idx="02">
+    <div class="sunk deep" data-photo="backbone" aria-hidden="true"></div>
+    <span class="r-side" aria-hidden="true">BACKBONE ／ 背骨</span>
+    <span class="r-ghost" aria-hidden="true">芯</span>
+    <div class="r-back__inner">
+      <p class="r-eyebrow light reveal"><span class="dot"></span>THE BACKBONE</p>
+      <p class="r-back__stmt">
+        <span class="line"><span class="i" data-d="0">二階建ての上に、</span></span>
+        <span class="line"><span class="i" data-d="1">〈<em>守る</em>〉と〈<em>縛らない</em>〉。</span></span>
+        <span class="line"><span class="i" data-d="2">それを名乗らず、100年かけて、</span></span>
+        <span class="line"><span class="i" data-d="3">次の世代へ手渡す。</span></span>
+      </p>
+      <p class="r-back__note reveal" data-d="4">― これが、VERAという会社の、いちばん芯にある一文です。</p>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" id="marquee" aria-hidden="true">
+    <div class="marquee__row" id="marquee-row">
+      <span>活力<i>VITAL</i></span><span>誠実<i>EARNEST</i></span><span>本物<i>REAL</i></span><span>源<i>AUTHENTIC</i></span><span>守る<i>PROTECT</i></span><span>縛らない<i>UNBIND</i></span><span>しあわせ<i>SHIAWASE</i></span>
+    </div>
+  </div>
+
+  <!-- 03 CONCEPT -->
+  <section class="r-con" id="r-concept" data-cap="四つの信念" data-idx="03">
+    <div class="r-con__head">
+      <p class="r-eyebrow reveal"><span class="dot"></span>CONCEPT</p>
+      <p class="r-con__mid reveal" data-d="0">巡らせ、先に差し出し、芯を曲げず、源へ還る。</p>
+      <h2 class="r-con__lead reveal" data-d="1">四つの信念が、<br>ひとつの四つ葉に。</h2>
+      <p class="r-con__note reveal" data-d="2">途切れることのないモノラインで描いた四つ葉のクローバー。<br>社会との結びつきと、本質を見つめ誠実に歩み続ける意志を表しています。</p>
+    </div>
+    <div class="r-clover reveal" aria-hidden="true"><img src="assets/img/vera_logo_2color.svg" alt=""></div>
+    <ol class="r-beliefs">
+      <li class="reveal" data-d="0"><span class="bl">V</span><span class="be" data-scramble>VITAL</span><span class="bj">活力</span><span class="bd">巡らせる</span></li>
+      <li class="reveal" data-d="1"><span class="bl">E</span><span class="be" data-scramble>EARNEST</span><span class="bj">誠実</span><span class="bd">先に差し出す</span></li>
+      <li class="reveal" data-d="2"><span class="bl">R</span><span class="be" data-scramble>REAL</span><span class="bj">本物</span><span class="bd">こだわりと信念</span></li>
+      <li class="reveal" data-d="3"><span class="bl">A</span><span class="be" data-scramble>AUTHENTIC</span><span class="bj">源</span><span class="bd">源泉＝自分が、自分の作者</span></li>
+    </ol>
+    <p class="r-con__recover reveal">四つ葉は、4つの信念。その土台にあるのは<br>〈<em>守る</em>／<em>縛らない</em>〉、目指すのは〈<em>人のしあわせ</em>〉。</p>
+  </section>
+
+  <!-- 04 FOUNDATION -->
+  <section class="r-found" id="r-foundation" data-cap="私たちの土台" data-idx="04">
+    <div class="r-found__head">
+      <p class="r-eyebrow reveal"><span class="dot"></span>FOUNDATION</p>
+      <h2 class="r-found__lead reveal" data-d="1">私たちの土台 ―<br>まず、足元で一番に。</h2>
+    </div>
+    <div class="r-floors">
+      <div class="r-roof reveal" aria-hidden="true"></div>
+      <div class="r-floor f2 reveal" data-d="1">
+        <span class="lv">2F ― 目的</span>
+        <h3>人を、幸せにできる会社 No.1</h3>
+        <p>“一番”にしたいのは売上の大きさではなく、人をどれだけ幸せにできるか。</p>
+      </div>
+      <div class="r-floor f1 reveal" data-d="2">
+        <span class="lv">1F ― 戦い方</span>
+        <h3>まず足元で一番に、そこから世界へ</h3>
+        <p>いきなり日本一を狙わない。目の前の地域・お客様で一番に。</p>
+        <div class="r-steps"><span>地域</span><i></i><span>埼玉</span><i></i><span>関東</span><i></i><span>全国</span><i></i><span class="goal">世界</span></div>
+      </div>
+    </div>
+    <p class="r-found__note reveal">シェアや実績は、それ自体がゴールではなく、「人を幸せにする力」を最大化するための土台です。<br>足元の一番は、100年かけて次の世代へ手渡すための、最初の一歩です。</p>
+  </section>
+
+  <!-- 05 VALUE MAP -->
+  <section class="r-vmap" id="r-valuemap" data-cap="価値の地図" data-idx="05">
+    <p class="r-eyebrow reveal"><span class="dot"></span>VALUE MAP</p>
+    <h2 class="r-vmap__lead reveal" data-d="1">価値の地図 ―<br>ぜんぶが、一本でつながっている。</h2>
+    <ol class="r-map">
+      <li class="m-star reveal" data-d="1"><span class="star" aria-hidden="true">★</span><b>しあわせ</b><small>目指す北極星（2階の目的）</small></li>
+      <li class="reveal" data-d="2"><span class="k">四つの信念</span><small>V 活力 ／ E 誠実 ／ R 本物 ／ A 源</small></li>
+      <li class="reveal" data-d="3"><span class="k"><em>守る</em>／<em>縛らない</em></span><small>背骨 ― 後ろで地面を整え、選ぶ自由まで渡す</small></li>
+      <li class="reveal" data-d="4"><span class="k">土台（二階建て）</span><small>1F 戦い方 ／ 2F 目的</small></li>
+    </ol>
+    <p class="r-vmap__foot reveal">名乗らず、100年かけて、次の世代へ手渡す。</p>
+  </section>
+
+  <!-- 06 STORY -->
+  <section class="r-story dark lit" id="r-story" data-cap="物語" data-idx="06">
+    <div class="sunk deep" data-photo="story" aria-hidden="true"><img class="sunk__img" src="https://images.pexels.com/photos/36396068/pexels-photo-36396068.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="" loading="lazy" decoding="async"></div>
+    <span class="r-side dark" aria-hidden="true">STORY ／ 物語</span>
+    <p class="r-eyebrow reveal"><span class="dot"></span>STORY</p>
+    <h2 class="r-story__q">
+      <span class="line"><span class="i" data-d="0">監督は、</span></span>
+      <span class="line"><span class="i" data-d="1">グラウンドに立たない。</span></span>
+    </h2>
+    <div class="r-story__body">
+      <p class="reveal" data-d="1">打つのも、走るのも、選手たち。監督がするのは、足元の土をならし、<em>誰もが安心して力を振れる場所</em>を整えること。点が入ったとき、ヒーローになるのは選手でいい。監督は、ベンチでそっとうなずいていればいい。</p>
+      <div class="r-story__more" id="story-more" hidden>
+        <p>VERAの「守る」は、それに近いと思っています。前に出て手柄を立てるのではなく、後ろにまわって地面を整える。中小企業の挑戦が、思いきり振りぬけるように。</p>
+        <p>20年以上前、伯父から一粒の種を受け取りました。すぐに芽は出ません。それでも水をやり、土を耕しつづける。100年かけて育てた木を、いつか次の世代へ手渡したい。名乗らず、急がず、一歩ずつ。それが、VERAのはじまりの約束です。</p>
+      </div>
+      <button class="r-more" data-more="story-more" data-cursor="read" aria-expanded="false" aria-controls="story-more"><span>続きを読む</span><i></i></button>
+    </div>
+  </section>
+
+  <!-- 07 FIVE PILLARS -->
+  <section class="r-pillars" id="r-pillars" data-cap="五本の柱" data-idx="07">
+    <div class="r-pillars__head">
+      <p class="r-eyebrow reveal"><span class="dot"></span>FIVE PILLARS</p>
+      <h2 class="r-pillars__lead reveal" data-d="1">五本の柱 ―<br>VERAが大切にしていること。</h2>
+    </div>
+    <div class="r-pills">
+      <article class="r-pill reveal"><div class="r-pill__t"><span class="e">VITAL</span><span class="j">活力</span></div><div class="r-pill__b"><p class="one">止まった流れを、もう一度めぐらせる。それがVERAの仕事です。</p><p class="d">活力は、溜め込む残高ではなく、巡らせる流れ。流して、誰かを潤して、はじめて「活かした」になる。</p></div></article>
+      <article class="r-pill reveal"><div class="r-pill__t"><span class="e">EARNEST</span><span class="j">誠実</span></div><div class="r-pill__b"><p class="one">報酬より先に、未来へ手付金を打つ。それがVERAの誠実です。</p><p class="d">本気は、言葉ではなく、先に差し出したもので決まる。戻らないこともある。それでも、こちらから先に置きます。</p></div></article>
+      <article class="r-pill reveal"><div class="r-pill__t"><span class="e">REAL</span><span class="j">本物</span></div><div class="r-pill__b"><p class="one">あたりさわりのない“平均”を、いちばん警戒します。</p><p class="d">こだわりと信念を、相手が自分で選んだしあわせへ向ける。芯は曲げず、やり方は直し続けます。</p></div></article>
+      <article class="r-pill reveal"><div class="r-pill__t"><span class="e">AUTHENTIC</span><span class="j">源</span></div><div class="r-pill__b"><p class="one">名乗りは、行いにあずけます。</p><p class="d">“authentic”の語源は「自ら為す者＝著者」。自分の人生の作者であること。名乗らず、呼ばれるまで、ただ手を動かします。</p></div></article>
+      <article class="r-pill reveal"><div class="r-pill__t"><span class="e">SHIAWASE</span><span class="j">しあわせ</span></div><div class="r-pill__b"><p class="one">笑顔は追いかけると逃げる。だから、咲く場所をつくる側に回ります。</p><p class="d">しあわせとは、誰かが安心して力を振れる場所を、後ろで黙って整えること。「あといくら」で測れるものは、たぶん、しあわせじゃない。</p></div></article>
+    </div>
+    <div class="r-bridge reveal">
+      <p class="b">還りは当てにしない。それでも、結果的に巡って還ってくる。</p>
+      <p class="s">― 先に置く（誠実）→ 結果的に巡る（活力）。この順番で読んでください。</p>
+    </div>
+  </section>
+
+  <!-- 08 MISSION -->
+  <section class="r-mission dark" id="r-mission" data-cap="人のしあわせ" data-idx="08">
+    <div class="sunk lift" data-photo="mission" aria-hidden="true"></div>
+    <span class="r-ghost light" aria-hidden="true">★</span>
+    <div class="r-mission__inner">
+      <p class="r-eyebrow light reveal"><span class="dot"></span>MISSION</p>
+      <h2 class="r-mission__k">
+        <span class="line"><span class="i" data-d="0">私たちが守るのは、</span></span>
+        <span class="line"><span class="i" data-d="1"><em>人のしあわせ</em>。</span></span>
+      </h2>
+      <p class="r-mission__p reveal" data-d="2">中小企業の挑戦と、その先にある働く人や家族の暮らしまで。そして、その人が自分で選ぶ自由まで。ウェルビーイング（心ゆたかな状態）を起点に、100年つづくブランドづくりを伴走します。</p>
+    </div>
+  </section>
+
+  <!-- 09 BUSINESS -->
+  <section class="r-biz" id="r-business" data-cap="事業内容" data-idx="09">
+    <div class="r-biz__head">
+      <p class="r-eyebrow reveal"><span class="dot"></span>BUSINESS</p>
+      <h2 class="r-biz__lead reveal" data-d="1">事業内容</h2>
+    </div>
+    <ol class="r-biz__list">
+      <li class="reveal" data-modal="biz-01" data-cursor="view" role="button" tabindex="0" aria-haspopup="dialog" aria-label="経営・営業支援コンサルティング ― 詳しく見る"><span class="n">01</span><div class="c"><h3>経営・営業支援コンサルティング</h3><p>経営の右腕・左腕として、戦略立案から営業支援・販売促進・マーケティングまで伴走します。</p></div><i class="r-biz__more">詳しく</i></li>
+      <li class="reveal" data-modal="biz-02" data-cursor="view" role="button" tabindex="0" aria-haspopup="dialog" aria-label="AI・DX ／ ソフトウェア開発 ― 詳しく見る"><span class="n">02</span><div class="c"><h3>AI・DX ／ ソフトウェア開発</h3><p>AIを軸にしたWebアプリ・業務システムの企画・開発・運用。現場で使える形に落とし込みます。</p></div><i class="r-biz__more">詳しく</i></li>
+      <li class="reveal" data-modal="biz-03" data-cursor="view" role="button" tabindex="0" aria-haspopup="dialog" aria-label="ブランドのご紹介（自社ブランド販売・販売代理・取次） ― 詳しく見る"><span class="n">03</span><div class="c"><h3>ブランドのご紹介（自社ブランド販売・販売代理・取次）</h3><p>自社ブランドの販売に加え、本当に良いと信じた他社サービスを厳選し、お客様の課題に合わせてお繋ぎします。</p></div><i class="r-biz__more">詳しく</i></li>
+      <li class="reveal soon" data-modal="biz-04" data-cursor="soon" role="button" tabindex="0" aria-haspopup="dialog" aria-label="住まいの支援 ／ VERAハウス（準備中） ― 詳しく見る"><span class="n">04</span><div class="c"><h3>住まいの支援 ／ VERAハウス<span class="chip">準備中</span></h3><p>「災害から、人の命と暮らしを守る」を旗印に。大地震で高い耐震性能が評価されてきた超耐震メーカーの住まいのご紹介と、賃貸・資産活用の伴走を準備しています。実績は提供開始時に出典とともにご案内します。</p></div><i class="r-biz__more">準備中</i></li>
+      <li class="reveal" data-modal="biz-05" data-cursor="view" role="button" tabindex="0" aria-haspopup="dialog" aria-label="グループ経営管理（Holdings） ― 詳しく見る"><span class="n">05</span><div class="c"><h3>グループ経営管理（Holdings）</h3><p>各事業・グループ会社を束ね、長く価値を生み続ける経営基盤を統括します。</p></div><i class="r-biz__more">詳しく</i></li>
+    </ol>
+  </section>
+
+  <!-- 10 SERVICE -->
+  <section class="r-service dark" id="r-service" data-cap="提供サービス" data-idx="10">
+    <div class="r-service__head">
+      <p class="r-eyebrow light reveal"><span class="dot"></span>SERVICE</p>
+      <h2 class="r-service__lead reveal" data-d="1">提供サービス・<br>取り扱いブランド</h2>
+    </div>
+    <ul class="r-service__list">
+      <li class="reveal"><span class="dot"></span><div><h4>社長のヒダリウデ</h4><span>経営企画を代行する“右腕・左腕”サービス。</span></div></li>
+      <li class="reveal"><span class="dot"></span><div><h4>ReviBooStar（レビブースター）</h4><span>Google口コミ・MEOを伸ばすAI集客ツール。</span></div></li>
+      <li class="reveal"><span class="dot"></span><div><h4>onemind</h4><span>離職を防ぎ、定着を支える理念浸透×社内ポータル。</span></div></li>
+      <li class="reveal"><span class="dot r"></span><div><h4>Diamond Note ／ Pulcher Note</h4><span>自社開発アプリ（育成記録・健康習慣化）。</span></div></li>
+      <li class="reveal"><span class="dot r"></span><div><h4>VERAハウス × 超耐震住宅<span class="chip">準備中</span></h4><span>大地震で高い耐震性能が評価されてきたメーカーの超耐震住宅のご紹介と、賃貸経営の伴走。実績は提供開始時に出典とともにご案内します。</span></div></li>
+    </ul>
+    <p class="r-service__legend reveal"><span class="dot r"></span>自社ブランド<span class="dot"></span>厳選パートナーの取り扱い</p>
+  </section>
+
+  <!-- 11 SHOWCASE (360° spin) -->
+  <section class="r-show dark" id="r-showcase" data-cap="ショーケース" data-idx="11">
+    <div class="r-show__head">
+      <p class="r-eyebrow light reveal"><span class="dot"></span>SHOWCASE ／ 美術館の陳列</p>
+      <h2 class="r-show__lead reveal" data-d="1">これから、<br>並べていくもの。</h2>
+      <p class="r-show__note reveal" data-d="2">売り場ではなく、陳列台。VERAの思想が宿ったプロダクトを、手に取るように、ぐるりと。<br>第一号は、着る信条 ―― VERAのTシャツやアパレルを、ここで静かに回します。</p>
+    </div>
+
+    <div class="studio reveal" id="studio" data-style="private" data-size="M" style="--tee-fill:#f2efe8">
+      <div class="studio__stage" id="tee3d" data-cursor="drag" role="img" aria-label="360度で見る VERA Tシャツ（サンプル）">
+        <span class="studio__badge"><span class="d"></span>SAMPLE ／ 準備中</span>
+        <div class="tee3d-hint" aria-hidden="true"><span class="dr"></span>ドラッグで回す ／ DRAG</div>
+      </div>
+
+      <div class="studio__panel">
+        <span class="tee__soon"><span class="d"></span>SAMPLE ／ 準備中</span>
+        <h3 class="tee__name">VERA ORIGINAL TEE</h3>
+        <p class="tee__desc">一枚で、二つの顔。プライベートは五分丈をだらっと大きく（オーバーサイズ）、ビジネスはジャストで、びしっと。<br>左胸に、小さなロゴマークをさりげなく。</p>
+
+        <div class="studio__ctrl">
+          <span class="studio__ctrl-l">STYLE ／ 着こなし</span>
+          <div class="seg" id="style-seg">
+            <button data-style="private" class="active" data-cursor="view">プライベート</button>
+            <button data-style="business" data-cursor="view">ビジネス</button>
+          </div>
+        </div>
+        <div class="studio__ctrl">
+          <span class="studio__ctrl-l">SIZE ／ サイズ</span>
+          <div class="seg" id="size-seg">
+            <button data-size="S" data-cursor="view">S</button>
+            <button data-size="M" class="active" data-cursor="view">M</button>
+            <button data-size="L" data-cursor="view">L</button>
+            <button data-size="XL" data-cursor="view">XL</button>
+          </div>
+        </div>
+        <div class="studio__ctrl">
+          <span class="studio__ctrl-l">COLOR ／ 色</span>
+          <div class="tee__swatches" id="tee-swatches">
+            <button class="sw active" data-color="#f2efe8" style="--sw:#f2efe8" aria-label="オフホワイト" data-cursor="view"></button>
+            <button class="sw" data-color="#22262e" style="--sw:#22262e" aria-label="ブラック" data-cursor="view"></button>
+            <button class="sw" data-color="#1d447c" style="--sw:#1d447c" aria-label="ネイビー" data-cursor="view"></button>
+            <button class="sw" data-color="#8a94a3" style="--sw:#8a94a3" aria-label="グレー" data-cursor="view"></button>
+          </div>
+        </div>
+
+        <dl class="studio__size" id="studio-size">
+          <div><dt>身丈</dt><dd data-k="bodyLength">—</dd></div>
+          <div><dt>身幅</dt><dd data-k="bodyWidth">—</dd></div>
+          <div><dt>肩幅</dt><dd data-k="shoulderWidth">—</dd></div>
+          <div><dt>裄丈</dt><dd data-k="sleeveLength">—</dd></div>
+        </dl>
+        <p class="studio__src" id="studio-src">※ 参考サイズ＝ユニクロ「エアリズムコットンオーバーサイズT／5分袖」実寸(cm)。裄丈=背中心〜袖口。確定値は生産時にご案内します。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 STRENGTH -->
+  <section class="r-strength" id="r-strength" data-cap="私たちの強み" data-idx="12">
+    <div class="r-strength__head">
+      <p class="r-eyebrow reveal"><span class="dot"></span>STRENGTH</p>
+      <h2 class="r-strength__lead reveal" data-d="1">私たちの強み</h2>
+    </div>
+    <div class="r-strength__grid">
+      <div class="reveal"><span class="n">01</span><h4>AIを軸にした高機動</h4><p>AIの力で、企画・開発・運用までスピーディに一気通貫。</p></div>
+      <div class="reveal"><span class="n">02</span><h4>ウェルビーイング起点</h4><p>売上の前に「人のしあわせ」を置く。だから長く続く関係になる。</p></div>
+      <div class="reveal"><span class="n">03</span><h4>信じられるものだけを</h4><p>自社・他社を問わず、本当に良いと信じたものだけをお繋ぎします。</p></div>
+      <div class="reveal"><span class="n">04</span><h4>縛らない、という姿勢</h4><p>決められた一本道ではなく、相手が自分で選べる余白を大切にします。</p></div>
+    </div>
+  </section>
+
+  <!-- 13 MESSAGE -->
+  <section class="r-message dark" id="r-message" data-cap="代表メッセージ" data-idx="13">
+    <div class="sunk deep" data-photo="company" aria-hidden="true"></div>
+    <div class="r-message__inner">
+      <p class="r-eyebrow light reveal"><span class="dot"></span>MESSAGE</p>
+      <h2 class="r-message__lead reveal" data-d="1">代表メッセージ</h2>
+      <p class="r-message__body reveal" data-d="1">私たちは「守る」を事業にしています。止まった流れを、もう一度めぐらせるために。技術や流行の前に、まず目の前の人と、その人が大切にしているものを守りたい。<br><br>だから、報酬より先に、こちらから手を差し出します。戻らないこともある。それでも、置きます。中小企業が積み上げてきた誇りを、100年つづくブランドへ。AIという新しい道具を、温かく・誠実に使いこなしていきます。</p>
+      <div class="r-sign reveal" data-d="2">
+        <span class="role">代表取締役</span>
+        <img src="assets/img/sign_morio_white.png" alt="森岡 浩一">
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 COMPANY -->
+  <section class="r-company" id="r-company" data-cap="会社概要" data-idx="14">
+    <div class="r-company__head">
+      <p class="r-eyebrow reveal"><span class="dot"></span>COMPANY</p>
+      <h2 class="r-company__lead reveal" data-d="1">会社概要</h2>
+    </div>
+    <dl class="r-company__tbl reveal">
+      <div><dt>商号</dt><dd>株式会社VERA Holdings（VERA Holdings Co., Ltd.）</dd></div>
+      <div><dt>所在地</dt><dd>〒100-0011　東京都千代田区内幸町1-3-1　幸ビルディング9階</dd></div>
+      <div><dt>設立</dt><dd>2026年7月9日（決算期：6月）</dd></div>
+      <div><dt>代表者</dt><dd>代表取締役　森岡 浩一</dd></div>
+      <div><dt>事業内容</dt><dd>経営・営業支援コンサルティング／AI・DX・ソフトウェア開発／自社ブランドの販売及びショーケース・ご紹介／住まいの支援（VERAハウス・準備中）／グループ経営管理</dd></div>
+    </dl>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="r-footer">
+    <img class="logo reveal" src="assets/img/vera_logo_whitered.svg" alt="VERA Holdings">
+    <p class="tag reveal">守る、を、事業に。</p>
+    <p class="addr reveal">株式会社VERA Holdings<br>〒100-0011　東京都千代田区内幸町1-3-1 幸ビルディング9階</p>
+    <p class="copy reveal">© 2026 VERA Holdings Co., Ltd.</p>
+    <button class="top magnetic" id="to-top" data-cursor="view"><span class="mag-in">↑ PAGE TOP</span></button>
+  </footer>
+
+</main>
+
+<!-- ========== MODAL ========== -->
+<div class="modal" id="modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="modal__veil" data-close></div>
+  <div class="modal__panel" id="modal-panel">
+    <button class="modal__x" data-close aria-label="閉じる" data-cursor="view"><span></span><span></span></button>
+    <div class="modal__body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- modal content store -->
+<template id="tpl-biz-01"><span class="m-eye">BUSINESS 01</span><h3>経営・営業支援コンサルティング</h3><p>経営の右腕・左腕として、戦略立案から現場の営業支援・販売促進・マーケティングまで、"一緒に手を動かす"伴走をします。会議室の提案書で終わらせず、翌朝の一手までを設計するのがVERA流です。</p><ul class="m-list"><li>経営企画の代行（社長のヒダリウデ）</li><li>営業戦略・トーク設計・同行</li><li>販促・LP・SNS・ブランディング</li></ul></template>
+<template id="tpl-biz-02"><span class="m-eye">BUSINESS 02</span><h3>AI・DX ／ ソフトウェア開発</h3><p>AIを軸に、Webアプリ・業務システム・自動化を企画から運用まで一気通貫。派手な導入で終わらせず、現場が"毎日ふつうに使える形"に落とし込みます。</p><ul class="m-list"><li>業務アプリ・PWA・社内ポータル</li><li>AI連携（要約・下書き・判定の下ごしらえ）</li><li>既存資産の改修・自動化</li></ul></template>
+<template id="tpl-biz-03"><span class="m-eye">BUSINESS 03</span><h3>ブランドのご紹介（自社ブランド販売・販売代理・取次）</h3><p>自社ブランドの販売に加え、本当に良いと信じた他社サービスだけを厳選してお繋ぎする、ショーケース事業。数を並べるのではなく、“信じられるものだけ”を並べます。</p><ul class="m-list"><li>自社ブランドの販売（適宜更新いたします）</li><li>厳選ブランドの取次・ご紹介</li><li>課題ヒアリング → 最適な一社へ</li><li>導入後の伴走まで見届ける</li></ul></template>
+<template id="tpl-biz-04"><span class="m-eye">BUSINESS 04 ／ 準備中</span><h3>住まいの支援 ／ VERAハウス</h3><figure class="m-photo" aria-hidden="true"><img src="https://images.pexels.com/photos/13041127/pexels-photo-13041127.jpeg?auto=compress&cs=tinysrgb&w=900" alt="" loading="lazy" decoding="async"></figure><p>「災害から、人の命と暮らしを守る」を旗印に。大地震で高い耐震性能が評価されてきた超耐震メーカーの住まいのご紹介と、賃貸・資産活用の伴走を準備しています。実績は提供開始時に出典とともにご案内します。<br><br>正式な提供開始まで、内容は変わる可能性があります。</p></template>
+<template id="tpl-biz-05"><span class="m-eye">BUSINESS 05</span><h3>グループ経営管理（Holdings）</h3><p>各事業・グループ会社を束ね、長く価値を生み続ける経営基盤を統括します。短期の売上ではなく、100年の継続を設計するのが持株会社としての役割です。</p></template>
+
+<script src="assets/js/photos.js" defer></script>
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>
