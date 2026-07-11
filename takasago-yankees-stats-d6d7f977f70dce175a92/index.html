@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>高砂ヤンキース 成績分析ボード</title>
+<style>
+:root{
+  --bg:#f4f3ee; --panel:#ffffff; --ink:#1b2334; --sub:#5c6577; --line:#dcdcd2;
+  --navy:#18305e; --navy-deep:#122442; --red:#bf3a2b; --red-soft:#f3e2df;
+  --win:#2e7d4f; --lose:#bf3a2b; --draw:#8a8f98;
+  --chip:#eceada; --hl:#fdf6e7; --focus:#bf3a2b;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0e131e; --panel:#161d2c; --ink:#e9edf5; --sub:#9aa4b5; --line:#2a3348;
+    --navy:#18305e; --navy-deep:#0c1830; --red:#e0553f; --red-soft:#3a2320;
+    --win:#4caf7d; --lose:#e0553f; --draw:#7f8794;
+    --chip:#222b3e; --hl:#243048; --focus:#e0553f;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f4f3ee; --panel:#ffffff; --ink:#1b2334; --sub:#5c6577; --line:#dcdcd2;
+  --red:#bf3a2b; --red-soft:#f3e2df; --win:#2e7d4f; --lose:#bf3a2b; --draw:#8a8f98;
+  --chip:#eceada; --hl:#fdf6e7; --focus:#bf3a2b; --navy-deep:#122442;
+}
+:root[data-theme="dark"]{
+  --bg:#0e131e; --panel:#161d2c; --ink:#e9edf5; --sub:#9aa4b5; --line:#2a3348;
+  --red:#e0553f; --red-soft:#3a2320; --win:#4caf7d; --lose:#e0553f; --draw:#7f8794;
+  --chip:#222b3e; --hl:#243048; --focus:#e0553f; --navy-deep:#0c1830;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic","Meiryo",system-ui,sans-serif;
+  font-size:14px;line-height:1.65;-webkit-text-size-adjust:100%}
+#hdr{background:var(--navy-deep);color:#fff;padding:14px 16px 0;position:relative;overflow:hidden}
+#hdr::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;
+  background:repeating-linear-gradient(90deg,transparent 0 26px,rgba(255,255,255,.06) 26px 27px)}
+#hdr .inner{max-width:1120px;margin:0 auto;position:relative;z-index:1}
+#hdr .eyebrow{font-size:10px;letter-spacing:.35em;color:#c9a44c;font-weight:700}
+#hdr h1{margin:2px 0 2px;font-size:clamp(19px,4vw,26px);letter-spacing:.04em}
+#hdr h1 small{font-weight:600;font-size:.55em;color:#aebadb;margin-left:10px;letter-spacing:.1em}
+#hdr .rec{font-size:13px;color:#dfe5f3;margin-bottom:10px}
+#hdr .rec b{color:#fff;font-size:15px}
+#nav{max-width:1120px;margin:0 auto;display:flex;gap:2px;overflow-x:auto;position:relative;z-index:1}
+#nav a{flex:0 0 auto;padding:8px 14px;color:#c9d3ea;text-decoration:none;font-weight:700;font-size:12.5px;
+  border-radius:8px 8px 0 0;white-space:nowrap;letter-spacing:.05em}
+#nav a.on{background:var(--bg);color:var(--ink)}
+#nav a:not(.on):hover{background:rgba(255,255,255,.08)}
+main{max-width:1120px;margin:0 auto;padding:18px 14px 70px}
+h2{font-size:17px;margin:26px 0 10px;letter-spacing:.03em;display:flex;align-items:baseline;gap:10px}
+h2 .en{font-size:10px;letter-spacing:.3em;color:var(--red);font-weight:800}
+h2:first-child{margin-top:4px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.tblwrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-bottom:14px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:12.5px}
+th,td{padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}
+th{background:var(--chip);font-size:11px;position:sticky;top:0;cursor:default}
+th.sortable{cursor:pointer}
+th.sorted{color:var(--red)}
+th:first-child,td:first-child, th.l,td.l{text-align:left}
+tr.click{cursor:pointer}
+tr.click:hover td{background:var(--hl)}
+tr.total td{font-weight:800;background:var(--chip);border-top:2px solid var(--ink)}
+td.top{color:var(--red);font-weight:800}
+.badge{display:inline-block;min-width:20px;text-align:center;padding:0 6px;border-radius:999px;
+  font-size:11px;font-weight:800;line-height:18px}
+.bw{background:var(--win);color:#fff}.bl{background:var(--lose);color:#fff}.bd{background:var(--draw);color:#fff}
+.g1{background:#c9a44c;color:#1b2334}.g2{background:#7fa1d6;color:#122442}.g3{background:#5a7fb8;color:#fff}.g4{background:var(--grade4,#18305e);color:#fff}
+@media (prefers-color-scheme: dark){:root{--grade4:#3d5f9e}}
+:root[data-theme="dark"]{--grade4:#3d5f9e}
+:root[data-theme="light"]{--grade4:#18305e}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.pcard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+.pcard:hover{border-color:var(--red)}
+.pcard .nm{font-weight:800;font-size:15px}
+.pcard .meta{color:var(--sub);font-size:11px;margin-bottom:4px}
+.pcard .st{font-size:11.5px;color:var(--sub)}
+.pcard .st b{color:var(--ink)}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;margin-bottom:14px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.stat .k{font-size:10.5px;color:var(--sub);letter-spacing:.08em}
+.stat .v{font-size:21px;font-weight:800;line-height:1.25}
+.stat .v small{font-size:12px;font-weight:600;color:var(--sub)}
+.stat .who{font-size:12px;color:var(--red);font-weight:700}
+.controls{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-bottom:10px;font-size:12.5px}
+.controls label{display:flex;align-items:center;gap:5px}
+select,input[type=text],input[type=number],input[type=date]{
+  background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:4px 7px;font:inherit;font-size:13px}
+input[type=number]{width:64px;text-align:right}
+input:focus,select:focus,button:focus{outline:2px solid var(--focus);outline-offset:1px}
+button{font:inherit;border:1px solid var(--line);background:var(--panel);color:var(--ink);
+  border-radius:8px;padding:6px 14px;cursor:pointer;font-weight:700;font-size:13px}
+button.pri{background:var(--navy);border-color:var(--navy);color:#fff}
+button.danger{color:var(--lose);border-color:var(--lose)}
+button:hover{filter:brightness(1.06)}
+details.cols{margin:6px 0 12px}
+details.cols summary{cursor:pointer;font-weight:700;font-size:12.5px;color:var(--sub)}
+.colgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:4px 12px;padding:10px;background:var(--panel);border:1px solid var(--line);border-radius:8px;margin-top:6px;font-size:12px}
+.chartwrap{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:14px}
+.legend{display:flex;gap:16px;font-size:11.5px;color:var(--sub);margin-top:6px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+.bars{display:grid;gap:6px}
+.brow{display:grid;grid-template-columns:70px 1fr 58px;align-items:center;gap:8px;font-size:12px}
+.btrack{background:var(--chip);border-radius:4px;height:16px;position:relative}
+.bfill{height:100%;border-radius:4px;background:var(--navy)}
+:root[data-theme="dark"] .bfill{background:#5a7fb8}
+.note{color:var(--sub);font-size:12px}
+.crumb{font-size:12.5px;margin-bottom:10px}
+.crumb a{color:var(--red);text-decoration:none;font-weight:700}
+.linescore td,.linescore th{padding:4px 7px;font-size:12.5px}
+.formrow{display:flex;flex-wrap:wrap;gap:10px 18px;margin-bottom:10px;align-items:center}
+.formrow label{font-size:12.5px;font-weight:700}
+.entry td input[type=number]{width:46px;padding:3px 4px}
+.entry td:first-child{min-width:96px}
+.pit-add{margin:8px 0}
+.help h3{font-size:14px;margin:16px 0 4px;color:var(--red)}
+.tag{display:inline-block;background:var(--chip);border-radius:5px;padding:1px 7px;font-size:11px;font-weight:700;margin-right:5px}
+footer{max-width:1120px;margin:30px auto 0;padding:0 14px 30px;color:var(--sub);font-size:11px}
+.savebar{position:sticky;bottom:0;background:var(--panel);border-top:2px solid var(--navy);padding:10px 12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px;border-radius:0 0 10px 10px;z-index:5}
+.etbl input[type=text],.etbl input[type=number],.etbl input[type=date],.etbl select{padding:3px 5px;font-size:12.5px}
+.etbl td,.etbl th{padding:4px 5px}
+@media print{#nav,button,.controls,details.cols,.savebar{display:none!important}body{background:#fff}}
+@media (max-width:560px){
+  th,td{padding:5px 6px;font-size:11.5px}
+  .statgrid{grid-template-columns:repeat(auto-fill,minmax(128px,1fr))}
+}
+</style>
+</head>
+<body>
+
+<div id="hdr">
+  <div class="inner">
+    <div class="eyebrow">BASEBALL SCORE BOARD</div>
+    <h1 id="ttl">高砂ヤンキース<small></small></h1>
+    <div class="rec" id="hdrrec"></div>
+    <nav id="nav"></nav>
+  </div>
+</div>
+<main id="view"></main>
+<footer>スコアブック → 成績自動集計ボード ／ データはこの端末（ブラウザ）に保存されます。機種変更・共有時は「設定・データ」からJSONで書き出してください。</footer>
+
+<script>
+"use strict";
+/* ================= 初期データ（Excelから取込済み） ================= */
+const INITIAL = {"season":"2026年度","teamName":"高砂ヤンキース","players":[{"id":"p1","grade":4,"number":"10","name":"リョウヘイ"},{"id":"p2","grade":4,"number":"0","name":"ゼンゾウ"},{"id":"p3","grade":4,"number":"1","name":"トモカ"},{"id":"p4","grade":4,"number":"2","name":"ユウヤ"},{"id":"p5","grade":4,"number":"3","name":"カエデ"},{"id":"p6","grade":4,"number":"4","name":"ヤマト"},{"id":"p7","grade":4,"number":"5","name":"カナタ"},{"id":"p8","grade":4,"number":"6","name":"マッスー"},{"id":"p9","grade":4,"number":"7","name":"イズホ"},{"id":"p10","grade":4,"number":"8","name":"ショウウン"},{"id":"p11","grade":4,"number":"9","name":"ゴトソウ"},{"id":"p12","grade":3,"number":"11","name":"カイ"},{"id":"p13","grade":3,"number":"12","name":"カイト"},{"id":"p14","grade":3,"number":"13","name":"リキ"},{"id":"p15","grade":3,"number":"14","name":"コウタロウ"},{"id":"p16","grade":3,"number":"15","name":"コウゾウ"},{"id":"p17","grade":3,"number":"16","name":"ハルヒコ"},{"id":"p18","grade":2,"number":"17","name":"キノスケ"},{"id":"p19","grade":2,"number":"18","name":"タツキ"},{"id":"p20","grade":2,"number":"19","name":"リュウキ"},{"id":"p21","grade":2,"number":"20","name":"フウタ"},{"id":"p22","grade":2,"number":"21","name":"カナメ"},{"id":"p23","grade":1,"number":"22","name":"ハヤト"},{"id":"p24","grade":1,"number":"23","name":"アオト"}],"games":[{"no":1,"opponent":"戸塚ジャガーズ","tournament":"練習試合","rs":3,"ra":9,"place":"戸塚榎戸公園","dateLabel":"1試合目","lineScore":[{"team":"高砂ヤンキース","innings":[3,0,0,0,0],"r":3},{"team":"戸塚ジャガーズ","innings":[1,0,3,5],"r":9}],"batting":[{"order":1,"pa":3,"ab":3,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":4,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p8"},{"order":2,"pa":3,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":2,"err":0,"pid":"p10"},{"order":3,"pa":3,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":1,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p4"},{"order":4,"pa":3,"ab":2,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p7"},{"order":5,"pa":2,"ab":1,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":1,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p1"},{"order":6,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p5"},{"order":7,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":2,"err":0,"pid":"p9"},{"order":8,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":2,"err":0,"pid":"p3"},{"order":9,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p11"},{"order":10,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p6"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":1,"d":0,"outs":3,"np":19,"ha":1,"hra":0,"bb":2,"hbp":0,"so":0,"bk":0,"wp":2,"runs":1,"er":1,"pid":"p10"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":23,"ha":0,"hra":0,"bb":3,"hbp":0,"so":2,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p1"},{"seq":3,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":36,"ha":1,"hra":0,"bb":3,"hbp":0,"so":2,"bk":0,"wp":0,"runs":3,"er":3,"pid":"p4"},{"seq":4,"cg":0,"w":0,"l":0,"d":0,"outs":1,"np":27,"ha":1,"hra":0,"bb":3,"hbp":0,"so":2,"bk":0,"wp":4,"runs":5,"er":5,"pid":"p7"},{"seq":5,"cg":0,"w":0,"l":0,"d":0,"outs":2,"np":9,"ha":0,"hra":0,"bb":0,"hbp":0,"so":1,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p8"}]},{"no":2,"opponent":"戸塚ジャガーズ","tournament":"練習試合②","rs":5,"ra":9,"place":"戸塚榎戸公園","dateLabel":"2試合目","lineScore":[{"team":"戸塚ジャガーズ","innings":[4,5,0],"r":9},{"team":"高砂ヤンキース","innings":[5,0,0],"r":5}],"batting":[{"order":1,"pa":2,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":3,"sh":0,"sf":0,"bb":2,"hbp":0,"so":0,"err":0,"pid":"p6"},{"order":2,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":1,"so":1,"err":0,"pid":"p15"},{"order":3,"pa":2,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":2,"hbp":0,"so":0,"err":0,"pid":"p12"},{"order":4,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p14"},{"order":5,"pa":2,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":1,"sb":2,"sh":0,"sf":0,"bb":0,"hbp":0,"so":2,"err":0,"pid":"p13"},{"order":6,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":1,"so":1,"err":0,"pid":"p18"},{"order":7,"pa":1,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p10"},{"order":8,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p7"},{"order":9,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p11"},{"order":10,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p5"},{"order":11,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p3"},{"order":12,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p8"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":1,"d":0,"outs":4,"np":45,"ha":2,"hra":1,"bb":3,"hbp":1,"so":2,"bk":0,"wp":0,"runs":8,"er":7,"pid":"p12"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":2,"np":9,"ha":0,"hra":0,"bb":0,"hbp":0,"so":1,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p18"},{"seq":3,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":11,"ha":0,"hra":0,"bb":0,"hbp":0,"so":2,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p5"}]},{"no":3,"opponent":"両新田レオーズ","tournament":"練習試合","rs":9,"ra":4,"place":"総合G","dateLabel":"3試合目","lineScore":[{"team":"高砂ヤンキース","innings":[5,3,1,0],"r":9},{"team":"両新田レオーズ","innings":[3,0,0,1],"r":4}],"batting":[{"order":1,"pa":2,"ab":2,"r":2,"h":2,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":4,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p8"},{"order":2,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p10"},{"order":3,"pa":2,"ab":2,"r":2,"h":2,"d2":0,"d3":0,"hr":0,"rbi":1,"sb":2,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p4"},{"order":4,"pa":2,"ab":2,"r":1,"h":1,"d2":1,"d3":0,"hr":0,"rbi":1,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p1"},{"order":5,"pa":2,"ab":2,"r":1,"h":2,"d2":0,"d3":0,"hr":0,"rbi":2,"sb":3,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p5"},{"order":6,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":1,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p7"},{"order":7,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p6"},{"order":8,"pa":2,"ab":2,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":1,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p3"},{"order":9,"pa":2,"ab":2,"r":0,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p11"},{"order":10,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p2"},{"order":11,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p9"}],"pitching":[{"seq":1,"cg":0,"w":1,"l":0,"d":0,"outs":6,"np":44,"ha":1,"hra":0,"bb":3,"hbp":0,"so":3,"bk":0,"wp":4,"runs":3,"er":2,"pid":"p8"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":11,"ha":0,"hra":0,"bb":0,"hbp":0,"so":2,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p10"},{"seq":3,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":18,"ha":0,"hra":0,"bb":2,"hbp":0,"so":1,"bk":0,"wp":0,"runs":1,"er":1,"pid":"p1"}]},{"no":4,"opponent":"両新田レオーズ","tournament":"練習試合","rs":1,"ra":9,"place":"総合G","dateLabel":"4試合目","lineScore":[{"team":"両新田レオーズ","innings":[3,3,3],"r":9},{"team":"高砂ヤンキース","innings":[0,0,1],"r":1}],"batting":[{"order":1,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p15"},{"order":2,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p19"},{"order":3,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p12"},{"order":4,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p14"},{"order":5,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p13"},{"order":6,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p20"},{"order":7,"pa":1,"ab":0,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p21"},{"order":8,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p17"},{"order":9,"pa":1,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p22"},{"order":10,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p16"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":1,"d":0,"outs":6,"np":48,"ha":0,"hra":0,"bb":4,"hbp":0,"so":5,"bk":0,"wp":5,"runs":6,"er":6,"pid":"p12"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":19,"ha":1,"hra":0,"bb":0,"hbp":0,"so":1,"bk":0,"wp":2,"runs":3,"er":3,"pid":"p19"}]},{"no":5,"opponent":"越谷ジャガーズ","tournament":"練習試合","rs":2,"ra":5,"place":"大原公園","dateLabel":"5試合目","lineScore":[{"team":"越谷ジャガーズ","innings":[1,3,0,1],"r":5},{"team":"高砂ヤンキース","innings":[2,0,0,0],"r":2}],"batting":[{"order":1,"pa":2,"ab":2,"r":0,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p8"},{"order":2,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p4"},{"order":3,"pa":2,"ab":2,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p5"},{"order":4,"pa":2,"ab":2,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p1"},{"order":5,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p7"},{"order":6,"pa":2,"ab":2,"r":0,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p10"},{"order":7,"pa":2,"ab":2,"r":0,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p6"},{"order":8,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p9"},{"order":9,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p11"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":1,"d":0,"outs":5,"np":46,"ha":2,"hra":0,"bb":2,"hbp":0,"so":0,"bk":0,"wp":0,"runs":3,"er":2,"pid":"p10"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":5,"np":50,"ha":0,"hra":0,"bb":6,"hbp":0,"so":0,"bk":0,"wp":0,"runs":2,"er":2,"pid":"p1"},{"seq":3,"cg":0,"w":0,"l":0,"d":0,"outs":2,"np":9,"ha":0,"hra":0,"bb":0,"hbp":0,"so":2,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p5"}]},{"no":6,"opponent":"越谷ジャガーズ","tournament":"練習試合","rs":7,"ra":6,"place":"大原公園","dateLabel":"6試合目","lineScore":[{"team":"高砂ヤンキース","innings":[3,1,3],"r":7},{"team":"越谷ジャガーズ","innings":[3,3],"r":6}],"batting":[{"order":1,"pa":2,"ab":2,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p2"},{"order":2,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p3"},{"order":3,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p12"},{"order":4,"pa":2,"ab":0,"r":2,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":4,"sh":0,"sf":0,"bb":2,"hbp":0,"so":0,"err":0,"pid":"p15"},{"order":5,"pa":2,"ab":0,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":3,"sh":0,"sf":0,"bb":2,"hbp":0,"so":0,"err":0,"pid":"p13"},{"order":6,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":1,"so":1,"err":0,"pid":"p20"},{"order":7,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p18"},{"order":8,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p19"},{"order":9,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p21"}],"pitching":[{"seq":1,"cg":0,"w":1,"l":0,"d":0,"outs":5,"np":37,"ha":1,"hra":0,"bb":2,"hbp":3,"so":3,"bk":0,"wp":0,"runs":6,"er":6,"pid":"p12"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":1,"np":2,"ha":1,"hra":0,"bb":0,"hbp":1,"so":0,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p19"}]},{"no":7,"opponent":"戸塚イーグルス","tournament":"MGオープン","rs":6,"ra":5,"place":"高砂小","dateLabel":"7試合目","lineScore":[{"team":"戸塚イーグルス","innings":[0,5,0,0],"r":5},{"team":"高砂ヤンキース","innings":[4,1,0,1],"r":6}],"batting":[{"order":1,"pa":3,"ab":2,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p8"},{"order":2,"pa":2,"ab":2,"r":2,"h":2,"d2":1,"d3":0,"hr":0,"rbi":1,"sb":3,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p4"},{"order":3,"pa":2,"ab":2,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p1"},{"order":4,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p7"},{"order":5,"pa":2,"ab":2,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p5"},{"order":6,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p10"},{"order":7,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p9"},{"order":8,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p11"},{"order":9,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p3"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":0,"d":0,"outs":5,"np":52,"ha":0,"hra":0,"bb":5,"hbp":0,"so":6,"bk":0,"wp":0,"runs":4,"er":5,"pid":"p1"},{"seq":2,"cg":0,"w":1,"l":0,"d":0,"outs":7,"np":28,"ha":2,"hra":0,"bb":1,"hbp":0,"so":4,"bk":0,"wp":0,"runs":1,"er":0,"pid":"p8"}]},{"no":8,"opponent":"戸塚イーグルス","tournament":"練習試合","rs":4,"ra":4,"place":"高砂小","dateLabel":"8試合目","lineScore":[{"team":"高砂ヤンキース","innings":[0,1,3],"r":4},{"team":"戸塚イーグルス","innings":[1,3,0],"r":4}],"batting":[{"order":1,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":2,"err":0,"pid":"p2"},{"order":2,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":0,"hbp":1,"so":1,"err":0,"pid":"p15"},{"order":3,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p12"},{"order":4,"pa":2,"ab":0,"r":2,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":4,"sh":0,"sf":0,"bb":1,"hbp":1,"so":0,"err":0,"pid":"p14"},{"order":5,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":2,"err":0,"pid":"p18"},{"order":6,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p20"},{"order":7,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":1,"pid":"p19"},{"order":8,"pa":2,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":1,"so":0,"err":0,"pid":"p17"},{"order":9,"pa":1,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p21"},{"order":10,"pa":1,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p22"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":0,"d":0,"outs":6,"np":48,"ha":2,"hra":0,"bb":2,"hbp":0,"so":5,"bk":0,"wp":0,"runs":4,"er":4,"pid":"p12"}]},{"no":9,"opponent":"浦和ビックウェーブ","tournament":"練習試合","rs":2,"ra":7,"place":"武蔵浦和","dateLabel":"9試合目","lineScore":[{"team":"高砂ヤンキース","innings":[0,1,1,0,0],"r":2},{"team":"浦和ビックウェーブ","innings":[0,3,3,1],"r":7}],"batting":[{"order":1,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":3,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p11"},{"order":2,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":2,"err":0,"pid":"p3"},{"order":3,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p10"},{"order":4,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p5"},{"order":5,"pa":2,"ab":2,"r":0,"h":1,"d2":1,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p7"},{"order":6,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":1,"pid":"p1"},{"order":7,"pa":2,"ab":2,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p4"},{"order":8,"pa":2,"ab":1,"r":0,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p8"},{"order":9,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p2"},{"order":10,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p18"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":1,"d":0,"outs":6,"np":28,"ha":1,"hra":0,"bb":0,"hbp":0,"so":3,"bk":0,"wp":0,"runs":3,"er":1,"pid":"p4"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":30,"ha":1,"hra":0,"bb":3,"hbp":0,"so":2,"bk":0,"wp":0,"runs":3,"er":3,"pid":"p7"},{"seq":3,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":23,"ha":0,"hra":0,"bb":2,"hbp":0,"so":1,"bk":0,"wp":0,"runs":1,"er":1,"pid":"p10"}]},{"no":10,"opponent":"浦和ビックウェーブ","tournament":"練習試合","rs":2,"ra":1,"place":"武蔵浦和","dateLabel":"10試合目","lineScore":[{"team":"浦和ビックウェーブ","innings":[1,0,0],"r":1},{"team":"高砂ヤンキース","innings":[2,0],"r":2}],"batting":[{"order":1,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p1"},{"order":2,"pa":1,"ab":1,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p8"},{"order":3,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":1,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p7"},{"order":4,"pa":1,"ab":1,"r":0,"h":1,"d2":1,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p4"},{"order":5,"pa":1,"ab":1,"r":0,"h":1,"d2":1,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p5"},{"order":6,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p10"},{"order":7,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p11"},{"order":8,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p3"},{"order":9,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p18"},{"order":10,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p2"}],"pitching":[{"seq":1,"cg":0,"w":1,"l":0,"d":0,"outs":6,"np":35,"ha":1,"hra":0,"bb":2,"hbp":2,"so":3,"bk":0,"wp":0,"runs":1,"er":1,"pid":"p1"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":19,"ha":0,"hra":0,"bb":2,"hbp":0,"so":1,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p5"}]},{"no":11,"opponent":"草加リトルパンサーズ","tournament":"練習試合","rs":4,"ra":5,"place":"高砂小","dateLabel":"11試合目","lineScore":[{"team":"草加リトルパンサーズ","innings":[0,0,1,0,4],"r":5},{"team":"高砂ヤンキース","innings":[0,1,2,1,0],"r":4}],"batting":[{"order":1,"pa":2,"ab":1,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":0,"hbp":1,"so":0,"err":0,"pid":"p8"},{"order":2,"pa":2,"ab":2,"r":1,"h":1,"d2":1,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p7"},{"order":3,"pa":2,"ab":2,"r":0,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p1"},{"order":4,"pa":2,"ab":2,"r":0,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p4"},{"order":5,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p5"},{"order":6,"pa":2,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":1,"hbp":1,"so":0,"err":0,"pid":"p10"},{"order":7,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p6"},{"order":8,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p3"},{"order":9,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p11"},{"order":10,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p9"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":0,"d":0,"outs":6,"np":39,"ha":2,"hra":0,"bb":0,"hbp":0,"so":5,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p4"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":13,"ha":1,"hra":0,"bb":1,"hbp":0,"so":0,"bk":0,"wp":0,"runs":1,"er":1,"pid":"p8"},{"seq":3,"cg":0,"w":0,"l":0,"d":0,"outs":6,"np":39,"ha":1,"hra":0,"bb":2,"hbp":0,"so":0,"bk":0,"wp":0,"runs":4,"er":3,"pid":"p1"}]},{"no":12,"opponent":"草加リトルパンサーズ","tournament":"練習試合","rs":0,"ra":3,"place":"高砂小","dateLabel":"12試合目","lineScore":[{"team":"高砂ヤンキース","innings":[0],"r":0},{"team":"草加リトルパンサーズ","innings":[3],"r":3}],"batting":[{"order":1,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p14"},{"order":2,"pa":1,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p13"},{"order":3,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p12"},{"order":4,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p15"},{"order":5,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p19"},{"order":6,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p21"},{"order":7,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p22"},{"order":8,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p20"},{"order":9,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p23"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":1,"d":0,"outs":3,"np":44,"ha":0,"hra":0,"bb":5,"hbp":0,"so":4,"bk":0,"wp":0,"runs":3,"er":3,"pid":"p12"}]},{"no":13,"opponent":"三枚橋ファイターズ","tournament":"MGオープン","rs":11,"ra":3,"place":"立野小","dateLabel":"13試合目","lineScore":[{"team":"三枚橋ファイターズ","innings":[0,0,3],"r":3},{"team":"高砂ヤンキース","innings":[1,5,5],"r":11}],"batting":[{"order":1,"pa":3,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":1,"so":1,"err":0,"pid":"p8"},{"order":2,"pa":3,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":2,"hbp":0,"so":0,"err":0,"pid":"p4"},{"order":3,"pa":2,"ab":2,"r":0,"h":1,"d2":0,"d3":0,"hr":0,"rbi":1,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p1"},{"order":4,"pa":2,"ab":2,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p5"},{"order":5,"pa":2,"ab":2,"r":2,"h":1,"d2":0,"d3":0,"hr":0,"rbi":1,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p7"},{"order":6,"pa":2,"ab":1,"r":2,"h":1,"d2":1,"d3":0,"hr":0,"rbi":1,"sb":2,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p10"},{"order":7,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p6"},{"order":8,"pa":2,"ab":0,"r":2,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":2,"hbp":0,"so":0,"err":0,"pid":"p11"},{"order":9,"pa":2,"ab":0,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":2,"hbp":0,"so":0,"err":0,"pid":"p9"}],"pitching":[{"seq":1,"cg":0,"w":1,"l":0,"d":0,"outs":7,"np":47,"ha":3,"hra":0,"bb":2,"hbp":1,"so":5,"bk":0,"wp":2,"runs":2,"er":3,"pid":"p4"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":2,"np":14,"ha":0,"hra":0,"bb":1,"hbp":0,"so":2,"bk":0,"wp":0,"runs":1,"er":0,"pid":"p8"}]},{"no":14,"opponent":"三枚橋ファイターズ","tournament":"練習試合","rs":3,"ra":6,"place":"立野小","dateLabel":"14試合目","lineScore":[{"team":"高砂ヤンキース","innings":[0,1,1,1],"r":3},{"team":"三枚橋ファイターズ","innings":[3,1,0,2],"r":6}],"batting":[{"order":1,"pa":3,"ab":3,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":2,"err":0,"pid":"p2"},{"order":2,"pa":3,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":2,"hbp":0,"so":0,"err":0,"pid":"p15"},{"order":3,"pa":3,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":2,"err":0,"pid":"p14"},{"order":4,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":2,"err":0,"pid":"p13"},{"order":5,"pa":2,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":2,"hbp":0,"so":0,"err":0,"pid":"p12"},{"order":6,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p11"},{"order":7,"pa":1,"ab":1,"r":1,"h":1,"d2":1,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p6"},{"order":8,"pa":1,"ab":1,"r":0,"h":1,"d2":0,"d3":0,"hr":0,"rbi":1,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p7"},{"order":9,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p5"},{"order":10,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p4"},{"order":11,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p8"},{"order":12,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p9"},{"order":13,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p1"},{"order":14,"pa":1,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p10"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":1,"d":0,"outs":3,"np":32,"ha":0,"hra":0,"bb":4,"hbp":1,"so":1,"bk":0,"wp":0,"runs":3,"er":3,"pid":"p12"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":6,"np":34,"ha":0,"hra":0,"bb":2,"hbp":0,"so":4,"bk":0,"wp":0,"runs":1,"er":1,"pid":"p1"},{"seq":3,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":28,"ha":2,"hra":0,"bb":1,"hbp":0,"so":2,"bk":0,"wp":0,"runs":2,"er":2,"pid":"p10"}]},{"no":15,"opponent":"太田マリーンズ","tournament":"MGオープン","rs":5,"ra":2,"place":"太田小","dateLabel":"15試合目","lineScore":[{"team":"太田マリーンズ","innings":[2,0,0,0],"r":2},{"team":"高砂ヤンキース","innings":[0,0,2,3],"r":5}],"batting":[{"order":1,"pa":3,"ab":3,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p8"},{"order":2,"pa":3,"ab":3,"r":1,"h":2,"d2":1,"d3":0,"hr":0,"rbi":1,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p4"},{"order":3,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p1"},{"order":4,"pa":2,"ab":2,"r":0,"h":2,"d2":0,"d3":0,"hr":0,"rbi":1,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p5"},{"order":5,"pa":2,"ab":2,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p7"},{"order":6,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p10"},{"order":7,"pa":2,"ab":1,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p9"},{"order":8,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p11"},{"order":9,"pa":2,"ab":2,"r":0,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p6"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":0,"d":0,"outs":6,"np":40,"ha":3,"hra":0,"bb":1,"hbp":0,"so":4,"bk":0,"wp":0,"runs":2,"er":2,"pid":"p4"},{"seq":2,"cg":0,"w":1,"l":0,"d":0,"outs":6,"np":35,"ha":0,"hra":0,"bb":3,"hbp":1,"so":2,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p1"}]},{"no":16,"opponent":"赤山カージナルス","tournament":"練習試合","rs":2,"ra":5,"place":"高砂小","dateLabel":"16試合目","lineScore":[{"team":"高砂ヤンキース","innings":[0,1,0,1,0],"r":2},{"team":"赤山カージナルス","innings":[2,2,1,0],"r":5}],"batting":[{"order":1,"pa":3,"ab":3,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p9"},{"order":2,"pa":3,"ab":2,"r":0,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p6"},{"order":3,"pa":3,"ab":3,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p7"},{"order":4,"pa":2,"ab":2,"r":2,"h":2,"d2":2,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p5"},{"order":5,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p4"},{"order":6,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p1"},{"order":7,"pa":2,"ab":2,"r":0,"h":2,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":3,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p8"},{"order":8,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p3"},{"order":9,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p2"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":1,"d":0,"outs":6,"np":36,"ha":3,"hra":0,"bb":1,"hbp":1,"so":1,"bk":0,"wp":0,"runs":4,"er":4,"pid":"p4"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":6,"np":48,"ha":1,"hra":0,"bb":3,"hbp":0,"so":3,"bk":0,"wp":0,"runs":1,"er":1,"pid":"p1"}]},{"no":17,"opponent":"赤山カージナルス","tournament":"練習試合","rs":6,"ra":15,"place":"高砂小","dateLabel":"17試合目","lineScore":[{"team":"赤山カージナルス","innings":[5,5,5],"r":15},{"team":"高砂ヤンキース","innings":[1,0,5],"r":6}],"batting":[{"order":1,"pa":2,"ab":2,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p14"},{"order":2,"pa":2,"ab":0,"r":2,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":2,"hbp":0,"so":0,"err":0,"pid":"p12"},{"order":3,"pa":2,"ab":2,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p15"},{"order":4,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p13"},{"order":5,"pa":2,"ab":2,"r":0,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p18"},{"order":6,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p19"},{"order":7,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p20"},{"order":8,"pa":1,"ab":0,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p9"},{"order":9,"pa":1,"ab":0,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p8"},{"order":10,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p7"},{"order":11,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p6"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":1,"d":0,"outs":3,"np":40,"ha":3,"hra":0,"bb":7,"hbp":0,"so":1,"bk":0,"wp":0,"runs":9,"er":9,"pid":"p8"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":0,"np":5,"ha":0,"hra":0,"bb":1,"hbp":0,"so":0,"bk":0,"wp":0,"runs":0,"er":1,"pid":"p6"},{"seq":3,"cg":0,"w":0,"l":0,"d":0,"outs":2,"np":24,"ha":0,"hra":0,"bb":2,"hbp":0,"so":0,"bk":0,"wp":0,"runs":1,"er":0,"pid":"p7"},{"seq":4,"cg":0,"w":0,"l":0,"d":0,"outs":1,"np":33,"ha":0,"hra":0,"bb":3,"hbp":1,"so":1,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p5"},{"seq":5,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":18,"ha":0,"hra":0,"bb":3,"hbp":0,"so":0,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p1"}]},{"no":18,"opponent":"新和ヴィクトリー","tournament":"MGオープン","rs":10,"ra":11,"place":"中川やしおG","dateLabel":"18試合目","lineScore":[{"team":"高砂ヤンキース","innings":[7,1,0,2],"r":10},{"team":"新和ヴィクトリー","innings":[2,1,5,3],"r":11}],"batting":[{"order":1,"pa":3,"ab":3,"r":1,"h":1,"d2":1,"d3":0,"hr":0,"rbi":1,"sb":3,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p8"},{"order":2,"pa":3,"ab":2,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p4"},{"order":3,"pa":3,"ab":1,"r":3,"h":1,"d2":1,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":2,"hbp":0,"so":0,"err":0,"pid":"p1"},{"order":4,"pa":3,"ab":3,"r":1,"h":0,"d2":0,"d3":0,"hr":1,"rbi":2,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":2,"err":0,"pid":"p5"},{"order":5,"pa":3,"ab":3,"r":1,"h":2,"d2":2,"d3":0,"hr":0,"rbi":2,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p7"},{"order":6,"pa":3,"ab":3,"r":1,"h":1,"d2":1,"d3":0,"hr":0,"rbi":1,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p9"},{"order":7,"pa":3,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p6"},{"order":8,"pa":1,"ab":0,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p3"},{"order":9,"pa":3,"ab":3,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":1,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p11"},{"order":10,"pa":2,"ab":1,"r":0,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p2"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":0,"d":0,"outs":9,"np":50,"ha":3,"hra":0,"bb":2,"hbp":0,"so":1,"bk":0,"wp":0,"runs":8,"er":4,"pid":"p4"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":0,"np":20,"ha":0,"hra":0,"bb":3,"hbp":0,"so":0,"bk":0,"wp":0,"runs":0,"er":4,"pid":"p1"},{"seq":3,"cg":0,"w":0,"l":1,"d":0,"outs":3,"np":31,"ha":1,"hra":0,"bb":3,"hbp":1,"so":0,"bk":0,"wp":0,"runs":3,"er":3,"pid":"p8"}]},{"no":19,"opponent":"南越レッズ","tournament":"八千草大会","rs":7,"ra":4,"place":"南越谷小","dateLabel":"19試合目","lineScore":[{"team":"高砂ヤンキース","innings":[1,4,0,2],"r":7},{"team":"南越レッズ","innings":[3,0,1,0],"r":4}],"batting":[{"order":1,"pa":3,"ab":3,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":1,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p8"},{"order":2,"pa":3,"ab":2,"r":1,"h":2,"d2":0,"d3":0,"hr":0,"rbi":1,"sb":3,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p4"},{"order":3,"pa":3,"ab":3,"r":0,"h":1,"d2":1,"d3":0,"hr":0,"rbi":1,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p7"},{"order":4,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p5"},{"order":5,"pa":2,"ab":2,"r":0,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p1"},{"order":6,"pa":2,"ab":2,"r":1,"h":1,"d2":1,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p9"},{"order":7,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p3"},{"order":8,"pa":2,"ab":0,"r":2,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":3,"sh":0,"sf":0,"bb":1,"hbp":1,"so":0,"err":0,"pid":"p6"},{"order":9,"pa":2,"ab":1,"r":2,"h":1,"d2":1,"d3":0,"hr":0,"rbi":1,"sb":3,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p11"},{"order":10,"pa":2,"ab":2,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p2"}],"pitching":[{"seq":1,"cg":0,"w":1,"l":0,"d":0,"outs":6,"np":47,"ha":2,"hra":0,"bb":2,"hbp":0,"so":6,"bk":0,"wp":0,"runs":3,"er":3,"pid":"p1"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":20,"ha":2,"hra":0,"bb":1,"hbp":0,"so":3,"bk":0,"wp":0,"runs":1,"er":1,"pid":"p7"},{"seq":3,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":19,"ha":2,"hra":0,"bb":0,"hbp":0,"so":0,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p4"}]},{"no":20,"opponent":"南越レッズ","tournament":"練習試合","rs":5,"ra":5,"place":"南越谷小","dateLabel":"20試合目","lineScore":[{"team":"南越レッズ","innings":[1,1,3],"r":5},{"team":"高砂ヤンキース","innings":[1,1,3],"r":5}],"batting":[{"order":1,"pa":2,"ab":2,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p14"},{"order":2,"pa":2,"ab":2,"r":2,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p19"},{"order":3,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":1,"so":1,"err":0,"pid":"p12"},{"order":4,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p13"},{"order":5,"pa":2,"ab":0,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":2,"hbp":0,"so":0,"err":0,"pid":"p15"},{"order":6,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p18"},{"order":7,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p20"},{"order":8,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p21"},{"order":9,"pa":1,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p22"},{"order":10,"pa":1,"ab":0,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p17"},{"order":11,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p16"},{"order":12,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p23"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":0,"d":1,"outs":6,"np":50,"ha":0,"hra":0,"bb":3,"hbp":0,"so":5,"bk":0,"wp":0,"runs":2,"er":1,"pid":"p18"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":18,"ha":1,"hra":0,"bb":1,"hbp":0,"so":2,"bk":0,"wp":0,"runs":3,"er":3,"pid":"p12"}]},{"no":21,"opponent":"東越谷ジュニアホープス","tournament":"越谷交流","rs":11,"ra":1,"place":"増林小","dateLabel":"21試合目","lineScore":[{"team":"東越谷ジュニアホープス","innings":[1,0,0,0],"r":1},{"team":"高砂ヤンキース","innings":[1,1,9],"r":11}],"batting":[{"order":1,"pa":3,"ab":1,"r":3,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":5,"sh":0,"sf":0,"bb":2,"hbp":0,"so":0,"err":0,"pid":"p8"},{"order":2,"pa":3,"ab":2,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p4"},{"order":3,"pa":3,"ab":2,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":2,"sb":2,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p1"},{"order":4,"pa":3,"ab":3,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p7"},{"order":5,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p5"},{"order":6,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p9"},{"order":7,"pa":2,"ab":2,"r":2,"h":2,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p10"},{"order":8,"pa":2,"ab":2,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":2,"sb":2,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p11"},{"order":9,"pa":2,"ab":2,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":1,"sb":2,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p6"}],"pitching":[{"seq":1,"cg":0,"w":1,"l":0,"d":0,"outs":12,"np":38,"ha":2,"hra":0,"bb":0,"hbp":0,"so":2,"bk":0,"wp":1,"runs":1,"er":1,"pid":"p4"}]},{"no":22,"opponent":"東越谷ジュニアホープス","tournament":"練習試合","rs":7,"ra":5,"place":"増林小","dateLabel":"22試合目","lineScore":[{"team":"高砂ヤンキース","innings":[0,6,1],"r":7},{"team":"東越谷ジュニアホープス","innings":[5,0,0],"r":5}],"batting":[{"order":1,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":2,"err":0,"pid":"p20"},{"order":2,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p3"},{"order":3,"pa":2,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":1,"hbp":1,"so":0,"err":0,"pid":"p15"},{"order":4,"pa":2,"ab":1,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":1,"so":1,"err":0,"pid":"p2"},{"order":5,"pa":2,"ab":1,"r":2,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":1,"so":0,"err":0,"pid":"p13"},{"order":6,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p14"},{"order":7,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p18"},{"order":8,"pa":2,"ab":0,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":3,"sh":0,"sf":0,"bb":2,"hbp":0,"so":0,"err":0,"pid":"p19"},{"order":9,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p22"},{"order":10,"pa":1,"ab":0,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p21"},{"order":11,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p16"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":48,"ha":0,"hra":0,"bb":6,"hbp":0,"so":3,"bk":0,"wp":0,"runs":5,"er":5,"pid":"p12"},{"seq":2,"cg":0,"w":1,"l":0,"d":0,"outs":6,"np":36,"ha":1,"hra":0,"bb":2,"hbp":0,"so":5,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p18"}]},{"no":23,"opponent":"三郷スターズ","tournament":"練習試合","rs":7,"ra":3,"place":"幸房小","dateLabel":"23試合目","lineScore":[{"team":"三郷スターズ","innings":[1,1,1,0,0],"r":3},{"team":"高砂ヤンキース","innings":[1,0,2,4],"r":7}],"batting":[{"order":1,"pa":3,"ab":2,"r":0,"h":2,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p11"},{"order":2,"pa":3,"ab":2,"r":2,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":2,"sh":0,"sf":0,"bb":2,"hbp":0,"so":0,"err":0,"pid":"p6"},{"order":3,"pa":3,"ab":3,"r":1,"h":1,"d2":0,"d3":0,"hr":1,"rbi":2,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p9"},{"order":4,"pa":2,"ab":2,"r":0,"h":1,"d2":0,"d3":0,"hr":0,"rbi":1,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p10"},{"order":5,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":1,"pid":"p3"},{"order":6,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":2,"err":0,"pid":"p2"},{"order":7,"pa":2,"ab":1,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p5"},{"order":8,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p1"},{"order":9,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p4"},{"order":10,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p8"},{"order":11,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p7"}],"pitching":[{"seq":1,"cg":0,"w":0,"l":0,"d":0,"outs":6,"np":46,"ha":3,"hra":0,"bb":3,"hbp":0,"so":3,"bk":0,"wp":0,"runs":2,"er":2,"pid":"p10"},{"seq":2,"cg":0,"w":1,"l":0,"d":0,"outs":6,"np":31,"ha":1,"hra":0,"bb":0,"hbp":0,"so":3,"bk":0,"wp":0,"runs":1,"er":1,"pid":"p1"},{"seq":3,"cg":0,"w":0,"l":0,"d":0,"outs":3,"np":16,"ha":0,"hra":0,"bb":0,"hbp":0,"so":3,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p7"}]},{"no":24,"opponent":"八幡メッツ","tournament":"スポ少","rs":8,"ra":3,"place":"中川やしお","dateLabel":"24試合目","lineScore":[{"team":"八幡メッツ","innings":[0,0,2,1],"r":3},{"team":"高砂ヤンキース","innings":[3,0,5],"r":8}],"batting":[{"order":1,"pa":3,"ab":1,"r":2,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":3,"sh":0,"sf":0,"bb":2,"hbp":0,"so":0,"err":0,"pid":"p8"},{"order":2,"pa":3,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":3,"sh":0,"sf":0,"bb":2,"hbp":0,"so":1,"err":0,"pid":"p4"},{"order":3,"pa":3,"ab":2,"r":1,"h":1,"d2":0,"d3":0,"hr":1,"rbi":1,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p1"},{"order":4,"pa":3,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":1,"hbp":0,"so":1,"err":0,"pid":"p5"},{"order":5,"pa":2,"ab":2,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p7"},{"order":6,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":1,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p10"},{"order":7,"pa":2,"ab":1,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":0,"so":0,"err":0,"pid":"p9"},{"order":8,"pa":2,"ab":2,"r":1,"h":1,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":1,"err":0,"pid":"p6"},{"order":9,"pa":2,"ab":0,"r":1,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":1,"sh":0,"sf":0,"bb":1,"hbp":1,"so":0,"err":0,"pid":"p11"}],"pitching":[{"seq":1,"cg":0,"w":1,"l":0,"d":0,"outs":9,"np":52,"ha":2,"hra":0,"bb":2,"hbp":1,"so":7,"bk":0,"wp":0,"runs":2,"er":2,"pid":"p1"},{"seq":2,"cg":0,"w":0,"l":0,"d":0,"outs":1,"np":10,"ha":0,"hra":0,"bb":0,"hbp":0,"so":1,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p7"},{"seq":3,"cg":0,"w":0,"l":0,"d":0,"outs":2,"np":30,"ha":0,"hra":0,"bb":4,"hbp":0,"so":1,"bk":0,"wp":0,"runs":0,"er":0,"pid":"p4"}]},{"no":25,"opponent":"宮沼ファイターズ","tournament":"テリア杯","rs":8,"ra":9,"place":"高砂小","dateLabel":"25試合目","lineScore":[{"team":"宮沼ファイターズ","innings":[1,0,1,3,1,3],"r":9},{"team":"高砂ヤンキース","innings":[1,0,2,3,0,2],"r":8}],"batting":[{"order":1,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p8"},{"order":2,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p4"},{"order":3,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p7"},{"order":4,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p5"},{"order":5,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p1"},{"order":6,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p10"},{"order":7,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p9"},{"order":8,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p11"},{"order":9,"pa":0,"ab":0,"r":0,"h":0,"d2":0,"d3":0,"hr":0,"rbi":0,"sb":0,"sh":0,"sf":0,"bb":0,"hbp":0,"so":0,"err":0,"pid":"p3"}],"pitching":[]}]};
+
+/* ================= 保存・設定 ================= */
+const LS_DB='ty-stats-v1', LS_SET='ty-set-v1';
+function deep(o){return JSON.parse(JSON.stringify(o))}
+let DB;
+try{ DB = JSON.parse(localStorage.getItem(LS_DB)) || deep(INITIAL); }catch(e){ DB = deep(INITIAL); }
+const DEF_SET = {
+  eraBasis:7, minPaMult:1.0, minIpMult:0.5,
+  batCols:['g','pa','ab','r','h','d2','d3','hr','rbi','sb','bb','so','avg','obp','slg','ops'],
+  pitCols:['g','w','l','d','ip','np','ha','bb','so','runs','er','era','whip','kbb']
+};
+let SET;
+try{ SET = Object.assign(deep(DEF_SET), JSON.parse(localStorage.getItem(LS_SET))||{}); }catch(e){ SET = deep(DEF_SET); }
+function save(){ try{localStorage.setItem(LS_DB,JSON.stringify(DB));}catch(e){} }
+function saveSet(){ try{localStorage.setItem(LS_SET,JSON.stringify(SET));}catch(e){} }
+
+/* ================= 集計エンジン ================= */
+const P = id => DB.players.find(p=>p.id===id);
+const PN = id => { const p=P(id); return p? p.name : '（削除された選手）'; };
+const esc = s => String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function batZero(){return {g:0,pa:0,ab:0,r:0,h:0,d2:0,d3:0,hr:0,rbi:0,sb:0,sh:0,sf:0,bb:0,hbp:0,so:0,err:0}}
+function pitZero(){return {g:0,cg:0,w:0,l:0,d:0,outs:0,np:0,ha:0,hra:0,bb:0,hbp:0,so:0,bk:0,wp:0,runs:0,er:0}}
+function addBat(a,b){a.g++;for(const k of ['pa','ab','r','h','d2','d3','hr','rbi','sb','sh','sf','bb','hbp','so','err'])a[k]+=b[k]||0}
+function addPit(a,b){a.g++;for(const k of ['cg','w','l','d','outs','np','ha','hra','bb','hbp','so','bk','wp','runs','er'])a[k]+=b[k]||0}
+function deriveBat(t){
+  t.tb = t.h + t.d2 + 2*t.d3 + 3*t.hr;
+  t.avg = t.ab? t.h/t.ab : null;
+  t.obp = (t.ab+t.bb+t.hbp+t.sf)? (t.h+t.bb+t.hbp)/(t.ab+t.bb+t.hbp+t.sf) : null;
+  t.slg = t.ab? t.tb/t.ab : null;
+  t.ops = (t.obp!=null||t.slg!=null)? (t.obp||0)+(t.slg||0) : null;
+  t.iso = t.avg!=null? t.slg-t.avg : null;
+  t.kpct = t.pa? t.so/t.pa : null;
+  t.bbpct = t.pa? (t.bb+t.hbp)/t.pa : null;
+  t.bbk = t.so? (t.bb+t.hbp)/t.so : null;
+  const bip = t.ab - t.so - t.hr + t.sf;
+  t.babip = bip>0? (t.h-t.hr)/bip : null;
+  return t;
+}
+function derivePit(t){
+  const ip = t.outs/3;
+  t.ip = t.outs;
+  t.era = ip>0? t.er*SET.eraBasis/ip : null;
+  t.whip = ip>0? (t.ha+t.bb)/ip : null;
+  t.kbb = t.bb>0? t.so/t.bb : (t.so>0? Infinity:null);
+  t.k9 = ip>0? t.so*SET.eraBasis/ip : null;
+  t.bb9 = ip>0? (t.bb+t.hbp)*SET.eraBasis/ip : null;
+  const bf = t.outs+t.ha+t.bb+t.hbp;
+  t.oavg = (bf-t.bb-t.hbp)>0? t.ha/(bf-t.bb-t.hbp) : null;
+  t.winp = (t.w+t.l)>0? t.w/(t.w+t.l) : null;
+  return t;
+}
+function aggBatting(filter){
+  const m = {};
+  for(const g of DB.games){ if(filter && !filter(g)) continue;
+    for(const b of g.batting){ (m[b.pid]=m[b.pid]||batZero()); addBat(m[b.pid],b); } }
+  return Object.entries(m).map(([pid,t])=>Object.assign(deriveBat(t),{pid}));
+}
+function aggPitching(filter){
+  const m = {};
+  for(const g of DB.games){ if(filter && !filter(g)) continue;
+    for(const b of g.pitching){ (m[b.pid]=m[b.pid]||pitZero()); addPit(m[b.pid],b); } }
+  return Object.entries(m).map(([pid,t])=>Object.assign(derivePit(t),{pid}));
+}
+function teamBat(){ const t=batZero(); t.g=DB.games.length; for(const g of DB.games)for(const b of g.batting){for(const k of ['pa','ab','r','h','d2','d3','hr','rbi','sb','sh','sf','bb','hbp','so','err'])t[k]+=b[k]||0} return deriveBat(t); }
+function teamPit(){ const t=pitZero(); t.g=DB.games.length; for(const g of DB.games)for(const b of g.pitching){for(const k of ['cg','w','l','d','outs','np','ha','hra','bb','hbp','so','bk','wp','runs','er'])t[k]+=b[k]||0} return derivePit(t); }
+
+/* ================= 表示フォーマット ================= */
+const f3 = v => v==null? '-' : (v===Infinity? '∞' : (v>=1? v.toFixed(3) : v.toFixed(3).replace(/^0/,'')));
+const f2 = v => v==null? '-' : (v===Infinity? '∞' : v.toFixed(2));
+const fpct = v => v==null? '-' : (v*100).toFixed(1)+'%';
+const fip = o => Math.floor(o/3) + (o%3? ' '+(o%3)+'/3' : '');
+const fint = v => v==null? '-' : String(v);
+const BAT_DEFS = [
+  {k:'g',l:'試合',f:fint},{k:'pa',l:'打席',f:fint},{k:'ab',l:'打数',f:fint},{k:'r',l:'得点',f:fint},
+  {k:'h',l:'安打',f:fint},{k:'d2',l:'二塁打',f:fint},{k:'d3',l:'三塁打',f:fint},{k:'hr',l:'本塁打',f:fint},
+  {k:'tb',l:'塁打',f:fint},{k:'rbi',l:'打点',f:fint},{k:'sb',l:'盗塁',f:fint},{k:'sh',l:'犠打',f:fint},
+  {k:'sf',l:'犠飛',f:fint},{k:'bb',l:'四球',f:fint},{k:'hbp',l:'死球',f:fint},{k:'so',l:'三振',f:fint},
+  {k:'err',l:'失策',f:fint},
+  {k:'avg',l:'打率',f:f3,best:'max'},{k:'obp',l:'出塁率',f:f3,best:'max'},{k:'slg',l:'長打率',f:f3,best:'max'},
+  {k:'ops',l:'OPS',f:f3,best:'max'},{k:'iso',l:'ISO',f:f3},{k:'babip',l:'BABIP',f:f3},
+  {k:'kpct',l:'三振率',f:fpct},{k:'bbpct',l:'四死球率',f:fpct},{k:'bbk',l:'四死球/三振',f:f2}
+];
+const PIT_DEFS = [
+  {k:'g',l:'登板',f:fint},{k:'w',l:'勝',f:fint},{k:'l',l:'敗',f:fint},{k:'d',l:'分',f:fint},{k:'cg',l:'完投',f:fint},
+  {k:'ip',l:'投球回',f:fip},{k:'np',l:'球数',f:fint},{k:'ha',l:'被安打',f:fint},{k:'hra',l:'被本塁打',f:fint},
+  {k:'bb',l:'与四球',f:fint},{k:'hbp',l:'与死球',f:fint},{k:'so',l:'奪三振',f:fint},{k:'bk',l:'ボーク',f:fint},
+  {k:'wp',l:'暴投',f:fint},{k:'runs',l:'失点',f:fint},{k:'er',l:'自責点',f:fint},
+  {k:'era',l:'防御率',f:f2,best:'min'},{k:'whip',l:'WHIP',f:f2,best:'min'},{k:'kbb',l:'K/BB',f:f2},
+  {k:'k9',l:'奪三振率',f:f2},{k:'bb9',l:'四死球率',f:f2},{k:'oavg',l:'被打率※',f:f3},{k:'winp',l:'勝率',f:f3}
+];
+
+/* ================= ルーター ================= */
+const V = document.getElementById('view');
+const NAV = [
+  ['dash','ダッシュボード'],['games','試合結果'],['bat','打撃成績'],['pit','投手成績'],
+  ['players','選手名鑑'],['grade','学年別'],['edit','データ編集'],['data','設定・データ']
+];
+function nav(){
+  const cur = (location.hash.replace('#/','')||'dash').split('/')[0];
+  document.getElementById('nav').innerHTML = NAV.map(([k,l])=>
+    `<a href="#/${k}" class="${cur===k?'on':''}">${l}</a>`).join('');
+}
+function header(){
+  let w=0,l=0,d=0,rs=0,ra=0;
+  for(const g of DB.games){ rs+=g.rs; ra+=g.ra; if(g.rs>g.ra)w++; else if(g.rs<g.ra)l++; else d++; }
+  document.getElementById('ttl').innerHTML = esc(DB.teamName||'高砂ヤンキース')+`<small>${esc(DB.season||'')}</small>`;
+  document.getElementById('hdrrec').innerHTML =
+    `<b>${w}勝${l}敗${d}分</b>（${DB.games.length}試合）　得点 ${rs} ／ 失点 ${ra} ／ 得失点差 ${rs-ra>=0?'+':''}${rs-ra}`;
+  return {w,l,d,rs,ra};
+}
+window.addEventListener('hashchange',render);
+function go(h){ location.hash=h; }
+
+/* ================= 共通テーブル ================= */
+const sortState = {};
+function statTable(rows, defs, visible, tableId, opt){
+  opt = opt||{};
+  const st = sortState[tableId] || (sortState[tableId]={k:opt.defaultSort||null,dir:-1});
+  const defsV = defs.filter(dd=>visible.includes(dd.k));
+  if(st.k){
+    const nullV = st.dir===-1? -1e15 : 1e15; // 未計算(-)は常に下へ
+    rows = rows.slice().sort((a,b)=>{
+      let av=a[st.k], bv=b[st.k];
+      if(av==null)av=nullV; if(bv==null)bv=nullV;
+      if(av===Infinity)av=1e12; if(bv===Infinity)bv=1e12;
+      return (av<bv?-1:av>bv?1:0)*st.dir; // dir=-1で降順（1回目タップ=良い順）
+    });
+  }
+  // best-value highlight (only among qualified rows if provided)
+  const best = {};
+  for(const dd of defsV){ if(!dd.best) continue;
+    const pool = rows.filter(r=>!opt.qualify || r._q).map(r=>r[dd.k]).filter(v=>v!=null&&v!==Infinity);
+    if(pool.length) best[dd.k] = dd.best==='max'? Math.max(...pool) : Math.min(...pool);
+  }
+  let html = `<div class="tblwrap"><table><thead><tr><th class="l">選手</th>`;
+  if(opt.gradeCol) html += `<th>学年</th>`;
+  html += defsV.map(dd=>`<th class="sortable ${st.k===dd.k?'sorted':''}" data-sort="${dd.k}" data-tbl="${tableId}">${dd.l}${st.k===dd.k?(st.dir<0?' ▼':' ▲'):''}</th>`).join('');
+  html += `</tr></thead><tbody>`;
+  for(const r of rows){
+    const p = P(r.pid);
+    html += `<tr class="click" data-go="#/player/${r.pid}"><td class="l"><b>${esc(p?p.name:r.pid)}</b>${opt.qualify&&!r._q?' <span class="note">※規定未満</span>':''}</td>`;
+    if(opt.gradeCol) html += `<td>${p?p.grade+'年':''}</td>`;
+    html += defsV.map(dd=>{
+      const v=r[dd.k]; const isBest = dd.best && v!=null && best[dd.k]!==undefined && v===best[dd.k] && (!opt.qualify||r._q);
+      return `<td class="${isBest?'top':''}">${dd.f(v)}</td>`;
+    }).join('');
+    html += `</tr>`;
+  }
+  if(opt.total){
+    html += `<tr class="total"><td class="l">チーム計</td>`;
+    if(opt.gradeCol) html += `<td></td>`;
+    html += defsV.map(dd=>`<td>${dd.f(opt.total[dd.k])}</td>`).join('') + `</tr>`;
+  }
+  html += `</tbody></table></div>`;
+  return html;
+}
+function colPicker(defs, visible, setKey){
+  return `<details class="cols" data-cset="${setKey}" ${SET['_open_'+setKey]?'open':''}><summary>✅ 表示する項目をカスタマイズ（${visible.length}/${defs.length}項目）</summary>
+    <div class="colgrid">`+defs.map(dd=>
+      `<label><input type="checkbox" class="colchk" data-set="${setKey}" data-k="${dd.k}" ${visible.includes(dd.k)?'checked':''}> ${dd.l}</label>`
+    ).join('')+`</div></details>`;
+}
+
+/* ================= 図（SVG） ================= */
+function gameChart(){
+  const gs = DB.games; if(!gs.length) return '';
+  const bw=26, gap=10, w=Math.max(640, gs.length*(bw+gap)+60), h=190, base=150;
+  const mx = Math.max(...gs.map(g=>Math.max(g.rs,g.ra)),1);
+  const sy = v => base - v/mx*110;
+  let s = `<svg width="${w}" height="${h}" role="img" aria-label="試合ごとの得点と失点">`;
+  for(const t of [0, Math.ceil(mx/2), mx]){
+    s += `<line x1="40" y1="${sy(t)}" x2="${w-10}" y2="${sy(t)}" stroke="var(--line)" stroke-width="1"/>
+          <text x="34" y="${sy(t)+4}" font-size="10" fill="var(--sub)" text-anchor="end">${t}</text>`;
+  }
+  gs.forEach((g,i)=>{
+    const x = 46+i*(bw+gap);
+    const res = g.rs>g.ra?'○':g.rs<g.ra?'●':'△';
+    const rc = g.rs>g.ra?'var(--win)':g.rs<g.ra?'var(--lose)':'var(--draw)';
+    s += `<rect x="${x}" y="${sy(g.rs)}" width="${bw/2-1}" height="${base-sy(g.rs)}" fill="var(--navy)" opacity="0.9"/>`;
+    s += `<rect x="${x+bw/2}" y="${sy(g.ra)}" width="${bw/2-1}" height="${base-sy(g.ra)}" fill="var(--red)" opacity="0.75"/>`;
+    s += `<text x="${x+bw/2}" y="${h-24}" font-size="9.5" fill="var(--sub)" text-anchor="middle">${g.no}</text>`;
+    s += `<text x="${x+bw/2}" y="${h-8}" font-size="11" fill="${rc}" text-anchor="middle" font-weight="bold">${res}</text>`;
+  });
+  s += `</svg>`;
+  return `<div class="chartwrap">${s}<div class="legend"><span><i style="background:var(--navy)"></i>高砂ヤンキースの得点</span><span><i style="background:var(--red)"></i>相手の得点</span><span>○勝ち ●負け △引き分け（横軸＝試合No.）</span></div></div>`;
+}
+function trendChart(pid){
+  // cumulative AVG / OPS by game
+  const pts=[]; const t=batZero(); t.g=0;
+  for(const g of DB.games){
+    const b = g.batting.find(x=>x.pid===pid); if(!b) continue;
+    addBat(t,b); const dd=deriveBat(deep(t));
+    pts.push({no:g.no, avg:dd.avg, ops:dd.ops});
+  }
+  if(pts.length<2) return '';
+  const w=Math.max(560, pts.length*34+70), h=180, base=140;
+  const mx = Math.max(1, ...pts.map(p=>p.ops||0));
+  const sy=v=>base - (v||0)/mx*110, sx=i=>50+i*((w-70)/(pts.length-1));
+  const line=(key,color,dash)=>{
+    const d = pts.map((p,i)=>(i?'L':'M')+sx(i).toFixed(1)+' '+sy(p[key]).toFixed(1)).join(' ');
+    return `<path d="${d}" fill="none" stroke="${color}" stroke-width="2" ${dash?'stroke-dasharray="5 4"':''}/>`+
+      pts.map((p,i)=>`<circle cx="${sx(i)}" cy="${sy(p[key])}" r="2.6" fill="${color}"/>`).join('');
+  };
+  let s=`<svg width="${w}" height="${h}" role="img" aria-label="打率とOPSの推移">`;
+  for(const t2 of [0,0.5,Math.round(mx*10)/10]){
+    s+=`<line x1="46" y1="${sy(t2)}" x2="${w-10}" y2="${sy(t2)}" stroke="var(--line)"/>
+        <text x="40" y="${sy(t2)+4}" font-size="10" fill="var(--sub)" text-anchor="end">${t2.toFixed(1)}</text>`;
+  }
+  s+=line('ops','var(--red)',true)+line('avg','var(--navy)',false);
+  pts.forEach((p,i)=>{ if(i%2===0||pts.length<15) s+=`<text x="${sx(i)}" y="${h-8}" font-size="9.5" fill="var(--sub)" text-anchor="middle">${p.no}</text>`; });
+  s+=`</svg>`;
+  return `<div class="chartwrap">${s}<div class="legend"><span><i style="background:var(--navy)"></i>打率（累積）</span><span><i style="background:var(--red)"></i>OPS（累積・点線）</span><span>横軸＝試合No.</span></div></div>`;
+}
+
+/* ================= 各ビュー ================= */
+function vDash(){
+  const rec = header();
+  const tb = teamBat(), tp = teamPit();
+  const teamGames = DB.games.length;
+  const minPa = Math.ceil(teamGames*SET.minPaMult), minOuts = Math.ceil(teamGames*SET.minIpMult*3);
+  const bats = aggBatting().map(r=>(r._q=r.pa>=minPa,r));
+  const pits = aggPitching().map(r=>(r._q=r.outs>=minOuts,r));
+  const lead=(rows,k,dir,fmt,q)=>{
+    const pool = rows.filter(r=>(!q||r._q)&&r[k]!=null&&r[k]!==Infinity);
+    if(!pool.length) return {n:'-',v:'-'};
+    const best = pool.reduce((a,b)=> (dir==='max'? (b[k]>a[k]):(b[k]<a[k]))?b:a );
+    return {n:PN(best.pid), v:fmt(best[k])};
+  };
+  const cards = [
+    ['首位打者', lead(bats,'avg','max',f3,true)],
+    ['本塁打王', lead(bats,'hr','max',fint,false)],
+    ['打点王', lead(bats,'rbi','max',fint,false)],
+    ['盗塁王', lead(bats,'sb','max',fint,false)],
+    ['最高出塁率', lead(bats,'obp','max',f3,true)],
+    ['最高OPS', lead(bats,'ops','max',f3,true)],
+    ['最優秀防御率', lead(pits,'era','min',f2,true)],
+    ['最多勝', lead(pits,'w','max',v=>v+'勝',false)],
+    ['奪三振王', lead(pits,'so','max',fint,false)]
+  ];
+  V.innerHTML = `
+    <h2><span class="en">SEASON</span>シーズンサマリー</h2>
+    <div class="statgrid">
+      <div class="stat"><div class="k">勝敗</div><div class="v">${rec.w}勝${rec.l}敗${rec.d}分</div></div>
+      <div class="stat"><div class="k">チーム打率</div><div class="v">${f3(tb.avg)}</div></div>
+      <div class="stat"><div class="k">チームOPS</div><div class="v">${f3(tb.ops)}</div></div>
+      <div class="stat"><div class="k">チーム防御率（${SET.eraBasis}回換算）</div><div class="v">${f2(tp.era)}</div></div>
+      <div class="stat"><div class="k">総盗塁</div><div class="v">${tb.sb}</div></div>
+      <div class="stat"><div class="k">総奪三振</div><div class="v">${tp.so}</div></div>
+    </div>
+    <h2><span class="en">TITLES</span>タイトルホルダー <span class="note">（率系は規定打席 ${minPa}打席・規定投球回 ${fip(minOuts)}回以上）</span></h2>
+    <div class="statgrid">${cards.map(([k,x])=>`<div class="stat"><div class="k">${k}</div><div class="v">${x.v}</div><div class="who">${esc(x.n)}</div></div>`).join('')}</div>
+    <h2><span class="en">GAMES</span>試合ごとの得点・失点</h2>
+    ${gameChart()}
+    <div class="note">タイトルの規定ラインは「設定・データ」で調整できます。</div>`;
+}
+
+function vGames(){
+  header();
+  let rows = DB.games.map(g=>{
+    const res = g.rs>g.ra?['○','bw']:g.rs<g.ra?['●','bl']:['△','bd'];
+    return `<tr class="click" data-go="#/game/${g.no}">
+      <td>${g.no}</td><td class="l">${esc(g.date||g.dateLabel||g.no+'試合目')}</td>
+      <td class="l">${esc(g.tournament)}</td><td class="l"><b>${esc(g.opponent)}</b></td>
+      <td><span class="badge ${res[1]}">${res[0]}</span></td>
+      <td><b>${g.rs} - ${g.ra}</b></td><td class="l">${esc(g.place||'')}</td></tr>`;
+  }).join('');
+  V.innerHTML = `
+    <h2><span class="en">RESULTS</span>試合結果 <span class="note">（行をタップで詳細）</span></h2>
+    <div class="controls"><button class="pri" data-go2="#/entry/new">＋ 新しい試合を記録する</button></div>
+    <div class="tblwrap"><table><thead><tr><th>No.</th><th class="l">日付</th><th class="l">大会</th><th class="l">対戦相手</th><th>勝敗</th><th>スコア</th><th class="l">場所</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+function vGame(no){
+  header();
+  const g = DB.games.find(x=>x.no===no); if(!g){go('#/games');return;}
+  let ls = '';
+  if(g.lineScore && g.lineScore.length){
+    const mxI = Math.max(...g.lineScore.map(r=>r.innings.length),1);
+    ls = `<div class="tblwrap"><table class="linescore"><thead><tr><th class="l">チーム</th>${Array.from({length:mxI},(_,i)=>`<th>${i+1}</th>`).join('')}<th>R</th></tr></thead><tbody>`+
+      g.lineScore.map(r=>`<tr><td class="l"><b>${esc(r.team)}</b></td>${Array.from({length:mxI},(_,i)=>`<td>${r.innings[i]==null?'':r.innings[i]}</td>`).join('')}<td><b>${r.r==null?'':r.r}</b></td></tr>`).join('')+
+      `</tbody></table></div>`;
+  }
+  const bdefs = BAT_DEFS.filter(dd=>['pa','ab','r','h','d2','d3','hr','rbi','sb','bb','hbp','so','err'].includes(dd.k));
+  const bat = g.batting.map(b=>{
+    const t = deriveBat(Object.assign(batZero(),b,{g:1}));
+    return `<tr class="click" data-go="#/player/${b.pid}"><td>${b.order||''}</td><td class="l"><b>${esc(PN(b.pid))}</b></td>`+
+      bdefs.map(dd=>`<td>${dd.f(t[dd.k])}</td>`).join('')+`<td>${f3(t.avg)}</td></tr>`;
+  }).join('');
+  const pit = g.pitching.map(b=>{
+    const t = derivePit(Object.assign(pitZero(),b,{g:1}));
+    const dec = b.w?'<span class="badge bw">勝</span>':b.l?'<span class="badge bl">敗</span>':b.d?'<span class="badge bd">分</span>':'';
+    return `<tr class="click" data-go="#/player/${b.pid}"><td>${b.seq}</td><td class="l"><b>${esc(PN(b.pid))}</b> ${dec}</td>
+      <td>${fip(b.outs)}</td><td>${b.np}</td><td>${b.ha}</td><td>${b.hra}</td><td>${b.bb}</td><td>${b.hbp}</td><td>${b.so}</td><td>${b.wp}</td><td>${b.runs}</td><td>${b.er}</td></tr>`;
+  }).join('');
+  const res = g.rs>g.ra?['○ 勝ち','bw']:g.rs<g.ra?['● 負け','bl']:['△ 引き分け','bd'];
+  V.innerHTML = `
+    <div class="crumb"><a href="#/games">← 試合結果一覧</a></div>
+    <h2><span class="en">GAME ${g.no}</span>vs ${esc(g.opponent)} <span class="badge ${res[1]}">${res[0]}</span></h2>
+    <div class="panel"><span class="tag">${esc(g.tournament||'—')}</span><span class="tag">${esc(g.date||g.dateLabel||'')}</span><span class="tag">${esc(g.place||'場所未記入')}</span>　<b style="font-size:17px">${g.rs} - ${g.ra}</b></div>
+    ${ls}
+    <h2><span class="en">BATTING</span>打撃</h2>
+    <div class="tblwrap"><table><thead><tr><th>打順</th><th class="l">選手</th>${bdefs.map(dd=>`<th>${dd.l}</th>`).join('')}<th>打率</th></tr></thead><tbody>${bat||'<tr><td class="l" colspan="16">記録なし</td></tr>'}</tbody></table></div>
+    <h2><span class="en">PITCHING</span>投手</h2>
+    <div class="tblwrap"><table><thead><tr><th>順</th><th class="l">投手</th><th>投球回</th><th>球数</th><th>被安打</th><th>被本塁打</th><th>与四球</th><th>与死球</th><th>奪三振</th><th>暴投</th><th>失点</th><th>自責点</th></tr></thead><tbody>${pit||'<tr><td class="l" colspan="12">記録なし</td></tr>'}</tbody></table></div>
+    <div class="controls">
+      <button data-go2="#/entry/${g.no}">✏️ この試合を編集</button>
+      <button class="danger" id="delGame">🗑 この試合を削除</button>
+    </div>`;
+  document.getElementById('delGame').onclick = ()=>{
+    if(!confirm(`試合No.${g.no} vs ${g.opponent} の記録を削除します。よろしいですか？`)) return;
+    DB.games = DB.games.filter(x=>x.no!==no); save(); go('#/games');
+  };
+}
+
+function vBat(){
+  header();
+  const teamGames = DB.games.length;
+  const minPa = Math.ceil(teamGames*SET.minPaMult);
+  const gradeF = SET._batGrade||'all';
+  const tourF = SET._batTour||'all';
+  const onlyQ = !!SET._batQ;
+  const tours = [...new Set(DB.games.map(g=>g.tournament).filter(Boolean))];
+  const filter = g => (tourF==='all'||g.tournament===tourF);
+  let rows = aggBatting(filter).map(r=>(r._q=r.pa>=minPa,r));
+  if(gradeF!=='all') rows = rows.filter(r=>String(P(r.pid).grade)===gradeF);
+  if(onlyQ) rows = rows.filter(r=>r._q);
+  V.innerHTML = `
+    <h2><span class="en">BATTING</span>打撃成績（年間） <span class="note">列見出しタップで並べ替え</span></h2>
+    <div class="controls">
+      <label>学年 <select id="fGrade"><option value="all">全学年</option>${[...new Set(DB.players.map(p=>p.grade))].sort((a,b)=>b-a).map(gr=>`<option value="${gr}" ${String(gr)===gradeF?'selected':''}>${gr}年生</option>`).join('')}</select></label>
+      <label>大会 <select id="fTour"><option value="all">全試合</option>${tours.map(t=>`<option ${t===tourF?'selected':''}>${esc(t)}</option>`).join('')}</select></label>
+      <label><input type="checkbox" id="fQ" ${onlyQ?'checked':''}> 規定打席（${minPa}打席）以上のみ</label>
+    </div>
+    ${colPicker(BAT_DEFS, SET.batCols, 'batCols')}
+    ${statTable(rows, BAT_DEFS, SET.batCols, 'bat', {gradeCol:true, qualify:true, total: tourF==='all'&&gradeF==='all'? teamBat():null, defaultSort:null})}
+    <div class="note">赤太字＝リーグトップ（規定打席到達者の中で）。率の定義：出塁率=(安打+四死球)÷(打数+四死球+犠飛)、OPS=出塁率+長打率。</div>`;
+  document.getElementById('fGrade').onchange = e=>{SET._batGrade=e.target.value;saveSet();render();};
+  document.getElementById('fTour').onchange = e=>{SET._batTour=e.target.value;saveSet();render();};
+  document.getElementById('fQ').onchange = e=>{SET._batQ=e.target.checked;saveSet();render();};
+}
+
+function vPit(){
+  header();
+  const teamGames = DB.games.length;
+  const minOuts = Math.ceil(teamGames*SET.minIpMult*3);
+  let rows = aggPitching().map(r=>(r._q=r.outs>=minOuts,r));
+  V.innerHTML = `
+    <h2><span class="en">PITCHING</span>投手成績（年間）</h2>
+    <div class="controls">
+      <label>防御率の換算 <select id="eraB">${[7,6,5].map(n=>`<option value="${n}" ${SET.eraBasis===n?'selected':''}>${n}回換算</option>`).join('')}</select></label>
+      <span class="note">高学年=7回、低学年=5回が目安（自責点×換算回数÷投球回）</span>
+    </div>
+    ${colPicker(PIT_DEFS, SET.pitCols, 'pitCols')}
+    ${statTable(rows, PIT_DEFS, SET.pitCols, 'pit', {gradeCol:true, qualify:true, total: teamPit(), defaultSort:null})}
+    <div class="note">赤太字＝リーグトップ（規定投球回 ${fip(minOuts)} 以上の中で）。WHIP=(被安打+与四球)÷投球回。被打率※は打席概算からの参考値。</div>`;
+  document.getElementById('eraB').onchange = e=>{SET.eraBasis=+e.target.value;saveSet();render();};
+}
+
+function vPlayers(){
+  header();
+  const bats = {}; aggBatting().forEach(r=>bats[r.pid]=r);
+  const pits = {}; aggPitching().forEach(r=>pits[r.pid]=r);
+  const grades = [...new Set(DB.players.map(p=>p.grade))].sort((a,b)=>b-a);
+  V.innerHTML = `<h2><span class="en">ROSTER</span>選手名鑑 <span class="note">（カードをタップで個人ページ）</span></h2>`+
+    grades.map(gr=>`<h2 style="font-size:14px">${gr}年生</h2><div class="cards">`+
+      DB.players.filter(p=>p.grade===gr && p.active!==false).map(p=>{
+        const b=bats[p.id], pi=pits[p.id];
+        return `<div class="pcard" data-go="#/player/${p.id}">
+          <div class="meta">背番号 ${esc(p.number)}　<span class="badge g${Math.min(gr,4)}">${gr}年</span></div>
+          <div class="nm">${esc(p.name)}</div>
+          <div class="st">${b?`打率 <b>${f3(b.avg)}</b> ／ OPS <b>${f3(b.ops)}</b><br>盗塁 <b>${b.sb}</b>`:'打撃記録なし'}${pi?`<br>投手: ${pi.w}勝${pi.l}敗 防 <b>${f2(pi.era)}</b>`:''}</div>
+        </div>`;}).join('')+`</div>`).join('');
+}
+
+function vPlayer(pid){
+  header();
+  const p = P(pid); if(!p){go('#/players');return;}
+  const b = aggBatting().find(r=>r.pid===pid);
+  const pi = aggPitching().find(r=>r.pid===pid);
+  const logs = [];
+  for(const g of DB.games){
+    const bl = g.batting.find(x=>x.pid===pid);
+    if(bl){ const t=deriveBat(Object.assign(batZero(),bl,{g:1}));
+      logs.push(`<tr class="click" data-go="#/game/${g.no}"><td>${g.no}</td><td class="l">${esc(g.opponent)}</td><td>${bl.pa}</td><td>${bl.ab}</td><td>${bl.h}</td><td>${bl.d2+bl.d3+bl.hr?`${bl.d2?'二'+bl.d2:''}${bl.d3?' 三'+bl.d3:''}${bl.hr?' 本'+bl.hr:''}`:''}</td><td>${bl.rbi}</td><td>${bl.r}</td><td>${bl.sb}</td><td>${bl.bb+bl.hbp}</td><td>${bl.so}</td><td>${f3(t.avg)}</td></tr>`);}
+  }
+  const plogs = [];
+  for(const g of DB.games){
+    const pl = g.pitching.find(x=>x.pid===pid);
+    if(pl){ plogs.push(`<tr class="click" data-go="#/game/${g.no}"><td>${g.no}</td><td class="l">${esc(g.opponent)}</td><td>${pl.w?'勝':pl.l?'敗':pl.d?'分':''}</td><td>${fip(pl.outs)}</td><td>${pl.np}</td><td>${pl.ha}</td><td>${pl.bb}</td><td>${pl.hbp}</td><td>${pl.so}</td><td>${pl.runs}</td><td>${pl.er}</td></tr>`);}
+  }
+  V.innerHTML = `
+    <div class="crumb"><a href="#/players">← 選手名鑑</a></div>
+    <h2><span class="en">PLAYER</span>${esc(p.name)} <span class="badge g${Math.min(p.grade,4)}">${p.grade}年</span> <span class="note">背番号 ${esc(p.number)}</span></h2>
+    ${b?`<div class="statgrid">
+      <div class="stat"><div class="k">打率</div><div class="v">${f3(b.avg)}</div></div>
+      <div class="stat"><div class="k">OPS</div><div class="v">${f3(b.ops)}</div></div>
+      <div class="stat"><div class="k">安打 / 本塁打</div><div class="v">${b.h}<small> 本</small> / ${b.hr}<small> 本</small></div></div>
+      <div class="stat"><div class="k">打点 / 盗塁</div><div class="v">${b.rbi} / ${b.sb}</div></div>
+      <div class="stat"><div class="k">出塁率</div><div class="v">${f3(b.obp)}</div></div>
+      <div class="stat"><div class="k">三振率</div><div class="v">${fpct(b.kpct)}</div></div>
+    </div>`:'<div class="panel">打撃成績はまだありません。</div>'}
+    ${trendChart(pid)}
+    ${pi?`<h2><span class="en">PITCHING</span>投手成績</h2><div class="statgrid">
+      <div class="stat"><div class="k">勝敗</div><div class="v">${pi.w}勝${pi.l}敗</div></div>
+      <div class="stat"><div class="k">防御率（${SET.eraBasis}回換算）</div><div class="v">${f2(pi.era)}</div></div>
+      <div class="stat"><div class="k">投球回 / 奪三振</div><div class="v">${fip(pi.outs)} / ${pi.so}</div></div>
+      <div class="stat"><div class="k">WHIP</div><div class="v">${f2(pi.whip)}</div></div>
+    </div>`:''}
+    <h2><span class="en">GAME LOG</span>試合別（打撃）</h2>
+    <div class="tblwrap"><table><thead><tr><th>No.</th><th class="l">相手</th><th>打席</th><th>打数</th><th>安打</th><th class="l">長打</th><th>打点</th><th>得点</th><th>盗塁</th><th>四死球</th><th>三振</th><th>その試合の打率</th></tr></thead><tbody>${logs.join('')||'<tr><td colspan="12" class="l">記録なし</td></tr>'}</tbody></table></div>
+    ${plogs.length?`<h2><span class="en">GAME LOG</span>試合別（投手）</h2>
+    <div class="tblwrap"><table><thead><tr><th>No.</th><th class="l">相手</th><th>勝敗</th><th>投球回</th><th>球数</th><th>被安打</th><th>与四球</th><th>与死球</th><th>奪三振</th><th>失点</th><th>自責点</th></tr></thead><tbody>${plogs.join('')}</tbody></table></div>`:''}`;
+}
+
+function vGrade(){
+  header();
+  const grades = [...new Set(DB.players.map(p=>p.grade))].sort((a,b)=>b-a);
+  const rows = grades.map(gr=>{
+    const pids = DB.players.filter(p=>p.grade===gr).map(p=>p.id);
+    const t = batZero(); t.g=0;
+    let n=0;
+    for(const g of DB.games)for(const b of g.batting){ if(pids.includes(b.pid)){for(const k of ['pa','ab','r','h','d2','d3','hr','rbi','sb','sh','sf','bb','hbp','so','err'])t[k]+=b[k]||0; n++;} }
+    t.g=n; deriveBat(t);
+    const tp = pitZero(); let np=0;
+    for(const g of DB.games)for(const b of g.pitching){ if(pids.includes(b.pid)){for(const k of ['cg','w','l','d','outs','np','ha','hra','bb','hbp','so','bk','wp','runs','er'])tp[k]+=b[k]||0; np++;} }
+    tp.g=np; derivePit(tp);
+    return {gr, count:pids.length, t, tp};
+  });
+  const bar = (v,mx)=> mx? Math.max(2,(v||0)/mx*100) : 0;
+  const mAvg = Math.max(...rows.map(r=>r.t.avg||0),0.001);
+  const mOps = Math.max(...rows.map(r=>r.t.ops||0),0.001);
+  const mSb = Math.max(...rows.map(r=>r.t.sb),1);
+  V.innerHTML = `
+    <h2><span class="en">BY GRADE</span>学年別分析</h2>
+    <div class="tblwrap"><table><thead><tr><th>学年</th><th>人数</th><th>打席</th><th>安打</th><th>本塁打</th><th>打点</th><th>盗塁</th><th>四死球</th><th>三振</th><th>打率</th><th>出塁率</th><th>OPS</th><th>三振率</th><th>投球回</th><th>防御率</th></tr></thead><tbody>`+
+    rows.map(r=>`<tr><td><span class="badge g${Math.min(r.gr,4)}">${r.gr}年</span></td><td>${r.count}</td><td>${r.t.pa}</td><td>${r.t.h}</td><td>${r.t.hr}</td><td>${r.t.rbi}</td><td>${r.t.sb}</td><td>${r.t.bb+r.t.hbp}</td><td>${r.t.so}</td><td>${f3(r.t.avg)}</td><td>${f3(r.t.obp)}</td><td>${f3(r.t.ops)}</td><td>${fpct(r.t.kpct)}</td><td>${fip(r.tp.outs)}</td><td>${f2(r.tp.era)}</td></tr>`).join('')+
+    `</tbody></table></div>
+    <div class="panel"><b>打率</b><div class="bars" style="margin-top:6px">${rows.map(r=>`<div class="brow"><span>${r.gr}年生</span><div class="btrack"><div class="bfill" style="width:${bar(r.t.avg,mAvg)}%"></div></div><b>${f3(r.t.avg)}</b></div>`).join('')}</div></div>
+    <div class="panel"><b>OPS</b><div class="bars" style="margin-top:6px">${rows.map(r=>`<div class="brow"><span>${r.gr}年生</span><div class="btrack"><div class="bfill" style="width:${bar(r.t.ops,mOps)}%;background:var(--red)"></div></div><b>${f3(r.t.ops)}</b></div>`).join('')}</div></div>
+    <div class="panel"><b>盗塁（合計）</b><div class="bars" style="margin-top:6px">${rows.map(r=>`<div class="brow"><span>${r.gr}年生</span><div class="btrack"><div class="bfill" style="width:${bar(r.t.sb,mSb)}%;background:var(--win)"></div></div><b>${r.t.sb}</b></div>`).join('')}</div></div>
+    <div class="note">学年をまたぐ育成の見取り図。学年別の率は打席数が少ないとブレやすい点に注意。</div>`;
+}
+
+/* ================= 試合入力・編集 ================= */
+const BAT_IN = [['pa','打席'],['ab','打数'],['r','得点'],['h','安打'],['d2','二塁打'],['d3','三塁打'],['hr','本塁打'],['rbi','打点'],['sb','盗塁'],['sh','犠打'],['sf','犠飛'],['bb','四球'],['hbp','死球'],['so','三振'],['err','失策']];
+const PIT_IN = [['np','球数'],['ha','被安打'],['hra','被本塁打'],['bb','与四球'],['hbp','与死球'],['so','奪三振'],['wp','暴投'],['bk','ボーク'],['runs','失点'],['er','自責点']];
+let editPitch = [];
+
+function vEntry(arg){
+  header();
+  const isNew = arg==='new';
+  const g = isNew? null : DB.games.find(x=>x.no===+arg);
+  if(!isNew && !g){ go('#/games'); return; }
+  const ex = g||{opponent:'',tournament:'練習試合',date:'',place:'',rs:'',ra:'',batting:[],pitching:[],lineScore:[]};
+  editPitch = deep(ex.pitching||[]);
+  const our = (ex.lineScore||[]).find(r=>/高砂/.test(r.team)) || {innings:[],r:null};
+  const opp = (ex.lineScore||[]).find(r=>!/高砂/.test(r.team)) || {innings:[],r:null};
+  const oursFirst = ex.lineScore&&ex.lineScore.length? /高砂/.test(ex.lineScore[0].team) : true;
+  const innIn = (pref,row)=>Array.from({length:9},(_,i)=>`<input type="number" min="0" id="${pref}${i}" value="${row.innings[i]??''}" style="width:40px" inputmode="numeric">`).join('');
+  const batRow = p=>{
+    const bl = ex.batting.find(x=>x.pid===p.id);
+    return `<tr data-pid="${p.id}"><td class="l"><label><input type="checkbox" class="playchk" ${bl?'checked':''}> <b>${esc(p.name)}</b> <span class="note">${p.grade}年</span></label></td>
+      <td><input type="number" min="0" max="20" class="bin" data-k="order" value="${bl?bl.order:''}" inputmode="numeric" style="width:44px"></td>`+
+      BAT_IN.map(([k])=>`<td><input type="number" min="0" class="bin" data-k="${k}" value="${bl&&bl[k]?bl[k]:''}" inputmode="numeric" ${bl?'':'disabled'}></td>`).join('')+`</tr>`;
+  };
+  V.innerHTML = `
+    <div class="crumb"><a href="#/games">← 試合結果一覧</a></div>
+    <h2><span class="en">ENTRY</span>${isNew?'新しい試合を記録':'試合No.'+g.no+' を編集'}</h2>
+    <div class="panel">
+      <div class="formrow">
+        <label>日付 <input type="date" id="eDate" value="${esc(ex.date||'')}"></label>
+        <label>大会名 <input type="text" id="eTour" value="${esc(ex.tournament)}" style="width:130px"></label>
+        <label>対戦相手 <input type="text" id="eOpp" value="${esc(ex.opponent)}" style="width:170px"></label>
+        <label>場所 <input type="text" id="ePlace" value="${esc(ex.place||'')}" style="width:150px"></label>
+        <label>先攻 <select id="eFirst"><option value="us" ${oursFirst?'selected':''}>高砂ヤンキース</option><option value="them" ${oursFirst?'':'selected'}>相手チーム</option></select></label>
+      </div>
+      <div class="tblwrap"><table class="linescore"><thead><tr><th class="l">イニングスコア</th>${Array.from({length:9},(_,i)=>`<th>${i+1}</th>`).join('')}<th>R</th></tr></thead><tbody>
+        <tr><td class="l"><b>高砂ヤンキース</b></td>${Array.from({length:9},(_,i)=>`<td><input type="number" min="0" class="innU" value="${our.innings[i]??''}" style="width:40px" inputmode="numeric"></td>`).join('')}<td><input type="number" min="0" id="eRs" value="${ex.rs}" style="width:46px" inputmode="numeric"></td></tr>
+        <tr><td class="l"><b>相手</b></td>${Array.from({length:9},(_,i)=>`<td><input type="number" min="0" class="innT" value="${opp.innings[i]??''}" style="width:40px" inputmode="numeric"></td>`).join('')}<td><input type="number" min="0" id="eRa" value="${ex.ra}" style="width:46px" inputmode="numeric"></td></tr>
+      </tbody></table></div>
+      <div class="note">イニングに点を入れると R（合計）は自動で埋まります。スコアブックの合計だけ写す場合は R に直接入力でもOK。</div>
+    </div>
+    <h2><span class="en">BATTING</span>打撃の記録 <span class="note">出場した選手に✅ → 数字を入力（空欄=0）</span></h2>
+    <div class="tblwrap entry"><table><thead><tr><th class="l">選手（✅=出場）</th><th>打順</th>${BAT_IN.map(([,l])=>`<th>${l}</th>`).join('')}</tr></thead><tbody>
+      ${DB.players.filter(p=>p.active!==false || ex.batting.some(b=>b.pid===p.id)).map(batRow).join('')}
+    </tbody></table></div>
+    <h2><span class="en">PITCHING</span>投手の記録 <span class="note">登板した順に追加</span></h2>
+    <div id="pitBox"></div>
+    <div class="pit-add"><button id="addPit">＋ 投手を追加</button></div>
+    <div class="controls" style="margin-top:18px">
+      <button class="pri" id="saveGame" style="font-size:15px;padding:10px 26px">💾 この試合を保存</button>
+      <span class="note">保存するとダッシュボード・年間成績・個人ページに即反映されます。</span>
+    </div>`;
+  renderPitBox();
+  // wire
+  V.querySelectorAll('.playchk').forEach(chk=>chk.addEventListener('change',e=>{
+    const tr = e.target.closest('tr');
+    tr.querySelectorAll('.bin').forEach(inp=>{ if(inp.dataset.k!=='order') inp.disabled = !e.target.checked; });
+    if(e.target.checked && !tr.querySelector('[data-k=order]').value){
+      const used = [...V.querySelectorAll('.playchk')].filter(c=>c.checked).length;
+      tr.querySelector('[data-k=order]').value = used;
+    }
+  }));
+  const syncR = ()=>{
+    const su = [...V.querySelectorAll('.innU')].reduce((a,i)=>a+(+i.value||0),0);
+    const st = [...V.querySelectorAll('.innT')].reduce((a,i)=>a+(+i.value||0),0);
+    if([...V.querySelectorAll('.innU')].some(i=>i.value!=='')) document.getElementById('eRs').value = su;
+    if([...V.querySelectorAll('.innT')].some(i=>i.value!=='')) document.getElementById('eRa').value = st;
+  };
+  V.querySelectorAll('.innU,.innT').forEach(i=>i.addEventListener('input',syncR));
+  document.getElementById('addPit').onclick = ()=>{ editPitch.push({pid:DB.players[0].id,seq:editPitch.length+1,cg:0,w:0,l:0,d:0,outs:0,np:0,ha:0,hra:0,bb:0,hbp:0,so:0,bk:0,wp:0,runs:0,er:0}); renderPitBox(); };
+  document.getElementById('saveGame').onclick = ()=>saveGameFromForm(isNew? null : g.no);
+}
+function renderPitBox(){
+  const box = document.getElementById('pitBox'); if(!box) return;
+  box.innerHTML = editPitch.map((pl,i)=>`
+    <div class="panel" data-pi="${i}">
+      <div class="formrow">
+        <b>${i+1}人目</b>
+        <label>投手 <select class="pSel">${DB.players.map(p=>`<option value="${p.id}" ${p.id===pl.pid?'selected':''}>${esc(p.name)}（${p.grade}年）</option>`).join('')}</select></label>
+        <label>投球回 <input type="number" min="0" class="pIn" data-k="_ipW" value="${Math.floor(pl.outs/3)}" style="width:46px" inputmode="numeric">回</label>
+        <label>＋アウト <select class="pIn" data-k="_ipO">${[0,1,2].map(n=>`<option value="${n}" ${pl.outs%3===n?'selected':''}>${n}/3</option>`).join('')}</select></label>
+        <label><input type="checkbox" class="pIn" data-k="cg" ${pl.cg?'checked':''}>完投</label>
+        <label><input type="checkbox" class="pIn" data-k="w" ${pl.w?'checked':''}>勝利</label>
+        <label><input type="checkbox" class="pIn" data-k="l" ${pl.l?'checked':''}>敗戦</label>
+        <label><input type="checkbox" class="pIn" data-k="d" ${pl.d?'checked':''}>引分</label>
+        <button class="danger pDel" style="margin-left:auto">削除</button>
+      </div>
+      <div class="formrow">${PIT_IN.map(([k,l])=>`<label>${l} <input type="number" min="0" class="pIn" data-k="${k}" value="${pl[k]||''}" inputmode="numeric" style="width:52px"></label>`).join('')}</div>
+    </div>`).join('') || '<div class="note" style="margin-bottom:8px">まだ投手が追加されていません。</div>';
+  box.querySelectorAll('.pDel').forEach(b=>b.onclick = e=>{ editPitch.splice(+e.target.closest('[data-pi]').dataset.pi,1); renderPitBox(); });
+  box.querySelectorAll('.pSel').forEach(s=>s.onchange = e=>{ editPitch[+e.target.closest('[data-pi]').dataset.pi].pid = e.target.value; });
+  box.querySelectorAll('.pIn').forEach(inp=>inp.addEventListener('change',e=>{
+    const pl = editPitch[+e.target.closest('[data-pi]').dataset.pi];
+    const k = e.target.dataset.k;
+    if(k==='_ipW'||k==='_ipO'){
+      const row = e.target.closest('[data-pi]');
+      const wv = +row.querySelector('[data-k=_ipW]').value||0;
+      const ov = +row.querySelector('[data-k=_ipO]').value||0;
+      pl.outs = wv*3+ov;
+    } else if(['cg','w','l','d'].includes(k)) pl[k] = e.target.checked?1:0;
+    else pl[k] = +e.target.value||0;
+  }));
+}
+function saveGameFromForm(no){
+  const opp = document.getElementById('eOpp').value.trim();
+  if(!opp){ alert('対戦相手を入力してください'); return; }
+  const batting = [];
+  V.querySelectorAll('tr[data-pid]').forEach(tr=>{
+    if(!tr.querySelector('.playchk').checked) return;
+    const b = {pid:tr.dataset.pid};
+    tr.querySelectorAll('.bin').forEach(inp=>{ b[inp.dataset.k] = +inp.value||0; });
+    batting.push(b);
+  });
+  batting.sort((a,b)=>(a.order||99)-(b.order||99));
+  editPitch.forEach((pl,i)=>pl.seq=i+1);
+  const innU = [...V.querySelectorAll('.innU')].map(i=>i.value===''?null:+i.value);
+  const innT = [...V.querySelectorAll('.innT')].map(i=>i.value===''?null:+i.value);
+  while(innU.length&&innU[innU.length-1]==null)innU.pop();
+  while(innT.length&&innT[innT.length-1]==null)innT.pop();
+  const rs = +document.getElementById('eRs').value||0;
+  const ra = +document.getElementById('eRa').value||0;
+  const oursFirst = document.getElementById('eFirst').value==='us';
+  const usRow = {team:'高砂ヤンキース',innings:innU,r:rs};
+  const themRow = {team:opp,innings:innT,r:ra};
+  const gobj = {
+    no: no ?? (DB.games.length? Math.max(...DB.games.map(g=>g.no))+1 : 1),
+    opponent: opp,
+    tournament: document.getElementById('eTour').value.trim(),
+    date: document.getElementById('eDate').value,
+    place: document.getElementById('ePlace').value.trim(),
+    rs, ra,
+    lineScore: oursFirst? [usRow,themRow]:[themRow,usRow],
+    batting, pitching: deep(editPitch)
+  };
+  if(no!=null){ const i = DB.games.findIndex(g=>g.no===no); DB.games[i]=gobj; }
+  else DB.games.push(gobj);
+  save();
+  go('#/game/'+gobj.no);
+}
+
+/* ================= 設定・データ ================= */
+function vData(){
+  header();
+  V.innerHTML = `
+    <h2><span class="en">SETTINGS</span>設定</h2>
+    <div class="panel">
+      <div class="formrow"><label>シーズン表示名 <input type="text" id="sSeason" value="${esc(DB.season||'')}" style="width:130px"></label>
+      <label>防御率の換算 <select id="sEra">${[7,6,5].map(n=>`<option value="${n}" ${SET.eraBasis===n?'selected':''}>${n}回換算</option>`).join('')}</select></label></div>
+      <div class="formrow">
+        <label>規定打席 = チーム試合数 × <input type="number" step="0.1" min="0" id="sPa" value="${SET.minPaMult}" style="width:58px"></label>
+        <label>規定投球回 = チーム試合数 × <input type="number" step="0.1" min="0" id="sIp" value="${SET.minIpMult}" style="width:58px"></label>
+      </div>
+      <button id="sSave" class="pri">設定を保存</button>
+      <div class="note" style="margin-top:6px">参考：NPBの規定打席は試合数×3.1、規定投球回は×1.0。学童は出場が分散するので×1.0／×0.5あたりが使いやすい目安です。</div>
+    </div>
+    <h2><span class="en">DATA</span>データ管理</h2>
+    <div class="panel">
+      <div class="controls">
+        <button id="expJson">⬇ 全データを書き出す（JSON）</button>
+        <button id="expBat">⬇ 打撃成績CSV</button>
+        <button id="expPit">⬇ 投手成績CSV</button>
+      </div>
+      <div class="controls">
+        <label>読み込み（JSON）: <input type="file" id="impJson" accept=".json"></label>
+      </div>
+      <div class="controls">
+        <button id="resetInit">↩ Excel取込時の初期データに戻す</button>
+        <button class="danger" id="wipeAll">🗑 全データを消去</button>
+      </div>
+      <div class="note">データはこの端末のブラウザ内（localStorage）に保存されます。別の端末・別の人と共有するときは「JSONで書き出し → 相手の端末で読み込み」。定期的なJSON書き出しをおすすめします。</div>
+    </div>
+    <h2><span class="en">MANUAL</span>使い方（説明書）</h2>
+    <div class="panel help">
+      <h3>これは何？</h3>
+      <p>紙のスコアブックの内容を打ち込むと、打率・OPS・防御率などNPBで使われる指標を全部自動計算して、チーム・選手・学年ごとに分析してくれる成績ボードです。Excelでの手計算・手集計はもう不要です。</p>
+      <h3>試合が終わったら（1試合あたり5〜10分）</h3>
+      <p>①「試合結果」→「＋新しい試合を記録する」 ②相手・大会・イニングスコアを写す ③出場選手に✅して打撃の数字を写す ④投手を追加して投球記録を写す ⑤保存。これだけで全ページに反映されます。</p>
+      <h3>用語ミニ辞典</h3>
+      <p><b>OPS</b>＝出塁率＋長打率（打者の総合力）。<b>WHIP</b>＝1回あたり何人ランナーを出したか（低いほど良い）。<b>ISO</b>＝長打率−打率（純粋な長打力）。<b>BABIP</b>＝本塁打以外の打球がヒットになった割合（運の指標）。<b>K/BB</b>＝奪三振÷与四球（投手の制球と支配力）。</p>
+      <h3>カスタマイズ</h3>
+      <p>打撃・投手ページの「✅表示する項目をカスタマイズ」で、見たい指標だけに絞れます。選択は端末に記憶されます。防御率の換算（7回/6回/5回）や規定打席のラインもこのページで変更できます。</p>
+    </div>`;
+  document.getElementById('sSave').onclick = ()=>{
+    DB.season = document.getElementById('sSeason').value.trim();
+    SET.eraBasis = +document.getElementById('sEra').value;
+    SET.minPaMult = +document.getElementById('sPa').value||0;
+    SET.minIpMult = +document.getElementById('sIp').value||0;
+    save(); saveSet(); render(); alert('設定を保存しました');
+  };
+  document.getElementById('expJson').onclick = ()=>dl(JSON.stringify(DB,null,1),'takasago-yankees-stats.json','application/json');
+  document.getElementById('expBat').onclick = ()=>{
+    const defs = BAT_DEFS;
+    const rows = aggBatting();
+    const csv = ['名前,学年,背番号,'+defs.map(d=>d.l).join(',')].concat(
+      rows.map(r=>{const p=P(r.pid);return [p.name,p.grade,p.number].concat(defs.map(d=>r[d.k]==null?'':(typeof r[d.k]==='number'&&!Number.isInteger(r[d.k])?r[d.k].toFixed(3):r[d.k]))).join(',');})).join('\r\n');
+    dl('﻿'+csv,'batting.csv','text/csv');
+  };
+  document.getElementById('expPit').onclick = ()=>{
+    const defs = PIT_DEFS;
+    const rows = aggPitching();
+    const csv = ['名前,学年,背番号,'+defs.map(d=>d.l).join(',')].concat(
+      rows.map(r=>{const p=P(r.pid);return [p.name,p.grade,p.number].concat(defs.map(d=>{let v=r[d.k];if(d.k==='ip')v=(r.outs/3).toFixed(2);return v==null||v===Infinity?'':(typeof v==='number'&&!Number.isInteger(v)?v.toFixed(3):v);})).join(',');})).join('\r\n');
+    dl('﻿'+csv,'pitching.csv','text/csv');
+  };
+  document.getElementById('impJson').onchange = e=>{
+    const f = e.target.files[0]; if(!f) return;
+    const rd = new FileReader();
+    rd.onload = ()=>{ try{
+      const j = JSON.parse(rd.result);
+      if(!j.players||!j.games) throw new Error('形式が違います');
+      DB = j; save(); render(); alert('読み込みました：選手'+j.players.length+'名・'+j.games.length+'試合');
+    }catch(err){ alert('読み込めませんでした：'+err.message); } };
+    rd.readAsText(f);
+  };
+  document.getElementById('resetInit').onclick = ()=>{
+    if(!confirm('アプリに入力した変更を捨てて、Excel取込時の初期データ（25試合）に戻します。よろしいですか？')) return;
+    DB = deep(INITIAL); save(); render();
+  };
+  document.getElementById('wipeAll').onclick = ()=>{
+    if(!confirm('全試合データを消去します（選手名簿は残ります）。よろしいですか？')) return;
+    DB.games = []; save(); render();
+  };
+}
+function dl(content,name,type){
+  const b = new Blob([content],{type});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(b); a.download = name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+}
+
+/* ================= データ編集（表で直す→保存） ================= */
+let EDIT=null, EDIT_DIRTY=false;
+const GRADES_ALL=[6,5,4,3,2,1];
+function ensureEdit(){ if(!EDIT){ EDIT=deep({teamName:DB.teamName,season:DB.season,players:DB.players,games:DB.games}); EDIT_DIRTY=false; } }
+function markDirty(){ EDIT_DIRTY=true; const el=document.getElementById('dirtyBanner'); if(el) el.style.display=''; }
+function newPid(){ let mx=0; EDIT.players.forEach(p=>{const n=parseInt(String(p.id).replace(/\D/g,''),10); if(!isNaN(n)&&n>mx)mx=n;}); return 'p'+(mx+1); }
+function refreshStatSelect(){
+  const sel=document.getElementById('statGame'); if(!sel) return;
+  const cur=+sel.value;
+  sel.innerHTML=EDIT.games.slice().sort((a,b)=>a.no-b.no).map(g=>`<option value="${g.no}">No.${g.no} vs ${esc(g.opponent)}</option>`).join('');
+  if(EDIT.games.length){ if(EDIT.games.some(g=>g.no===cur)) sel.value=cur; renderStatGrid(+sel.value); }
+  else document.getElementById('statGrid').innerHTML='<div class="note">試合がありません。</div>';
+}
+function vEdit(){
+  ensureEdit(); header();
+  V.innerHTML = `
+    <h2><span class="en">EDIT</span>データ編集 <span class="note">表を直して「保存」で全ページに反映</span></h2>
+    <div class="panel" id="dirtyBanner" style="${EDIT_DIRTY?'':'display:none'};border-color:var(--red)">
+      <b style="color:var(--red)">未保存の変更があります。</b> 下の「💾変更を保存」で確定、または「変更前に戻す」で取り消せます。</div>
+    <h2 style="font-size:14px"><span class="en">TEAM</span>チーム情報</h2>
+    <div class="panel"><div class="formrow">
+      <label>チーム名 <input type="text" id="eTeam" value="${esc(EDIT.teamName||'')}" style="width:180px"></label>
+      <label>年度 <input type="text" id="eSeason2" value="${esc(EDIT.season||'')}" style="width:110px"></label>
+    </div><div class="note">内部ID（p1・p2…）は自動管理です。触る必要はありません。</div></div>
+    <h2 style="font-size:14px"><span class="en">ROSTER</span>❶ 選手名簿 <span class="note">✓＝一覧・入力候補に表示。改名しても成績はその選手についてきます。</span></h2>
+    <div id="rosterTbl"></div>
+    <div class="pit-add"><button id="addP">＋ 選手を追加</button></div>
+    <h2 style="font-size:14px"><span class="en">GAMES</span>❷ 試合の情報 <span class="note">相手名・日付・スコアを直接修正。✏️で打席の数字ページへ。</span></h2>
+    <div id="gameTbl"></div>
+    <h2 style="font-size:14px"><span class="en">SPREADSHEET</span>❸ 成績を表で編集 <span class="note">試合を選んで、打者・投手の数字を一括で直せます。</span></h2>
+    <div class="controls"><label>試合を選ぶ <select id="statGame"></select></label></div>
+    <div id="statGrid"></div>
+    <div class="savebar">
+      <button class="pri" id="editSave" style="font-size:15px;padding:9px 22px">💾 変更を保存</button>
+      <button id="editReset">変更前に戻す</button>
+      <span class="note">保存するまで、他のページの数字は変わりません。</span>
+    </div>`;
+  document.getElementById('eTeam').addEventListener('input',e=>{EDIT.teamName=e.target.value;markDirty();});
+  document.getElementById('eSeason2').addEventListener('input',e=>{EDIT.season=e.target.value;markDirty();});
+  renderRoster(); renderGameTbl();
+  const sel=document.getElementById('statGame');
+  sel.onchange=()=>renderStatGrid(+sel.value);
+  refreshStatSelect();
+  document.getElementById('addP').onclick=()=>{ EDIT.players.push({id:newPid(),grade:4,number:'',name:'新しい選手',realName:'',active:true}); markDirty(); renderRoster(); };
+  document.getElementById('editSave').onclick=()=>{
+    if(!confirm('この内容で保存します。全ページに反映されます。よろしいですか？')) return;
+    DB.teamName=EDIT.teamName; DB.season=EDIT.season; DB.players=EDIT.players; DB.games=EDIT.games;
+    save(); EDIT=null; EDIT_DIRTY=false; alert('保存しました'); render();
+  };
+  document.getElementById('editReset').onclick=()=>{
+    if(EDIT_DIRTY && !confirm('編集した内容を捨てて、保存済みの状態に戻します。よろしいですか？')) return;
+    EDIT=null; render();
+  };
+}
+function renderRoster(){
+  const box=document.getElementById('rosterTbl'); if(!box) return;
+  box.innerHTML = `<div class="tblwrap"><table class="etbl"><thead><tr><th>表示</th><th>学年</th><th>背番号</th><th class="l">表示名</th><th class="l">本名（任意・非公開）</th><th></th></tr></thead><tbody>`+
+    EDIT.players.map(p=>`<tr data-pid="${p.id}">
+      <td><input type="checkbox" class="e-active" ${p.active!==false?'checked':''}></td>
+      <td><select class="e-grade">${GRADES_ALL.map(g=>`<option value="${g}" ${g===p.grade?'selected':''}>${g}年</option>`).join('')}</select></td>
+      <td><input type="text" class="e-num" value="${esc(p.number)}" style="width:50px" inputmode="numeric"></td>
+      <td class="l"><input type="text" class="e-name" value="${esc(p.name)}" style="width:120px"></td>
+      <td class="l"><input type="text" class="e-real" value="${esc(p.realName||'')}" style="width:150px" placeholder="（空欄OK）"></td>
+      <td><button class="danger e-del-p">削除</button></td></tr>`).join('')+`</tbody></table></div>`;
+  const upd=(pid,f)=>{const p=EDIT.players.find(x=>x.id===pid); if(p){f(p); markDirty();}};
+  box.querySelectorAll('tr[data-pid]').forEach(tr=>{
+    const pid=tr.dataset.pid;
+    tr.querySelector('.e-active').addEventListener('change',e=>upd(pid,p=>p.active=e.target.checked));
+    tr.querySelector('.e-grade').addEventListener('change',e=>upd(pid,p=>p.grade=+e.target.value));
+    tr.querySelector('.e-num').addEventListener('input',e=>upd(pid,p=>p.number=e.target.value));
+    tr.querySelector('.e-name').addEventListener('input',e=>upd(pid,p=>p.name=e.target.value));
+    tr.querySelector('.e-real').addEventListener('input',e=>upd(pid,p=>p.realName=e.target.value));
+    tr.querySelector('.e-del-p').onclick=()=>{
+      const p=EDIT.players.find(x=>x.id===pid); if(!p) return;
+      const used=EDIT.games.some(g=>g.batting.some(b=>b.pid===pid)||g.pitching.some(b=>b.pid===pid));
+      if(!confirm(`「${p.name}」を名簿から削除します。${used?'この選手には試合成績が記録されています。名簿から消えますが、各試合内の記録は残ります。':''}よろしいですか？`)) return;
+      EDIT.players=EDIT.players.filter(x=>x.id!==pid); markDirty(); renderRoster(); refreshStatSelect();
+    };
+  });
+}
+function renderGameTbl(){
+  const box=document.getElementById('gameTbl'); if(!box) return;
+  box.innerHTML = `<div class="tblwrap"><table class="etbl"><thead><tr><th>No</th><th>日付</th><th class="l">大会</th><th class="l">対戦相手</th><th>得点</th><th>失点</th><th class="l">場所</th><th></th></tr></thead><tbody>`+
+    EDIT.games.slice().sort((a,b)=>a.no-b.no).map(g=>`<tr data-no="${g.no}">
+      <td>${g.no}</td>
+      <td><input type="date" class="g-date" value="${esc(g.date||'')}"></td>
+      <td class="l"><input type="text" class="g-tour" value="${esc(g.tournament||'')}" style="width:92px"></td>
+      <td class="l"><input type="text" class="g-opp" value="${esc(g.opponent)}" style="width:150px"></td>
+      <td><input type="number" class="g-rs" value="${g.rs}" style="width:46px" inputmode="numeric"></td>
+      <td><input type="number" class="g-ra" value="${g.ra}" style="width:46px" inputmode="numeric"></td>
+      <td class="l"><input type="text" class="g-place" value="${esc(g.place||'')}" style="width:120px"></td>
+      <td><button data-go2="#/entry/${g.no}">✏️</button> <button class="danger g-del">🗑</button></td></tr>`).join('')+`</tbody></table></div>`;
+  const upd=(no,f)=>{const g=EDIT.games.find(x=>x.no===no); if(g){f(g); markDirty();}};
+  box.querySelectorAll('tr[data-no]').forEach(tr=>{
+    const no=+tr.dataset.no;
+    tr.querySelector('.g-date').addEventListener('input',e=>upd(no,g=>g.date=e.target.value));
+    tr.querySelector('.g-tour').addEventListener('input',e=>upd(no,g=>g.tournament=e.target.value));
+    tr.querySelector('.g-opp').addEventListener('input',e=>upd(no,g=>{g.opponent=e.target.value; const opp=(g.lineScore||[]).find(x=>!/高砂/.test(x.team)); if(opp) opp.team=e.target.value;}));
+    tr.querySelector('.g-rs').addEventListener('input',e=>upd(no,g=>g.rs=+e.target.value||0));
+    tr.querySelector('.g-ra').addEventListener('input',e=>upd(no,g=>g.ra=+e.target.value||0));
+    tr.querySelector('.g-place').addEventListener('input',e=>upd(no,g=>g.place=e.target.value));
+    tr.querySelector('.g-del').onclick=()=>{
+      if(!confirm(`試合No.${no} を削除します。よろしいですか？`)) return;
+      EDIT.games=EDIT.games.filter(x=>x.no!==no); markDirty(); renderGameTbl(); refreshStatSelect();
+    };
+  });
+}
+function blankBat(pid,order){return {pid,order,pa:0,ab:0,r:0,h:0,d2:0,d3:0,hr:0,rbi:0,sb:0,sh:0,sf:0,bb:0,hbp:0,so:0,err:0};}
+function blankPit(pid,seq){return {pid,seq,cg:0,w:0,l:0,d:0,outs:0,np:0,ha:0,hra:0,bb:0,hbp:0,so:0,bk:0,wp:0,runs:0,er:0};}
+function renderStatGrid(no){
+  const box=document.getElementById('statGrid'); if(!box) return;
+  const g=EDIT.games.find(x=>x.no===no); if(!g){box.innerHTML='';return;}
+  const opts=sel=>EDIT.players.map(pp=>`<option value="${pp.id}" ${pp.id===sel?'selected':''}>${esc(pp.name)}</option>`).join('');
+  const bat=`<div class="note" style="margin:4px 0"><b>打撃</b>（空欄＝0）</div><div class="tblwrap"><table class="etbl"><thead><tr><th class="l">打者</th><th>打順</th>${BAT_IN.map(([,l])=>`<th>${l}</th>`).join('')}<th></th></tr></thead><tbody>`+
+    g.batting.map((b,i)=>`<tr data-bi="${i}"><td class="l"><select class="s-pid" style="width:92px">${opts(b.pid)}</select></td>
+      <td><input type="number" class="s-b" data-k="order" value="${b.order||''}" style="width:42px" inputmode="numeric"></td>`+
+      BAT_IN.map(([k])=>`<td><input type="number" class="s-b" data-k="${k}" value="${b[k]||''}" style="width:44px" inputmode="numeric"></td>`).join('')+
+      `<td><button class="danger s-bdel">✕</button></td></tr>`).join('')+`</tbody></table></div><div class="pit-add"><button id="sAddBat">＋ 打者を追加</button></div>`;
+  const pit=`<div class="note" style="margin:10px 0 4px"><b>投手</b></div><div class="tblwrap"><table class="etbl"><thead><tr><th class="l">投手</th><th>回</th><th>+out</th><th>勝</th><th>敗</th><th>分</th>${PIT_IN.map(([,l])=>`<th>${l}</th>`).join('')}<th></th></tr></thead><tbody>`+
+    g.pitching.map((p,i)=>`<tr data-pi="${i}"><td class="l"><select class="s-ppid" style="width:92px">${opts(p.pid)}</select></td>
+      <td><input type="number" class="s-p" data-k="_ipW" value="${Math.floor(p.outs/3)}" style="width:40px" inputmode="numeric"></td>
+      <td><select class="s-p" data-k="_ipO">${[0,1,2].map(n=>`<option value="${n}" ${p.outs%3===n?'selected':''}>${n}/3</option>`).join('')}</select></td>
+      <td><input type="checkbox" class="s-pc" data-k="w" ${p.w?'checked':''}></td>
+      <td><input type="checkbox" class="s-pc" data-k="l" ${p.l?'checked':''}></td>
+      <td><input type="checkbox" class="s-pc" data-k="d" ${p.d?'checked':''}></td>`+
+      PIT_IN.map(([k])=>`<td><input type="number" class="s-p" data-k="${k}" value="${p[k]||''}" style="width:44px" inputmode="numeric"></td>`).join('')+
+      `<td><button class="danger s-pdel">✕</button></td></tr>`).join('')+`</tbody></table></div><div class="pit-add"><button id="sAddPit">＋ 投手を追加</button></div>`;
+  box.innerHTML = bat+pit;
+  box.querySelectorAll('tr[data-bi]').forEach(tr=>{
+    const b=g.batting[+tr.dataset.bi];
+    tr.querySelector('.s-pid').addEventListener('change',e=>{b.pid=e.target.value;markDirty();});
+    tr.querySelectorAll('.s-b').forEach(inp=>inp.addEventListener('input',e=>{b[e.target.dataset.k]=+e.target.value||0;markDirty();}));
+    tr.querySelector('.s-bdel').onclick=()=>{g.batting.splice(+tr.dataset.bi,1);markDirty();renderStatGrid(no);};
+  });
+  box.querySelector('#sAddBat').onclick=()=>{ if(!EDIT.players.length)return; g.batting.push(blankBat(EDIT.players[0].id,g.batting.length+1));markDirty();renderStatGrid(no);};
+  box.querySelectorAll('tr[data-pi]').forEach(tr=>{
+    const p=g.pitching[+tr.dataset.pi];
+    tr.querySelector('.s-ppid').addEventListener('change',e=>{p.pid=e.target.value;markDirty();});
+    tr.querySelectorAll('.s-pc').forEach(c=>c.addEventListener('change',e=>{p[e.target.dataset.k]=e.target.checked?1:0;markDirty();}));
+    tr.querySelectorAll('.s-p').forEach(inp=>inp.addEventListener('change',e=>{
+      const k=e.target.dataset.k;
+      if(k==='_ipW'||k==='_ipO'){const wv=+tr.querySelector('[data-k=_ipW]').value||0;const ov=+tr.querySelector('[data-k=_ipO]').value||0;p.outs=wv*3+ov;}
+      else p[k]=+e.target.value||0; markDirty();
+    }));
+    tr.querySelector('.s-pdel').onclick=()=>{g.pitching.splice(+tr.dataset.pi,1);markDirty();renderStatGrid(no);};
+  });
+  box.querySelector('#sAddPit').onclick=()=>{ if(!EDIT.players.length)return; g.pitching.push(blankPit(EDIT.players[0].id,g.pitching.length+1));markDirty();renderStatGrid(no);};
+}
+
+/* ================= レンダリング ================= */
+function render(){
+  nav();
+  const h = (location.hash.replace('#/','')||'dash').split('/');
+  window.scrollTo(0,0);
+  switch(h[0]){
+    case 'games': vGames(); break;
+    case 'game': vGame(+h[1]); break;
+    case 'bat': vBat(); break;
+    case 'pit': vPit(); break;
+    case 'players': vPlayers(); break;
+    case 'player': vPlayer(h[1]); break;
+    case 'grade': vGrade(); break;
+    case 'entry': vEntry(h[1]); break;
+    case 'edit': vEdit(); break;
+    case 'data': vData(); break;
+    default: vDash();
+  }
+  V.querySelectorAll('details.cols').forEach(d=>d.addEventListener('toggle',()=>{
+    SET['_open_'+d.dataset.cset] = d.open; saveSet();
+  }));
+}
+document.addEventListener('click',e=>{
+  const th = e.target.closest('th.sortable');
+  if(th){ const id=th.dataset.tbl,k=th.dataset.sort;
+    const st = sortState[id]||(sortState[id]={k:null,dir:-1});
+    if(st.k===k) st.dir*=-1; else {st.k=k;st.dir=-1;}
+    render(); return; }
+  const chk = e.target.closest('.colchk');
+  if(chk){ const arr = SET[chk.dataset.set];
+    const defs = chk.dataset.set==='batCols'? BAT_DEFS:PIT_DEFS;
+    let next = defs.map(d=>d.k).filter(k=> k===chk.dataset.k? chk.checked : arr.includes(k));
+    SET[chk.dataset.set]=next; saveSet(); render();
+    return; }
+  const row = e.target.closest('[data-go]');
+  if(row && !e.target.closest('input,select,button,a,label')){ go(row.dataset.go); return; }
+  const btn = e.target.closest('[data-go2]');
+  if(btn){ go(btn.dataset.go2); return; }
+});
+render();
+</script>
+
+</body>
+</html>
