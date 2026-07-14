@@ -98,6 +98,7 @@
   .btn-navy{background:var(--navy); color:var(--white)}
   .btn-ghost{background:var(--white); color:var(--navy); border:1.5px solid var(--navy)}
   .btn-disabled{background:#e7ebf3; color:#9aa4bb; cursor:default; box-shadow:none}
+  .btn-tablet{background:#fbf7ee; color:#6b5726; border:1.5px dashed #d9b978; cursor:default; box-shadow:none; line-height:1.45; font-size:14px}
   .btn+.btn{margin-top:10px}
   .mt{margin-top:18px}
   .note{font-size:11px; color:#8390a8; text-align:center; margin-top:14px}
@@ -203,8 +204,8 @@
       </div>
 
       <div class="cta">
-        <div class="lb">▼ せっかくなので、あと2つだけ</div>
-        <button class="btn btn-primary" id="ctaSurvey" onclick="goSurvey()">遮熱テント、正直どうだった？（アンケート）</button>
+        <div class="lb">▼ せっかくなので、もう少しだけ</div>
+        <div class="btn btn-tablet" id="ctaSurvey"></div>
         <button class="btn btn-navy" id="ctaCompany" onclick="goCompany()">この診断を配ってる会社を見てみる</button>
         <button class="btn btn-ghost" onclick="share()">結果をシェア / コピー</button>
         <button class="btn btn-ghost" onclick="retake()">もう一度診断する</button>
@@ -222,7 +223,9 @@
 const CONFIG = {
   companyName: "加藤株式会社",
   venueName:   "涼み処",
-  surveyUrl:   "",   // 〔遮熱アンケートURL_要記入〕Googleフォーム等
+  // 遮熱アンケートは会場タブレット1台で集計する運用（回答は端末内localStorage→CSV）。
+  // 学生の結果画面はリンクではなく「会場のタブレットで答えてね」の案内にする。
+  surveyNote:  "📋 遮熱テント、正直どうだった？<br>感想は会場のタブレットで教えてね！",
   companyUrl:  "",   // 〔会社案内URL_要記入〕加藤㈱HP or 採用ページ
   showSponsors:false
 };
@@ -281,6 +284,7 @@ const $=id=>document.getElementById(id);
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');window.scrollTo(0,0);}
 
 $('brandLine').textContent = CONFIG.companyName + " × " + CONFIG.venueName;
+$('ctaSurvey').innerHTML = CONFIG.surveyNote;
 
 (function(){
   const wrap=$('facOpts');
@@ -325,7 +329,6 @@ function finish(){
   const ul=$('rStr'); ul.innerHTML='';
   t.str.forEach(s=>{const li=document.createElement('li');li.textContent='✔ '+s;ul.appendChild(li);});
   $('rFit').textContent=t.fit;
-  setCTA('ctaSurvey', CONFIG.surveyUrl, '遮熱テント、正直どうだった？（アンケート）', 'アンケートは準備中です');
   setCTA('ctaCompany', CONFIG.companyUrl, 'この診断を配ってる会社を見てみる', '会社案内は準備中です');
   $('prog').style.display='none';
   show('s-res');
