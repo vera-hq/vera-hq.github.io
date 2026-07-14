@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>加藤㈱ 涼み処診断 当日運営マニュアル</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif; color:#1a2340; line-height:1.7;
+    background:#eef1f6; padding:20px;}
+  .sheet{max-width:820px; margin:0 auto; background:#ffffff; border-radius:14px; overflow:hidden;
+    box-shadow:0 10px 30px rgba(26,47,94,.15);}
+  .hd{background:#1a2f5e; color:#fff; padding:22px 26px;}
+  .hd .kicker{font-size:12px; letter-spacing:.14em; color:#c9a44c; font-weight:800}
+  .hd h1{font-size:22px; font-weight:900; margin-top:4px}
+  .hd p{font-size:13px; margin-top:6px; opacity:.9}
+  .body{padding:24px 26px}
+
+  /* QR 2枚パネル */
+  .qrs{display:flex; gap:16px; margin-bottom:26px}
+  .qrcard{flex:1; border:2px solid #dfe4ee; border-radius:14px; padding:16px; text-align:center}
+  .qrcard.student{border-color:#1a2f5e; background:#f4f7fc}
+  .qrcard.staff{border-color:#c88a4a; background:#fbf5ec}
+  .qrcard .tag{display:inline-block; font-size:12px; font-weight:900; color:#fff; padding:4px 12px; border-radius:99px; margin-bottom:10px}
+  .qrcard.student .tag{background:#1a2f5e}
+  .qrcard.staff .tag{background:#a85a1e}
+  .qrcard img{width:170px; height:170px; display:block; margin:0 auto}
+  .qrcard .use{font-size:14px; font-weight:800; color:#1a2340; margin-top:10px}
+  .qrcard .desc{font-size:12px; color:#54607a; margin-top:5px; line-height:1.55}
+  .qrcard .url{font-size:10px; color:#8390a8; margin-top:8px; word-break:break-all}
+
+  .phase{margin-bottom:22px; border:1px solid #e6eaf2; border-radius:12px; overflow:hidden}
+  .phase-h{display:flex; align-items:center; gap:10px; background:#f4f7fc; padding:11px 16px; border-bottom:1px solid #e6eaf2}
+  .phase-h .no{flex:0 0 auto; width:26px; height:26px; border-radius:50%; background:#1a2f5e; color:#fff;
+    font-size:14px; font-weight:900; display:flex; align-items:center; justify-content:center}
+  .phase-h h2{font-size:16px; font-weight:900; color:#1a2f5e}
+  .phase-h .when{margin-left:auto; font-size:11px; font-weight:700; color:#8a6d2b; background:#fbf3df; padding:3px 10px; border-radius:99px}
+  ol.steps{list-style:none; counter-reset:s; padding:14px 16px}
+  ol.steps li{counter-increment:s; position:relative; padding:7px 0 7px 30px; font-size:14px}
+  ol.steps li::before{content:counter(s); position:absolute; left:0; top:7px; width:20px; height:20px; border-radius:50%;
+    background:#c9a44c; color:#1a2f5e; font-size:12px; font-weight:900; display:flex; align-items:center; justify-content:center}
+  ol.steps li b{color:#1a2f5e}
+  .warn{background:#fff6ea; border:1px solid #f0d6a8; border-radius:8px; padding:8px 12px; font-size:12.5px; color:#7a5b1e;
+    margin:8px 0 0 30px; font-weight:600}
+  .warn::before{content:"⚠ "; font-weight:900}
+
+  .trouble{border:1px solid #e6eaf2; border-radius:12px; padding:16px}
+  .trouble h2{font-size:15px; font-weight:900; color:#b0433a; margin-bottom:10px}
+  .trouble dl{display:grid; grid-template-columns:auto 1fr; gap:8px 14px}
+  .trouble dt{font-size:13px; font-weight:800; color:#1a2340; white-space:nowrap}
+  .trouble dd{font-size:13px; color:#42506e}
+
+  .foot{text-align:center; font-size:11px; color:#9aa4bb; padding:16px 0 2px}
+  .foot b{color:#1a2f5e}
+
+  @media print{
+    body{background:#fff; padding:0}
+    .sheet{box-shadow:none; border-radius:0; max-width:100%}
+    .phase, .trouble, .qrcard{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="hd">
+    <div class="kicker">加藤株式会社 ×  涼み処｜東海大 遮熱テント体感会</div>
+    <h1>当日運営マニュアル</h1>
+    <p>この紙1枚で当日の流れが分かります。ポイントは「学生がQRを読む」→「タブレットでアンケート」の2本立てです。</p>
+  </div>
+  <div class="body">
+
+    <!-- QR 2枚 -->
+    <div class="qrs">
+      <div class="qrcard student">
+        <span class="tag">① 学生用</span>
+        <img src="data:image/png;base64,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" alt="診断QR">
+        <div class="use">診断QR（テントに掲示）</div>
+        <div class="desc">学生が<b>自分のスマホ</b>のカメラで読む。<br>30秒のはたらき方タイプ診断が開きます。</div>
+        <div class="url">vera-hq.github.io/suzumi-shindan-kato-…</div>
+      </div>
+      <div class="qrcard staff">
+        <span class="tag">② スタッフ用</span>
+        <img src="data:image/png;base64,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" alt="アンケートQR">
+        <div class="use">アンケートQR（タブレットで開く）</div>
+        <div class="desc">スタッフが<b>会場タブレット1台</b>で読む。<br>遮熱アンケートの入力画面が開きます。</div>
+        <div class="url">vera-hq.github.io/suzumi-survey-shanetsu-…</div>
+      </div>
+    </div>
+
+    <!-- Phase 1 -->
+    <div class="phase">
+      <div class="phase-h"><span class="no">1</span><h2>設営（開始30分前まで）</h2><span class="when">準備</span></div>
+      <ol class="steps">
+        <li><b>診断QR（①）をテントに掲示。</b>ポスターを印刷して貼るか、モニター／タブレットに表示する。学生の目に入る高さに。</li>
+        <li><b>アンケート用タブレットを1台用意。</b>SafariまたはChromeで、アンケートQR（②）を読んで入力画面を開く。</li>
+        <li><b>「学校名」「競技種目」を先に入力しておく。</b>一度入れれば次の人にも自動で引き継がれます。</li>
+      </ol>
+      <div class="warn">アンケートは必ず Safari／Chrome で開く。LINEやメールのアプリの中で開くと回答が保存されないことがあります（黄色い警告が出たら開き直し）。</div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase">
+      <div class="phase-h"><span class="no">2</span><h2>学生が来たら（本番のくり返し）</h2><span class="when">本番</span></div>
+      <ol class="steps">
+        <li>「<b>スマホのカメラでこのQR読んでみて</b>」と声をかける（①診断QR）。</li>
+        <li>学生のスマホで診断が開く → 学部1問＋6問（<b>約30秒</b>）→ はたらき方タイプの結果が出る。</li>
+        <li>結果画面に「<b>感想は会場のタブレットで教えてね</b>」と表示される。</li>
+        <li>タブレット（②）へ案内 → <b>遮熱アンケートに回答</b>（学生本人が入力、またはスタッフが聞いて入力）。</li>
+        <li>最後に「<b>回答を保存して次の人へ</b>」を押す → 件数が1増える → 次の学生へ。</li>
+      </ol>
+      <div class="warn">アンケートは毎回「同じタブレット・同じブラウザ」で。別の端末で開くと回答は合算されません。</div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase">
+      <div class="phase-h"><span class="no">3</span><h2>撤収（1日の終わり）</h2><span class="when">回収</span></div>
+      <ol class="steps">
+        <li>タブレットのアンケート画面で「<b>CSVダウンロード</b>」を押す。全回答が1つの表（ファイル）になる。</li>
+        <li>そのCSVファイルを保存し、<b>森岡さんへ共有</b>（メール添付やクラウド等）。これが協賛営業の武器＝実数です。</li>
+      </ol>
+      <div class="warn">CSVを保存する前に「全データ消去」は絶対に押さない。消すと回答が戻せません。</div>
+    </div>
+
+    <!-- Trouble -->
+    <div class="trouble">
+      <h2>困ったとき</h2>
+      <dl>
+        <dt>QRが読めない</dt>
+        <dd>スマホの「カメラ」アプリを起動してQRにかざす／画面や紙の明るさを上げる／それでもダメなら短縮せず表示URLを直接入力。</dd>
+        <dt>アンケートが保存できない</dt>
+        <dd>LINE等アプリ内ブラウザの可能性。共有メニューから「Safari／Chromeで開く」を選び、開き直してから再入力。</dd>
+        <dt>タブレットの回答が消えた／少ない</dt>
+        <dd>別の端末・別のブラウザで開いていないか確認。回答は「開いた端末の中」に貯まる仕組みです。</dd>
+        <dt>ネットは必要？</dt>
+        <dd>QRを読んで最初にページを開くときだけ必要。開いた後の入力は電波が弱くても進みます。</dd>
+      </dl>
+    </div>
+
+    <div class="foot">powered by <b>VERA</b> ／ 診断で、母集団づくり。｜ ①診断 と ②アンケート はそれぞれ別のQRです（取り違え注意）</div>
+  </div>
+</div>
+</body>
+</html>
