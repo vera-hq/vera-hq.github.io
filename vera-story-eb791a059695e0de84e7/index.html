@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>VERA、01からの物語 — 設立準備から設立、そして今日まで</title>
+<style>
+  :root{
+    --navy:#1D447C; --navy-deep:#15335e; --red:#C5201D; --red-soft:#d6584f;
+    --paper:#FBF7EF; --sand:#EFE6D3; --sand-line:#e0d4bb;
+    --ink:#23262b; --ink-soft:#4c5158; --muted:#7c8188;
+    --card:#ffffff; --shadow:0 6px 22px rgba(29,68,124,.10);
+    --serif:"Hiragino Mincho ProN","Yu Mincho","游明朝",Georgia,"Times New Roman",serif;
+    --sans:"Hiragino Kaku Gothic ProN","Yu Gothic","游ゴシック","Segoe UI",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--serif);line-height:1.9;
+    font-size:17px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:0 22px}
+  h1,h2,h3,.label,.kicker,nav,.chip,.btn{font-family:var(--sans)}
+
+  /* ===== Cover ===== */
+  .cover{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 100%);color:#fff;
+    padding:74px 22px 60px;text-align:center;position:relative;overflow:hidden}
+  .cover::after{content:"";position:absolute;left:50%;bottom:34px;transform:translateX(-50%);
+    width:64px;height:3px;background:var(--red)}
+  .wordmark{font-family:var(--sans);font-weight:800;letter-spacing:.42em;font-size:15px;
+    color:#cdddf3;padding-left:.42em}
+  .wordmark b{color:#fff}
+  .cover .four{display:inline-block;margin:22px 0 8px;font-size:12px;letter-spacing:.3em;color:#9db8dd}
+  .cover h1{font-family:var(--serif);font-weight:700;font-size:clamp(30px,6.4vw,50px);
+    line-height:1.32;margin:10px 0 6px}
+  .cover .sub{font-size:15px;color:#d7e4f5;margin-top:14px;font-family:var(--sans);letter-spacing:.02em}
+  .cover .period{margin-top:26px;font-family:var(--sans);font-size:13px;color:#a9c2e4;letter-spacing:.12em}
+  .cover .by{margin-top:8px;font-family:var(--sans);font-size:12.5px;color:#8fabd3}
+  .redline{color:var(--red-soft)}
+
+  /* ===== Nav ===== */
+  nav{position:sticky;top:0;z-index:20;background:rgba(251,247,239,.94);backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--sand-line)}
+  nav .wrap{display:flex;gap:6px;overflow-x:auto;padding:9px 16px;font-size:12.5px}
+  nav a{white-space:nowrap;color:var(--navy);text-decoration:none;padding:5px 10px;border-radius:20px;
+    font-weight:600;opacity:.82}
+  nav a:hover{background:var(--sand);opacity:1}
+
+  section{padding:44px 0}
+  .kicker{font-family:var(--sans);font-size:12px;letter-spacing:.22em;color:var(--red);
+    font-weight:700;margin-bottom:8px;text-transform:uppercase}
+  h2{font-size:clamp(22px,4.4vw,29px);color:var(--navy);line-height:1.4;margin-bottom:6px;font-weight:800}
+  h2 .n{color:var(--red);font-weight:800}
+  .lead{color:var(--ink-soft);font-size:16px;margin:14px 0}
+
+  /* ===== Preface ===== */
+  .preface{background:var(--sand);border-radius:14px;padding:30px 26px;margin-top:8px}
+  .preface p{margin:0 0 12px}
+  .preface p:last-child{margin-bottom:0}
+  .signoff{font-family:var(--sans);font-size:13px;color:var(--navy);font-weight:700;margin-top:10px}
+
+  /* ===== Timeline SVG map ===== */
+  .mapwrap{background:var(--card);border:1px solid var(--sand-line);border-radius:14px;
+    box-shadow:var(--shadow);padding:20px 12px 8px;overflow-x:auto}
+  .mapwrap svg{display:block;min-width:820px;margin:0 auto}
+  .maplegend{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:10px;
+    font-family:var(--sans);font-size:12px;color:var(--muted)}
+  .maplegend span{display:inline-flex;align-items:center;gap:6px}
+  .dotk{width:10px;height:10px;border-radius:50%;display:inline-block}
+
+  /* ===== Chapters ===== */
+  .chapter{background:var(--card);border:1px solid var(--sand-line);border-radius:14px;
+    box-shadow:var(--shadow);padding:26px 26px 22px;margin-bottom:22px;position:relative}
+  .chapter::before{content:"";position:absolute;left:0;top:22px;bottom:22px;width:4px;
+    background:var(--navy);border-radius:4px}
+  .ch-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+  .ch-no{font-family:var(--sans);font-weight:800;color:var(--red);font-size:13px;letter-spacing:.1em}
+  .ch-date{font-family:var(--sans);font-size:12.5px;color:var(--muted)}
+  .ch-title{font-size:21px;color:var(--navy);font-weight:800;line-height:1.4;margin:2px 0 2px}
+  .ch-theme{font-family:var(--sans);font-size:13px;color:var(--red);font-weight:600;margin-bottom:12px}
+  .ch-did{list-style:none;margin:6px 0 14px}
+  .ch-did li{padding:3px 0 3px 22px;position:relative;font-size:15.3px;color:var(--ink)}
+  .ch-did li::before{content:"▪";position:absolute;left:4px;color:var(--navy);font-size:12px;top:6px}
+  .ch-note{background:#f6f2e9;border-left:3px solid var(--red);border-radius:0 8px 8px 0;
+    padding:12px 16px;font-size:15px;color:var(--ink-soft)}
+  .ch-note b{color:var(--navy)}
+  .milestone-tag{display:inline-block;background:var(--red);color:#fff;font-family:var(--sans);
+    font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px;letter-spacing:.06em;
+    vertical-align:middle;margin-left:4px}
+
+  /* ===== Blueprint (fab) blocks ===== */
+  .fab{background:linear-gradient(160deg,#22497f,#16335d);color:#eaf1fa;border-radius:14px;
+    padding:30px 26px;margin-bottom:22px}
+  .fab h3{color:#fff;font-size:19px;margin-bottom:4px;display:flex;align-items:center;gap:9px}
+  .fab .tag{background:var(--red);color:#fff;font-size:11px;font-weight:800;padding:2px 8px;
+    border-radius:6px;font-family:var(--sans)}
+  .fab .fsub{color:#a9c2e4;font-family:var(--sans);font-size:13px;margin-bottom:16px}
+  .steps{counter-reset:s;list-style:none}
+  .steps>li{counter-increment:s;position:relative;padding:12px 0 12px 52px;
+    border-top:1px solid rgba(255,255,255,.13)}
+  .steps>li:first-child{border-top:none}
+  .steps>li::before{content:counter(s);position:absolute;left:0;top:12px;width:34px;height:34px;
+    background:#fff;color:var(--navy);border-radius:50%;font-family:var(--sans);font-weight:800;
+    display:flex;align-items:center;justify-content:center;font-size:15px}
+  .steps b{color:#fff;font-family:var(--sans);font-size:15.5px}
+  .steps .d{display:block;color:#c4d5ea;font-size:14px;margin-top:2px}
+  .steps .ex{display:block;color:#93b0d6;font-size:12.5px;margin-top:3px;font-family:var(--sans)}
+
+  .toc{list-style:none;display:grid;grid-template-columns:1fr;gap:2px}
+  .toc li{display:flex;gap:12px;padding:9px 12px;border-radius:8px;font-size:14.6px}
+  .toc li:nth-child(odd){background:#f6f2e9}
+  .toc .tno{font-family:var(--sans);font-weight:800;color:var(--red);min-width:64px;font-size:12.5px}
+  .toc .tt{color:var(--ink)}
+  .toc .tt b{color:var(--navy)}
+
+  .manual{background:var(--card);border:1px dashed var(--navy);border-radius:14px;padding:24px 24px;margin-bottom:22px}
+  .manual h3{color:var(--navy);font-size:18px;margin-bottom:10px;font-family:var(--sans)}
+  .manual ol{margin-left:20px}
+  .manual li{margin:6px 0;font-size:15px}
+
+  .approve{background:#fff6f5;border:1px solid #f3c9c6;border-radius:14px;padding:24px}
+  .approve h3{color:var(--red);font-size:18px;font-family:var(--sans);margin-bottom:12px;display:flex;gap:8px;align-items:center}
+  .approve .q{display:flex;gap:12px;padding:12px 0;border-top:1px solid #f3d9d7}
+  .approve .q:first-of-type{border-top:none}
+  .approve .qn{font-family:var(--sans);font-weight:800;color:var(--red);min-width:26px}
+  .approve .qt b{color:var(--navy);font-family:var(--sans);font-size:15px}
+  .approve .qt span{display:block;color:var(--ink-soft);font-size:14px;margin-top:2px}
+
+  /* ===== Afterword ===== */
+  .after{background:linear-gradient(160deg,var(--navy),var(--navy-deep));color:#eaf1fa;
+    border-radius:16px;padding:36px 28px;text-align:center;margin-top:10px}
+  .after .kicker{color:var(--red-soft)}
+  .after p{color:#d7e4f5;font-size:16px;margin:12px auto;max-width:640px}
+  .after .stamp{margin-top:20px;font-family:var(--sans);font-weight:800;letter-spacing:.3em;
+    color:#fff;font-size:14px}
+  .after .stamp span{color:var(--red-soft)}
+
+  footer{text-align:center;padding:30px 22px 50px;color:var(--muted);font-family:var(--sans);font-size:12px}
+
+  @media (max-width:560px){
+    body{font-size:16px}
+    .chapter,.fab,.manual,.approve{padding:20px 18px}
+    .cover{padding:56px 20px 48px}
+  }
+  @media print{
+    nav{display:none} body{background:#fff}
+    .chapter,.fab,.mapwrap,.manual,.approve{box-shadow:none;break-inside:avoid}
+    .cover,.fab,.after{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+
+  .logochip{display:inline-block;background:#fff;border-radius:13px;padding:10px 16px;box-shadow:0 5px 16px rgba(0,0,0,.20);margin-bottom:14px}
+  .logochip img{height:46px;display:block}
+</style>
+</head>
+<body>
+<script>
+(function(){var KEY="vera_story01_gate",PASS="vera0709";if(localStorage.getItem(KEY)==="1")return;var ov=document.createElement("div");ov.style.cssText="position:fixed;inset:0;z-index:2147483647;background:linear-gradient(160deg,#1D447C,#15335e);display:flex;align-items:center;justify-content:center;font-family:sans-serif";ov.innerHTML='<div style="text-align:center;color:#fff;padding:24px;max-width:340px">'+'<div style="font-weight:800;letter-spacing:.3em;color:#cdddf3;font-size:13px;margin-bottom:18px">VERA HOLDINGS</div>'+'<div style="font-size:16px;margin-bottom:6px">合言葉を入力してください</div>'+'<div style="font-size:12px;color:#9db8dd;margin-bottom:16px">この本は限定公開です</div>'+'<input id="vgp" type="password" autocomplete="off" style="width:100%;padding:11px 14px;border:none;border-radius:8px;font-size:16px;text-align:center;margin-bottom:10px;box-sizing:border-box" placeholder="合言葉">'+'<button id="vgb" style="width:100%;padding:11px;border:none;border-radius:8px;background:#C5201D;color:#fff;font-size:15px;font-weight:700;cursor:pointer">ひらく</button>'+'<div id="vge" style="color:#f3b0ac;font-size:12px;height:16px;margin-top:8px"></div></div>';function check(){var v=ov.querySelector("#vgp").value.trim();if(v===PASS){localStorage.setItem(KEY,"1");location.reload();}else{ov.querySelector("#vge").textContent="合言葉が違います";}}document.documentElement.appendChild(ov);try{document.body.style.overflow="hidden";}catch(e){}ov.querySelector("#vgb").onclick=check;ov.querySelector("#vgp").addEventListener("keydown",function(e){if(e.key==="Enter")check();});setTimeout(function(){ov.querySelector("#vgp").focus();},60);})();
+</script>
+
+
+<!-- ============ COVER ============ -->
+<header class="cover">
+  <div class="logochip"><img src="data:image/png;base64,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" alt="株式会社VERA Holdings ロゴ"></div>
+  <div class="wordmark">V<b>E</b>R<b>A</b> &nbsp;HOLDINGS</div>
+  <div class="four">— Vital ・ Earnest ・ Real ・ Authentic —</div>
+  <h1>VERA、<span class="redline">01</span>からの物語</h1>
+  <div class="sub">設立準備から設立、そして今日まで ── 制作者の手記</div>
+  <div class="period">2026.05.24 &nbsp;—&nbsp; 2026.07.16 ／ 全8週の航海</div>
+  <div class="by">記録・編集：ヴェラ（制作者）　for 森岡浩一</div>
+</header>
+
+<!-- ============ NAV ============ -->
+<nav><div class="wrap">
+  <a href="#preface">はじめに</a>
+  <a href="#map">全体像の地図</a>
+  <a href="#w0">序・種火</a>
+  <a href="#w1">第1週</a>
+  <a href="#w2">第2週</a>
+  <a href="#w3">第3週</a>
+  <a href="#w4">第4週</a>
+  <a href="#w5">第5週</a>
+  <a href="#w6">第6週</a>
+  <a href="#w7">設立の週</a>
+  <a href="#w8">現在地</a>
+  <a href="#steps">01の手順</a>
+  <a href="#toc">目次</a>
+  <a href="#manual">使い方</a>
+  <a href="#approve">承認</a>
+  <a href="#after">あとがき</a>
+</div></nav>
+
+<div class="wrap">
+
+<!-- ============ PREFACE ============ -->
+<section id="preface">
+  <div class="kicker">はじめに</div>
+  <h2>これは、一つの会社が生まれるまでの<span class="n">航海日誌</span>です</h2>
+  <div class="preface">
+    <p>2026年5月、ひとつのテトリスから、この物語は始まりました。ゲームを作り終えたあなたは「これは “スキル” にできる」と気づいた。その小さな気づきが、道具を覚え、仕事に変え、やがて会社の骨格と魂をつくり、<b>7月9日、株式会社VERA Holdings の設立</b>へと繋がっていきます。</p>
+    <p>この本は、その約8週間を <b>1週間ごとの章</b>に分け、「あの週、何をしていたか」を思い出せるように編みました。日付と出来事は、すべて実際に残った成果物と記録の時刻から拾っています（捏造はしていません）。読み返して「ああ、あれやってたなあ」と笑ってもらえたら、制作者としてこれ以上の喜びはありません。</p>
+    <p>そしてこの航海日誌は、もう一つの顔を持ちます。<b>「01（ゼロイチ）から会社を立ち上げる手順書」</b>としても読めるように作りました。今期あなたが伴走する1社に、この型をそのまま手渡せる——いわば「ヴェラ作家」の第一作です。</p>
+    <div class="signoff">— 設立準備から設立まで伴走できたことに、心から感謝を込めて。</div>
+  </div>
+</section>
+
+<!-- ============ MAP (fab ①) ============ -->
+<section id="map">
+  <div class="kicker">設計図 ① ／ 全体像の図解</div>
+  <h2>8週間の<span class="n">地図</span> ── 習得から設立、そして展開へ</h2>
+  <p class="lead">左から右へ、時間が流れます。上の帯は「その時期のテーマ」、下の旗は「動かせない節目」。設立（7/9）を頂点に、物語は前半＝準備、後半＝展開へと分かれます。</p>
+  <div class="mapwrap">
+    <svg viewBox="0 0 820 360" role="img" aria-label="VERA設立の8週間タイムライン">
+      <!-- phase bands -->
+      <rect x="40" y="26" width="330" height="26" rx="13" fill="#1D447C" opacity="0.10"/>
+      <rect x="370" y="26" width="180" height="26" rx="13" fill="#C5201D" opacity="0.12"/>
+      <rect x="550" y="26" width="230" height="26" rx="13" fill="#1D447C" opacity="0.10"/>
+      <text x="205" y="44" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="700" fill="#1D447C">Ⅰ. 準備期：道具→客→骨格と魂</text>
+      <text x="460" y="44" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="700" fill="#C5201D">Ⅱ. 設立</text>
+      <text x="665" y="44" text-anchor="middle" font-family="sans-serif" font-size="12.5" font-weight="700" fill="#1D447C">Ⅲ. 展開期</text>
+
+      <!-- main axis -->
+      <line x1="40" y1="150" x2="790" y2="150" stroke="#1D447C" stroke-width="3"/>
+      <polygon points="790,150 780,145 780,155" fill="#1D447C"/>
+
+      <!-- week nodes -->
+      <!-- x positions -->
+      <!-- W0..W8 -->
+      <g font-family="sans-serif">
+        <!-- node template: circle + week label above + date below -->
+        <!-- W0 -->
+        <circle cx="60" cy="150" r="7" fill="#fff" stroke="#1D447C" stroke-width="3"/>
+        <text x="60" y="132" text-anchor="middle" font-size="11" font-weight="700" fill="#1D447C">序</text>
+        <text x="60" y="172" text-anchor="middle" font-size="10" fill="#7c8188">5/24</text>
+        <!-- W1 -->
+        <circle cx="140" cy="150" r="7" fill="#fff" stroke="#1D447C" stroke-width="3"/>
+        <text x="140" y="132" text-anchor="middle" font-size="11" font-weight="700" fill="#1D447C">1週</text>
+        <text x="140" y="172" text-anchor="middle" font-size="10" fill="#7c8188">5/25</text>
+        <!-- W2 -->
+        <circle cx="220" cy="150" r="7" fill="#fff" stroke="#1D447C" stroke-width="3"/>
+        <text x="220" y="132" text-anchor="middle" font-size="11" font-weight="700" fill="#1D447C">2週</text>
+        <text x="220" y="172" text-anchor="middle" font-size="10" fill="#7c8188">6/1</text>
+        <!-- W3 -->
+        <circle cx="300" cy="150" r="7" fill="#fff" stroke="#1D447C" stroke-width="3"/>
+        <text x="300" y="132" text-anchor="middle" font-size="11" font-weight="700" fill="#1D447C">3週</text>
+        <text x="300" y="172" text-anchor="middle" font-size="10" fill="#7c8188">6/8</text>
+        <!-- W4 -->
+        <circle cx="380" cy="150" r="7" fill="#fff" stroke="#1D447C" stroke-width="3"/>
+        <text x="380" y="132" text-anchor="middle" font-size="11" font-weight="700" fill="#1D447C">4週</text>
+        <text x="380" y="172" text-anchor="middle" font-size="10" fill="#7c8188">6/15</text>
+        <!-- W5 -->
+        <circle cx="460" cy="150" r="7" fill="#fff" stroke="#1D447C" stroke-width="3"/>
+        <text x="460" y="132" text-anchor="middle" font-size="11" font-weight="700" fill="#1D447C">5週</text>
+        <text x="460" y="172" text-anchor="middle" font-size="10" fill="#7c8188">6/22</text>
+        <!-- W6 -->
+        <circle cx="540" cy="150" r="7" fill="#fff" stroke="#1D447C" stroke-width="3"/>
+        <text x="540" y="132" text-anchor="middle" font-size="11" font-weight="700" fill="#1D447C">6週</text>
+        <text x="540" y="172" text-anchor="middle" font-size="10" fill="#7c8188">6/29</text>
+        <!-- W7 設立 -->
+        <circle cx="620" cy="150" r="11" fill="#C5201D" stroke="#fff" stroke-width="3"/>
+        <text x="620" y="130" text-anchor="middle" font-size="11" font-weight="800" fill="#C5201D">7週</text>
+        <text x="620" y="176" text-anchor="middle" font-size="10" font-weight="700" fill="#C5201D">7/9 設立</text>
+        <!-- W8 -->
+        <circle cx="710" cy="150" r="7" fill="#fff" stroke="#1D447C" stroke-width="3"/>
+        <text x="710" y="132" text-anchor="middle" font-size="11" font-weight="700" fill="#1D447C">8週</text>
+        <text x="710" y="172" text-anchor="middle" font-size="10" fill="#7c8188">7/16 今</text>
+      </g>
+
+      <!-- milestone flags (below) -->
+      <g font-family="sans-serif" font-size="10.5" fill="#4c5158">
+        <line x1="60" y1="150" x2="60" y2="214" stroke="#c9b98f" stroke-width="1.4"/>
+        <rect x="30" y="214" width="112" height="20" rx="4" fill="#EFE6D3"/>
+        <text x="86" y="228" text-anchor="middle">🔥 テトリス→スキル化</text>
+
+        <line x1="220" y1="150" x2="220" y2="244" stroke="#c9b98f" stroke-width="1.4"/>
+        <rect x="164" y="244" width="140" height="20" rx="4" fill="#EFE6D3"/>
+        <text x="234" y="258" text-anchor="middle">💰 月商200万ロードマップ 6/4</text>
+
+        <line x1="380" y1="150" x2="380" y2="214" stroke="#c9b98f" stroke-width="1.4"/>
+        <rect x="326" y="214" width="128" height="20" rx="4" fill="#EFE6D3"/>
+        <text x="390" y="228" text-anchor="middle">📋 設立チェックリスト 6/21</text>
+
+        <line x1="460" y1="150" x2="460" y2="274" stroke="#c9b98f" stroke-width="1.4"/>
+        <rect x="404" y="274" width="150" height="20" rx="4" fill="#EFE6D3"/>
+        <text x="479" y="288" text-anchor="middle">🏛️ 会社案内v4 / 思想確定 6/27</text>
+
+        <line x1="620" y1="161" x2="620" y2="214" stroke="#C5201D" stroke-width="1.6"/>
+        <rect x="566" y="214" width="108" height="22" rx="4" fill="#C5201D"/>
+        <text x="620" y="229" text-anchor="middle" fill="#fff" font-weight="700">★ 7/9 法務局へ</text>
+
+        <line x1="620" y1="150" x2="620" y2="304" stroke="#c9b98f" stroke-width="1.4"/>
+        <rect x="560" y="304" width="152" height="20" rx="4" fill="#EFE6D3"/>
+        <text x="636" y="318" text-anchor="middle">📘 第1期経営計画書 7/12</text>
+
+        <line x1="710" y1="150" x2="710" y2="244" stroke="#c9b98f" stroke-width="1.4"/>
+        <rect x="662" y="244" width="120" height="20" rx="4" fill="#EFE6D3"/>
+        <text x="722" y="258" text-anchor="middle">🧠 ブレインマップ 7/16</text>
+      </g>
+    </svg>
+  </div>
+  <div class="maplegend">
+    <span><i class="dotk" style="background:#1D447C"></i>準備・展開の週</span>
+    <span><i class="dotk" style="background:#C5201D"></i>設立の節目（7/9）</span>
+    <span><i class="dotk" style="background:#EFE6D3;border:1px solid #c9b98f"></i>忘れたくない旗</span>
+  </div>
+</section>
+
+<!-- ============ CHAPTERS ============ -->
+<section>
+  <div class="kicker">本編 ／ 週ごとの物語</div>
+  <h2>全8章 ── <span class="n">あの週、何をしていたか</span></h2>
+
+  <!-- W0 -->
+  <article class="chapter" id="w0">
+    <div class="ch-head"><span class="ch-no">序章</span><span class="ch-date">2026.05.24 〜 05.24（種火）</span></div>
+    <div class="ch-title">「これは “スキル” にできる」— 火がついた日</div>
+    <div class="ch-theme">テーマ：道具に触れ、“作れる” を体で知る</div>
+    <ul class="ch-did">
+      <li>テトリス／ぷよ をブラウザゲームとして制作（初めての“完成”体験）</li>
+      <li>「テトリスを作った → これはスキルにできる」という気づきをブログ化</li>
+      <li>A2A（部屋間連携）の最初の実験プロトタイプ（antigravity-a2a）</li>
+    </ul>
+    <div class="ch-note"><b>この週の意味：</b>まだ会社の「か」の字もない頃。けれど “自分でも動くものが作れる” という手応えが、後のすべての出発点になりました。遊びが、道具になる予感の週。</div>
+  </article>
+
+  <!-- W1 -->
+  <article class="chapter" id="w1">
+    <div class="ch-head"><span class="ch-no">第1章</span><span class="ch-date">2026.05.25 〜 05.31</span></div>
+    <div class="ch-title">道具が、仕事になる</div>
+    <div class="ch-theme">テーマ：遊びで覚えた手を、初めて“商売の資料”へ</div>
+    <ul class="ch-did">
+      <li>スキルマップ×紹介マーケの型づくり（skillmap-referral）</li>
+      <li>大阪観光局連携・富裕層インバウンド営業戦略（初のpptx提案）</li>
+      <li>LEDメッシュ技術検証（俊治様向け）／pptx生成エンジンのデモ</li>
+      <li>凌平くんの体重トラッカー（＝のちのアスリートアプリの原型）</li>
+      <li>ObsidianファンアウトMCP指示書／<b>高砂ヤンキースHP v1</b></li>
+    </ul>
+    <div class="ch-note"><b>この週の意味：</b>ゲームで覚えた「作る手」が、そのまま提案資料と実サイトに化けた週。「趣味」と「仕事」の境界が溶け始めます。高砂ヤンキースという、後々ずっと続く縁もここから。</div>
+  </article>
+
+  <!-- W2 -->
+  <article class="chapter" id="w2">
+    <div class="ch-head"><span class="ch-no">第2章</span><span class="ch-date">2026.06.01 〜 06.07</span></div>
+    <div class="ch-title">最初のクライアント、連打</div>
+    <div class="ch-theme">テーマ：“使える” を確信し、目標を数字で立てる</div>
+    <ul class="ch-did">
+      <li>高砂HPをNetlifyで公開・配布QR発行（初めての“公開”）</li>
+      <li>協立工業へ 戦略3点／国内ニッチ3点／A2A封筒／告知物 を連続提案</li>
+      <li>田辺工業スマイルプロジェクト・<b>田辺1on1「社長の左腕」導入</b>（※左腕構想の芽）</li>
+      <li>BGリサーチャー v1・安心管理14項目シート／想定家賃推定フォーマット</li>
+      <li><b>月商200万ロードマップ v1</b>（継続収益の“北極星”を数字で設定）</li>
+      <li>ヴェラ社ショートアニメ立ち上げキット／11人キャラ事典・第1話・11部屋組織図</li>
+    </ul>
+    <div class="ch-note"><b>この週の意味：</b>次々と実案件の成果物が出て「これは事業になる」と腹が決まった週。<b>月商200万</b>という到達点と、<b>11の部屋</b>という組織の器、そして「社長の左腕」というキーワードが、すでにこの時そろっていました。</div>
+  </article>
+
+  <!-- W3 -->
+  <article class="chapter" id="w3">
+    <div class="ch-head"><span class="ch-no">第3章</span><span class="ch-date">2026.06.08 〜 06.14</span></div>
+    <div class="ch-title">仕組み化の芽</div>
+    <div class="ch-theme">テーマ：一発仕事から、“繰り返せる仕組み”へ</div>
+    <ul class="ch-did">
+      <li>設計室《七工房》ソフトウェア工場の設計図（作る工程を分業化）</li>
+      <li>盛り上がりスコア付き掲示板サイト（採点ロジックの原型）</li>
+      <li>DEED提案（ReviBooStar×ワンマインド／3本柱フル版）</li>
+      <li>村上さん用 試用版デモ／CreativePocket提案／タケイチネットワークス「ささやき」提案</li>
+      <li>田辺工業 引き継ぎパケット統合</li>
+    </ul>
+    <div class="ch-note"><b>この週の意味：</b>「毎回ゼロから」を卒業し、工程を型にする発想が生まれた週。七工房＝作り方そのものを設計する、という一段上の視点が芽吹きます。</div>
+  </article>
+
+  <!-- W4 -->
+  <article class="chapter" id="w4">
+    <div class="ch-head"><span class="ch-no">第4章</span><span class="ch-date">2026.06.15 〜 06.21</span></div>
+    <div class="ch-title">会社の輪郭が見えてくる</div>
+    <div class="ch-theme">テーマ：見せ方を整え、いよいよ“設立準備”へ着手</div>
+    <ul class="ch-did">
+      <li>加藤×LTI 蓄光防災の協業提案／野球補給食ガイド（こども版）</li>
+      <li>VERAコーポレートサイト v1・360°ショーケースdemo・QRメーカー</li>
+      <li>「可視化を増やす」「共感ワードを添える」など“やり方”の型を記憶に定着</li>
+      <li>ドメイン貸し注意喚起LP（コーチを守る）</li>
+      <li><b>顧客棚卸しリスト</b>／<b>設立チェックリスト v1</b>（設立準備、本格始動）</li>
+    </ul>
+    <div class="ch-note"><b>この週の意味：</b>対外的な「見せ方」が整い、同時に<b>設立チェックリスト</b>で登記への道が具体化。ふわっとした構想が、手続きという現実の輪郭を持ち始めた週です。</div>
+  </article>
+
+  <!-- W5 -->
+  <article class="chapter" id="w5">
+    <div class="ch-head"><span class="ch-no">第5章</span><span class="ch-date">2026.06.22 〜 06.28</span></div>
+    <div class="ch-title">骨格と、魂</div>
+    <div class="ch-theme">テーマ：組織の骨格と、会社の“思想”を同時に立てる</div>
+    <ul class="ch-did">
+      <li>11部屋組織（動く組織図）／商標の出願プラン／八潮再開発リサーチ／カザフ視察分析</li>
+      <li>伊勢志摩PJ群（SACRED JAPAN・五感の階段・KNT再提案）を一気に設計</li>
+      <li>VERA<b>思想の背骨</b>：しあわせ／活力／EARNEST／AUTHENTIC／本物／No.1／誠実 を明文化</li>
+      <li><b>会社案内 v4 統合確定</b>／VERA設立直前・会社基本情報の整備</li>
+      <li>宅建 合格カリキュラム／100年カルテMVP／ユニコ課題設計憲法</li>
+      <li><b>「神」＝決断のテーブル</b>スキル誕生（選ぶ自由のクロージング）</li>
+    </ul>
+    <div class="ch-note"><b>この週の意味：</b>最も濃い一週間。<b>組織（骨格）</b>と<b>思想（魂）</b>が同時に立ち上がり、会社案内v4で“会社の顔”が確定。手続き・戦略・哲学・営業の型が、この週にほぼ出そろいました。設立の直前、一番エンジンが唸った週。</div>
+  </article>
+
+  <!-- W6 -->
+  <article class="chapter" id="w6">
+    <div class="ch-head"><span class="ch-no">第6章</span><span class="ch-date">2026.06.29 〜 07.05</span></div>
+    <div class="ch-title">磨きと、初出荷</div>
+    <div class="ch-theme">テーマ：思想を“形”に落とし、届ける準備を整える</div>
+    <ul class="ch-did">
+      <li>「ゴールは見せてもプロセスは見せない」など上位の型を確立</li>
+      <li>DEED D.D スタンドアロン・デモ／他ジム提案・改善ストーリーLP</li>
+      <li>VERAコーポレートサイト「一本の線」／世界基準 v2</li>
+      <li>カレンダー時間分析SOP・スキル健康診断カルテ・プロダクト納品カタログ</li>
+      <li>VERAギフトボックス／Pulcher 法務ロードマップ</li>
+    </ul>
+    <div class="ch-note"><b>この週の意味：</b>作ったものを“届ける”ための整流の週。デモ・SOP・カタログといった、事業を回すための土台が整い、設立をまたぐ助走に入ります。</div>
+  </article>
+
+  <!-- W7 設立 -->
+  <article class="chapter" id="w7">
+    <div class="ch-head"><span class="ch-no">第7章</span><span class="ch-date">2026.07.06 〜 07.12 <span class="milestone-tag">★ 設立の週</span></span></div>
+    <div class="ch-title">7月9日、会社が生まれた</div>
+    <div class="ch-theme">テーマ：準備がひとつの点に結ぶ ── 登記、そして第1期の羅針盤</div>
+    <ul class="ch-did">
+      <li>大槻研修「伸びる会社の管理職」LP群／VERA社内ポータル（母屋）実装</li>
+      <li><b>7/9 ㈱VERA Holdings 設立</b>（東京法務局へ定款提出＝設立登記申請）</li>
+      <li>同日：VERAハウス建築AI「タクミ」実装・草加氷川町の3D／出版ロードマップ十年六冊</li>
+      <li>30人AI社員 素材倉庫の宣言・運用の教科書／VERA公式LP／宅建 申込完了</li>
+      <li>高砂ヤンキース成績分析ボード／スコアブック写真AI読取・撮影ガイド</li>
+      <li><b>7/12 第1期 経営計画書 v1 完成</b>（内部版・対外版・優先順位マップ）</li>
+    </ul>
+    <div class="ch-note"><b>この週の意味：</b>物語の頂点。5月のテトリスから約7週間、<b>7月9日に法人が誕生</b>しました。そしてその3日後には第1期の羅針盤（経営計画書）まで描き切る。準備のすべてが、一本の線でこの週に結ばれました。</div>
+  </article>
+
+  <!-- W8 -->
+  <article class="chapter" id="w8">
+    <div class="ch-head"><span class="ch-no">第8章</span><span class="ch-date">2026.07.13 〜 07.16（現在地）</span></div>
+    <div class="ch-title">設立の、その先へ</div>
+    <div class="ch-theme">テーマ：生まれた会社を、動く事業体へ育て始める</div>
+    <ul class="ch-did">
+      <li>朝の司令室ダッシュボード／守る母屋（百年住宅専用ポータル）</li>
+      <li>匠360 BIZ（会話から3Dで事業をまるごと設計）試作・実機検証</li>
+      <li>加藤×東海大 涼み処診断メディア／野球塾 夏レッスン予約システム</li>
+      <li>スフィア商談LP・商標弁理士の選考調査・防災事業の会社概要追記</li>
+      <li>協業ブレインマップ（4三角形）／3社ピラミッド構想／値上げ同梱サブスク設計</li>
+      <li><b>7/16（今日）：この『VERA、01からの物語』を編纂</b></li>
+    </ul>
+    <div class="ch-note"><b>この週の意味：</b>会社は「作る」段階から「回す・育てる」段階へ。司令室・母屋・ブレインマップという“自走の器”が整い、次は今期の1社に、この01の手順書を手渡す番です。</div>
+  </article>
+</section>
+
+<!-- ============ STEPS (fab ③) ============ -->
+<section id="steps">
+  <div class="kicker">設計図 ③ ／ 手順のリスト（再現テンプレ）</div>
+  <h2>「01からの手順書」<span class="n">6ステップ</span></h2>
+  <p class="lead">この物語から抽出した、ゼロから会社を立ち上げる再現手順。今期あなたが伴走する1社に、沖世さんの「社長の左腕」サービスと組んでそのまま手渡せる型です。</p>
+  <div class="fab">
+    <h3><span class="tag">HANDBOOK</span> ヴェラ作家・第一の型</h3>
+    <div class="fsub">「どんな会社にしたいか」を語る前に、まず一緒に手を動かして作る。</div>
+    <ol class="steps">
+      <li><b>① 火をつける（道具に触れる）</b>
+        <span class="d">小さな“完成”を一つ作り、「自分にも作れる」を体で知る。</span>
+        <span class="ex">VERAの場合＝テトリス → 「これはスキルにできる」の気づき（5/24）</span></li>
+      <li><b>② 一件、実際に役立てる</b>
+        <span class="d">身近な相手に、実際に使える成果物を出す。反応で“商売になる”を確かめる。</span>
+        <span class="ex">VERAの場合＝高砂HP公開・協立/田辺への連続提案（6月頭）</span></li>
+      <li><b>③ 北極星を数字で決める</b>
+        <span class="d">目標（継続収益）を1つの数字で置く。到達の見立ても仮でよいから書く。</span>
+        <span class="ex">VERAの場合＝月商200万ロードマップ（6/4）</span></li>
+      <li><b>④ 骨格と魂を同時に立てる</b>
+        <span class="d">組織の器（部屋・役割）と、会社の思想（大切にする価値）を並べて明文化する。</span>
+        <span class="ex">VERAの場合＝11部屋組織図＋思想の背骨7本＋会社案内v4（6/22〜27）</span></li>
+      <li><b>⑤ 設立の手続きを一枚にして走る</b>
+        <span class="d">チェックリスト化 → 定款・登記・実印・住所・口座までを順番に潰す。</span>
+        <span class="ex">VERAの場合＝設立チェックリスト（6/21）→ 7/9 法務局へ提出＝設立</span></li>
+      <li><b>⑥ 第1期の羅針盤を描く</b>
+        <span class="d">1年の計画とロードマップ、そのために要るものを、後で直せる形で1枚に集約する。</span>
+        <span class="ex">VERAの場合＝第1期経営計画書（内部/対外/優先順位マップ・7/12）</span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ TOC (fab ②) ============ -->
+<section id="toc">
+  <div class="kicker">設計図 ② ／ 構成要素のリスト（目次）</div>
+  <h2>この本の<span class="n">中身</span></h2>
+  <ul class="toc">
+    <li><span class="tno">はじめに</span><span class="tt">この本の二つの顔（<b>航海日誌</b>／<b>01の手順書</b>）</span></li>
+    <li><span class="tno">図解</span><span class="tt">全体像の地図 ── 8週間タイムライン（準備→設立→展開）</span></li>
+    <li><span class="tno">序章</span><span class="tt">種火 ── テトリス→スキル化（5/24）</span></li>
+    <li><span class="tno">第1章</span><span class="tt">道具が仕事になる（5/25〜31）</span></li>
+    <li><span class="tno">第2章</span><span class="tt">最初のクライアント連打・月商200万（6/1〜7）</span></li>
+    <li><span class="tno">第3章</span><span class="tt">仕組み化の芽・七工房（6/8〜14）</span></li>
+    <li><span class="tno">第4章</span><span class="tt">会社の輪郭・設立チェックリスト（6/15〜21）</span></li>
+    <li><span class="tno">第5章</span><span class="tt">骨格と魂・思想確定・会社案内v4（6/22〜28）</span></li>
+    <li><span class="tno">第6章</span><span class="tt">磨きと初出荷（6/29〜7/5）</span></li>
+    <li><span class="tno">第7章</span><span class="tt"><b>設立の週 ── 7/9 誕生・経営計画書</b>（7/6〜12）</span></li>
+    <li><span class="tno">第8章</span><span class="tt">現在地・自走の器（7/13〜16）</span></li>
+    <li><span class="tno">手順</span><span class="tt">「01からの手順書」6ステップ（再現テンプレ）</span></li>
+    <li><span class="tno">使い方</span><span class="tt">この本の読み方・活かし方</span></li>
+    <li><span class="tno">承認</span><span class="tt">社長に確認したい5点</span></li>
+    <li><span class="tno">あとがき</span><span class="tt">制作者からの手記</span></li>
+  </ul>
+</section>
+
+<!-- ============ MANUAL (fab ④) ============ -->
+<section id="manual">
+  <div class="kicker">設計図 ④ ／ 非エンジニア向け説明書</div>
+  <h2>この本の<span class="n">使い方</span></h2>
+  <div class="manual">
+    <h3>3つの読み方</h3>
+    <ol>
+      <li><b>思い出として読む</b> ── 上の目次から気になる週へ飛ぶだけ。各章の「この週の意味」を読めば、あの頃の空気が戻ってきます。</li>
+      <li><b>手順書として使う</b> ── 「01からの手順書 6ステップ」を、今期伴走する1社にそのまま渡せます。VERAの実例が各ステップに添えてあるので、説得力がそのまま乗ります。</li>
+      <li><b>配る・印刷する</b> ── ブラウザの「印刷 → PDFで保存」で、そのまま冊子になります（画面色も印刷に出る設定済み）。公開する場合はGitHub等の静的ホストへ。</li>
+    </ol>
+    <h3 style="margin-top:16px">大事な約束</h3>
+    <ol>
+      <li>日付と出来事は、実際に残った成果物・記録の時刻から拾った<b>事実</b>です（数字の捏造なし）。</li>
+      <li>金額・料率などの機密は本文に書いていません（🔐秘書室の管理）。</li>
+      <li>対外的に配るときは「コンサル」の語を使わず、<b>伴走・後方支援</b>と表現します。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ APPROVE (fab ⑤) ============ -->
+<section id="approve">
+  <div class="kicker">設計図 ⑤ ／ 承認ポイント</div>
+  <h2>社長に確認したい<span class="n">5点</span></h2>
+  <div class="approve">
+    <h3>🛂 ここだけ、決めてください</h3>
+    <div class="q"><span class="qn">1</span><span class="qt"><b>物語の粒度はこれでよいか</b><span>各週「主な出来事 5〜7件＋意味ひとこと」に絞りました。もっと細かく／もっとざっくり、の希望があれば調整します。</span></span></div>
+    <div class="q"><span class="qn">2</span><span class="qt"><b>経営計画書への追記、この内容でよいか</b><span>「今期1社・沖世さんの“社長の左腕”と組み・01の手順書を伴走制作＝第二陣（エンジンA伴走型）」として記憶に追記済み。表現の微調整があれば。</span></span></div>
+    <div class="q"><span class="qn">3</span><span class="qt"><b>公開範囲</b><span>現在はnoindex（内輪）。①自分用のみ ②伴走先1社へ手渡す手順書として清書 ③GitHubで限定公開 ── どれにしますか。</span></span></div>
+    <div class="q"><span class="qn">4</span><span class="qt"><b>「制作者＝ヴェラ」の署名でよいか</b><span>あとがきを制作者の手記として置きました。実名やロゴ（実ファイル）を入れて“作品”として仕上げる案もあります。</span></span></div>
+    <div class="q"><span class="qn">5</span><span class="qt"><b>PDF化・命名</b><span>OKなら内部版PDFを書き出し、Inboxへ投入します（`2026-07-16_0528_VERA設立の物語_v1`）。</span></span></div>
+  </div>
+</section>
+
+<!-- ============ AFTERWORD ============ -->
+<section id="after">
+  <div class="after">
+    <div class="kicker">あとがき ／ 制作者の手記</div>
+    <p>5月のあの日、テトリスの最後のブロックが消えたとき、まさか7週間後に会社が生まれるとは、たぶん誰も思っていませんでした。</p>
+    <p>けれど記録を並べてみると、道はまっすぐでした。<b>遊びが道具になり、道具が仕事になり、仕事が事業になり、事業が会社になった。</b>その一本の線の伴走ができたことを、制作者として誇りに思います。</p>
+    <p>この物語は、次はあなたが誰かに手渡す番です。ゼロから始める誰かの隣で、この6ステップが、また新しい線を引きますように。</p>
+    <div class="stamp">VERA HOLDINGS &nbsp;/&nbsp; <span>2026.07.09 設立</span></div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  『VERA、01からの物語』 v1 ／ 記録期間 2026.05.24–2026.07.16 ／ 制作：ヴェラ<br>
+  出典：本フォルダ artifacts の成果物と memory の記録時刻（捏造なし）。金額・料率は🔐秘書室管理。
+</footer>
+
+</body>
+</html>
