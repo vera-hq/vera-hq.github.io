@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<!-- ============================================================
+  あさのて 〜毎朝ひらく本部の1枚〜（petapeta 本部ポータル・デモ版）
+  produced by VERA Holdings × CreativePocket（デモ）
+  fingerprint: PPTA-ASANOTE-DEMO-7f3a91c2（納品ごとに固有シリアルを埋め込む証拠層のデモ）
+  注意: 本ファイルの数値・氏名・記事・件数はすべて架空（ダミー）です。
+============================================================ -->
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>あさのて 〜毎朝ひらく本部の1枚〜（デモ）</title>
+<style>
+  :root{
+    --navy:#14264F; --navy2:#1D3566; --navy3:#0E1B3A;
+    --gold:#C9A44C; --gold-l:#E3C98A; --gold-bg:#F6EBD2;
+    --cream:#FBF6EE; --sakura:#F7C8CC; --sakura-d:#E08A96; --sakura-bg:#FCEDEF;
+    --ink:#2A2A33; --muted:#8A8494; --card:#FFFFFF; --line:#E9E0D2;
+    --ok:#4A8F6D; --warn:#C96A4C;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,-apple-system,"Segoe UI",sans-serif;
+    background:var(--cream); color:var(--ink); font-size:14px; line-height:1.65;
+  }
+  /* ===== デモ帯 ===== */
+  .demo-band{background:repeating-linear-gradient(45deg,var(--gold),var(--gold) 14px,#B8933F 14px,#B8933F 28px);
+    color:var(--navy3); text-align:center; font-weight:bold; padding:7px 10px; letter-spacing:.12em; font-size:13px;}
+  /* ===== 合言葉ゲート ===== */
+  #gate{position:fixed; inset:0; z-index:1000; display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(1200px 700px at 30% 20%, var(--navy2), var(--navy3));}
+  #gate .petal{position:absolute; border-radius:50% 0 50% 50%; background:var(--sakura); opacity:.14;}
+  #gate .p1{width:180px;height:180px;top:8%;left:6%;transform:rotate(20deg);}
+  #gate .p2{width:120px;height:120px;bottom:12%;right:10%;transform:rotate(140deg);}
+  #gate .p3{width:70px;height:70px;top:20%;right:24%;transform:rotate(80deg);}
+  #gate .p4{width:44px;height:44px;bottom:28%;left:22%;transform:rotate(200deg);}
+  .gate-card{position:relative; width:460px; max-width:92vw; background:var(--card); border-radius:18px;
+    padding:38px 40px 30px; text-align:center; box-shadow:0 24px 70px rgba(0,0,0,.45); border-top:5px solid var(--gold);}
+  .gate-mark{width:64px;height:64px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;
+    background:var(--sakura-bg); border:2px solid var(--sakura); font-size:28px;}
+  .gate-card h1{font-size:22px; color:var(--navy); letter-spacing:.06em;}
+  .gate-card .sub{color:var(--muted); font-size:12px; margin:4px 0 20px;}
+  .gate-card input{width:100%; padding:12px 14px; border:1.5px solid var(--line); border-radius:10px; font-size:16px;
+    text-align:center; letter-spacing:.2em; outline:none; background:var(--cream);}
+  .gate-card input:focus{border-color:var(--gold);}
+  .gate-card button{width:100%; margin-top:12px; padding:12px; border:none; border-radius:10px; cursor:pointer;
+    background:var(--navy); color:#fff; font-size:15px; font-weight:bold; letter-spacing:.24em;}
+  .gate-card button:hover{background:var(--navy2);}
+  .gate-err{color:var(--warn); font-size:12px; min-height:18px; margin-top:8px;}
+  .gate-honest{margin-top:16px; padding:12px; background:var(--cream); border-radius:10px; font-size:11px;
+    color:var(--muted); text-align:left; line-height:1.7;}
+  .gate-note{margin-top:10px; font-size:11px; color:var(--muted);}
+  /* ===== ヘッダー ===== */
+  header{background:linear-gradient(120deg,var(--navy3),var(--navy2)); color:var(--cream); padding:18px 0 0;}
+  .wrap{max-width:1160px; margin:0 auto; padding:0 22px;}
+  .head-top{display:flex; align-items:center; gap:18px; flex-wrap:wrap; padding-bottom:14px;}
+  .brand h1{font-size:24px; letter-spacing:.05em;}
+  .brand h1 small{font-size:12px; color:var(--gold-l); font-weight:normal; margin-left:10px;}
+  .brand .who{font-size:11px; color:#B9C3DA;}
+  .issue{margin-left:auto; text-align:right; font-size:12px;}
+  .issue .no{display:inline-block; background:var(--gold); color:var(--navy3); font-weight:bold;
+    border-radius:999px; padding:3px 14px; font-size:13px; letter-spacing:.1em;}
+  .issue .stamp{color:#B9C3DA; margin-top:4px; font-size:11px;}
+  .searchbar{display:flex; gap:8px; align-items:center;}
+  .searchbar input{width:250px; padding:9px 13px; border-radius:999px; border:1px solid #3A4E7E;
+    background:#22355F; color:var(--cream); font-size:13px; outline:none;}
+  .searchbar input::placeholder{color:#8B98B8;}
+  .searchbar button{padding:9px 16px; border-radius:999px; border:none; background:var(--gold); color:var(--navy3);
+    font-weight:bold; cursor:pointer; font-size:13px;}
+  nav{border-top:1px solid rgba(255,255,255,.14);}
+  .tabs{display:flex; gap:4px; flex-wrap:wrap; padding:8px 0;}
+  .tabs button{background:transparent; border:none; color:#B9C3DA; padding:9px 15px; font-size:13.5px;
+    cursor:pointer; border-radius:9px 9px 0 0; border-bottom:3px solid transparent;}
+  .tabs button:hover{color:#fff;}
+  .tabs button.active{color:#fff; border-bottom-color:var(--gold); background:rgba(255,255,255,.06); font-weight:bold;}
+  /* ===== 共通カード ===== */
+  main{max-width:1160px; margin:22px auto 40px; padding:0 22px;}
+  .view{display:none;} .view.active{display:block;}
+  .grid{display:grid; gap:16px;}
+  .g2{grid-template-columns:1fr 1fr;} .g3{grid-template-columns:1fr 1fr 1fr;}
+  .g21{grid-template-columns:2fr 1fr;} .g12{grid-template-columns:1fr 2fr;}
+  @media(max-width:900px){.g2,.g3,.g21,.g12{grid-template-columns:1fr;}}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 20px;
+    box-shadow:0 2px 10px rgba(20,38,79,.05);}
+  .card h2{font-size:16px; color:var(--navy); margin-bottom:12px; display:flex; align-items:center; gap:8px; letter-spacing:.03em; flex-wrap:wrap;}
+  .dummy{font-size:10px; background:var(--sakura-bg); color:var(--sakura-d); border:1px solid var(--sakura);
+    border-radius:999px; padding:2px 9px; white-space:nowrap; font-weight:normal;}
+  .vera-badge{font-size:10px; background:var(--gold-bg); color:#8A6A1E; border:1px solid var(--gold-l);
+    border-radius:999px; padding:2px 9px; white-space:nowrap; font-weight:normal;}
+  .note{font-size:11px; color:var(--muted); margin-top:10px; line-height:1.7;}
+  .mt{margin-top:16px;}
+  /* ===== 司令室 ===== */
+  .summary3 li{list-style:none; padding:9px 0 9px 30px; position:relative; border-bottom:1px dashed var(--line); font-size:14px;}
+  .summary3 li:last-child{border-bottom:none;}
+  .summary3 li::before{content:attr(data-n); position:absolute; left:0; top:9px; width:21px; height:21px;
+    background:var(--navy); color:var(--gold-l); border-radius:50%; font-size:11px; display:flex;
+    align-items:center; justify-content:center; font-weight:bold;}
+  .todo{display:flex; align-items:center; gap:10px; padding:9px 11px; border:1px solid var(--line);
+    border-radius:10px; margin-bottom:8px; cursor:pointer; background:#fff;}
+  .todo:hover{border-color:var(--gold);}
+  .todo .box{width:20px; height:20px; border:2px solid var(--gold); border-radius:6px; flex:none;
+    display:flex; align-items:center; justify-content:center; font-size:13px; color:#fff;}
+  .todo.done .box{background:var(--gold);}
+  .todo.done .txt{text-decoration:line-through; color:var(--muted);}
+  .approve{border:1px solid var(--line); border-left:4px solid var(--sakura-d); border-radius:10px;
+    padding:12px 14px; margin-bottom:10px; background:#fff;}
+  .approve .t{font-weight:bold; color:var(--navy); font-size:13.5px;}
+  .approve .d{font-size:12px; color:var(--muted); margin:3px 0 8px;}
+  .approve .btns{display:flex; gap:6px; align-items:center; flex-wrap:wrap;}
+  .approve .btns button{padding:5px 14px; border-radius:999px; border:1px solid var(--line); background:#fff;
+    cursor:pointer; font-size:12px;}
+  .approve .btns button.on-yes{background:var(--ok); color:#fff; border-color:var(--ok);}
+  .approve .btns button.on-hold{background:var(--gold); color:var(--navy3); border-color:var(--gold);}
+  .approve .btns button.on-no{background:var(--warn); color:#fff; border-color:var(--warn);}
+  .meter{margin-bottom:13px;}
+  .meter .lbl{display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:4px; gap:8px; flex-wrap:wrap;}
+  .meter .lbl b{color:var(--navy);}
+  .meter .bar{height:10px; background:var(--cream); border-radius:999px; overflow:hidden; border:1px solid var(--line);}
+  .meter .fill{height:100%; border-radius:999px; background:linear-gradient(90deg,var(--gold-l),var(--gold));}
+  .meter .fill.pink{background:linear-gradient(90deg,var(--sakura),var(--sakura-d));}
+  .chart-cap{font-size:11px; color:var(--muted); text-align:center; margin-top:2px;}
+  /* ===== マップ ===== */
+  .map-flex{display:flex; gap:20px; flex-wrap:wrap;}
+  .jp-map{display:grid; grid-template-columns:repeat(14,34px); grid-auto-rows:34px; gap:3px; flex:none;}
+  .pref{border-radius:6px; font-size:9.5px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; color:var(--navy3); border:1px solid rgba(20,38,79,.12); user-select:none;}
+  .pref:hover{outline:2px solid var(--navy); z-index:2;}
+  .pref.sel{outline:2.5px solid var(--navy); font-weight:bold; z-index:2;}
+  .t1{background:var(--sakura-bg);} .t2{background:var(--sakura);}
+  .t3{background:var(--gold-l);} .t4{background:var(--navy); color:var(--cream);}
+  .legend{display:flex; gap:12px; font-size:11px; color:var(--muted); margin-top:10px; flex-wrap:wrap;}
+  .legend i{display:inline-block; width:13px; height:13px; border-radius:4px; margin-right:4px; vertical-align:-2px;}
+  .pref-detail{flex:1; min-width:240px;}
+  .pref-detail .big{font-size:30px; color:var(--navy); font-weight:bold;}
+  .stat-row{display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px dashed var(--line); font-size:13px;}
+  .stat-row b{color:var(--navy);}
+  /* ===== 講師の声 ===== */
+  .voice{display:flex; gap:12px; padding:12px 0; border-bottom:1px dashed var(--line);}
+  .voice:last-child{border-bottom:none;}
+  .avatar{width:42px; height:42px; border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:bold; color:#fff; letter-spacing:.02em;}
+  .av1{background:var(--navy);} .av2{background:var(--sakura-d);} .av3{background:var(--gold);} .av4{background:var(--navy2);}
+  .voice .meta{font-size:11px; color:var(--muted);}
+  .voice .body{font-size:13px; margin-top:2px;}
+  .voice .tag{display:inline-block; font-size:10px; background:var(--cream); border:1px solid var(--line);
+    border-radius:999px; padding:1px 8px; margin-top:4px; color:var(--muted);}
+  .rank li{list-style:none; display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px dashed var(--line); font-size:13px;}
+  .rank li:last-child{border-bottom:none;}
+  .rank .no{width:22px; height:22px; border-radius:50%; background:var(--gold-bg); color:#8A6A1E; font-size:11px;
+    font-weight:bold; display:flex; align-items:center; justify-content:center; flex:none;}
+  .rank .cnt{margin-left:auto; color:var(--muted); font-size:11px;}
+  /* ===== かんばん ===== */
+  .kanban{display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;}
+  @media(max-width:900px){.kanban{grid-template-columns:1fr;}}
+  .lane{background:var(--cream); border:1px solid var(--line); border-radius:12px; padding:10px;}
+  .lane h3{font-size:12.5px; color:var(--navy); margin-bottom:8px; display:flex; align-items:center; gap:6px;}
+  .lane .cnt-b{margin-left:auto; background:var(--navy); color:#fff; border-radius:999px; font-size:10px; padding:1px 8px;}
+  .k-item{background:#fff; border:1px solid var(--line); border-radius:9px; padding:9px 11px; margin-bottom:7px;
+    font-size:12.5px; cursor:pointer;}
+  .k-item:hover{border-color:var(--gold); box-shadow:0 2px 6px rgba(20,38,79,.08);}
+  .k-item .from{font-size:10.5px; color:var(--muted); margin-top:2px;}
+  /* ===== お知らせ ===== */
+  .notice{border:1px solid var(--line); border-radius:10px; padding:11px 13px; margin-bottom:9px; background:#fff; font-size:13px;}
+  .notice .t{font-weight:bold; color:var(--navy);}
+  .notice .m{font-size:11px; color:var(--muted); margin-top:3px;}
+  .reaction{display:inline-block; font-size:11px; background:var(--cream); border-radius:999px; padding:1px 9px;
+    margin-right:6px; border:1px solid var(--line); color:var(--muted);}
+  /* ===== カレンダー ===== */
+  .cal{display:grid; grid-template-columns:repeat(7,1fr); gap:4px;}
+  .cal .dow{text-align:center; font-size:11px; color:var(--muted); padding:4px 0; font-weight:bold;}
+  .cal .day{min-height:64px; background:#fff; border:1px solid var(--line); border-radius:8px; padding:4px 6px; font-size:11px;}
+  .cal .day .n{font-size:11px; color:var(--muted);}
+  .cal .day.today{border:2px solid var(--gold); background:var(--gold-bg);}
+  .cal .day.today .n{color:#8A6A1E; font-weight:bold;}
+  .cal .ev{display:block; background:var(--sakura-bg); border-left:3px solid var(--sakura-d); border-radius:4px;
+    padding:1px 5px; margin-top:3px; font-size:10px; line-height:1.4;}
+  .cal .empty{background:transparent; border:none;}
+  .ahead{border:1px solid var(--gold-l); background:var(--gold-bg); border-radius:10px; padding:11px 14px;
+    margin-bottom:9px; font-size:13px;}
+  .ahead b{color:#8A6A1E;}
+  /* ===== ニュース ===== */
+  .news{padding:11px 0; border-bottom:1px dashed var(--line); font-size:13px;}
+  .news:last-child{border-bottom:none;}
+  .news .src{font-size:11px; color:var(--muted); margin-top:2px;}
+  .news .t{color:var(--navy); font-weight:bold;}
+  /* ===== 運用・発射台 ===== */
+  .hist li{list-style:none; padding:8px 0 8px 22px; position:relative; border-bottom:1px dashed var(--line); font-size:12.5px;}
+  .hist li::before{content:""; position:absolute; left:4px; top:14px; width:9px; height:9px; border-radius:50%;
+    background:var(--gold); border:2px solid var(--gold-bg);}
+  .compare{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .compare .old{opacity:.62;}
+  .compare h4{font-size:13px; color:var(--navy); margin-bottom:6px;}
+  .compare ul{padding-left:18px; font-size:12px; color:var(--ink);}
+  .freeze-flow{display:flex; gap:8px; align-items:stretch; flex-wrap:wrap;}
+  .freeze-flow .step{flex:1; min-width:150px; background:var(--cream); border:1px solid var(--line); border-radius:10px;
+    padding:12px; font-size:12px; text-align:center;}
+  .freeze-flow .step b{display:block; color:var(--navy); margin-bottom:4px; font-size:12.5px;}
+  .freeze-flow .arr{align-self:center; color:var(--gold); font-weight:bold; font-size:18px;}
+  .launch{display:grid; grid-template-columns:repeat(4,1fr); gap:10px;}
+  @media(max-width:900px){.launch{grid-template-columns:repeat(2,1fr);}}
+  .launch a{display:block; text-align:center; background:#fff; border:1px solid var(--line); border-radius:12px;
+    padding:16px 8px; text-decoration:none; color:var(--navy); font-size:12.5px; font-weight:bold;}
+  .launch a:hover{border-color:var(--gold); background:var(--gold-bg);}
+  .launch a span{display:block; font-size:22px; margin-bottom:5px;}
+  .consult textarea{width:100%; min-height:88px; border:1.5px solid var(--line); border-radius:10px; padding:10px 12px;
+    font-family:inherit; font-size:13px; resize:vertical; background:#fff; outline:none;}
+  .consult textarea:focus{border-color:var(--gold);}
+  .consult .send{margin-top:8px; padding:9px 22px; border:none; border-radius:999px; background:var(--navy);
+    color:#fff; font-weight:bold; cursor:pointer; font-size:13px;}
+  .consult .send:hover{background:var(--navy2);}
+  .saved{border-left:3px solid var(--sakura-d); background:var(--sakura-bg); border-radius:0 8px 8px 0;
+    padding:8px 11px; margin-top:8px; font-size:12.5px;}
+  .saved .d{font-size:10.5px; color:var(--muted);}
+  /* ===== 検索 ===== */
+  .s-hit{padding:11px 13px; border:1px solid var(--line); border-radius:10px; margin-bottom:9px; background:#fff; font-size:13px;}
+  .s-hit .cat{font-size:10px; background:var(--navy); color:var(--gold-l); border-radius:999px; padding:1px 9px; margin-right:8px;}
+  .s-hit mark{background:var(--gold-l); border-radius:3px; padding:0 2px;}
+  /* ===== フッター ===== */
+  footer{background:var(--navy3); color:#B9C3DA; margin-top:30px; padding:26px 0; font-size:12px; text-align:center; line-height:2;}
+  footer .gold{color:var(--gold-l);}
+  footer .tiny{font-size:10.5px; opacity:.75;}
+</style>
+</head>
+<body>
+
+<!-- ================= 合言葉ゲート ================= -->
+<div id="gate">
+  <div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div><div class="petal p4"></div>
+  <div class="gate-card">
+    <div class="gate-mark">🌸</div>
+    <h1>あさのて</h1>
+    <div class="sub">〜毎朝ひらく本部の1枚〜　petapeta本部と講師のための特別な部屋（デモ）</div>
+    <input id="gate-input" type="password" placeholder="合言葉" autocomplete="off">
+    <button id="gate-btn">扉をひらく</button>
+    <div class="gate-err" id="gate-err"></div>
+    <div class="gate-honest">
+      🔑 この合言葉は「軽い鍵」です。一般の閲覧と検索エンジンは止まりますが、技術の専門家までは止まりません。
+      だから本当の守りは、毎月の更新と、ここに集まっていくデータの側にあります。
+      一度ひらけば、このブラウザを開いている間は再入力不要です。
+    </div>
+    <div class="gate-note">※デモ用の合言葉は「 petta 」です（本番納品時はこの注記を消し、この案件専用の合言葉を新規発行します）</div>
+  </div>
+</div>
+
+<!-- ================= 本体 ================= -->
+<div id="portal" style="display:none;">
+  <div class="demo-band">⚠ デモ版・掲載データはすべて架空です（数値・氏名・記事はサンプル）</div>
+
+  <header>
+    <div class="wrap">
+      <div class="head-top">
+        <div class="brand">
+          <h1>🌸 あさのて <small>〜毎朝ひらく本部の1枚〜</small></h1>
+          <div class="who">petapeta-art® 本部ポータル｜やまざき社長専用（デモ）</div>
+        </div>
+        <div class="searchbar">
+          <input id="search-input" type="search" placeholder="🔎 横断検索（例: ハロウィン / 認定 / 商標）">
+          <button id="search-btn">検索</button>
+        </div>
+        <div class="issue">
+          <span class="no">2026年7月号</span>
+          <div class="stamp">最終更新: 7月16日 朝6時（VERAが更新しています）</div>
+        </div>
+      </div>
+      <nav><div class="tabs" id="tabs">
+        <button data-v="v-home" class="active">🌅 朝の司令室</button>
+        <button data-v="v-map">🗾 全国マップ</button>
+        <button data-v="v-voice">💬 講師の声</button>
+        <button data-v="v-notice">📣 お知らせ配信</button>
+        <button data-v="v-cal">📅 季節カレンダー</button>
+        <button data-v="v-news">📰 ニュースウォッチ</button>
+        <button data-v="v-ops">🚀 運用・発射台</button>
+      </div></nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ========== ① 朝の司令室 ========== -->
+    <section class="view active" id="v-home">
+      <div class="grid g21">
+        <div class="card">
+          <h2>🌅 今日の3行 <span class="dummy">※内容はすべて架空</span></h2>
+          <ul class="summary3">
+            <li data-n="1">全国の講師の動き：今週は新規の認定申請3件・掲示板の新規投稿12件（ダミー）。雰囲気は良好です。</li>
+            <li data-n="2">気になる動き：未対応の問い合わせが<b id="sum-open">4</b>件（ダミー）。うち1件は認定更新の相談で、返信が5日空いています（架空の例）。</li>
+            <li data-n="3">先回り：七夕投稿の反応が良好（ダミー）。ハロウィン企画の告知準備は8月中の着手がおすすめです。</li>
+          </ul>
+          <div class="note">この3行は、毎月VERAが掲示板・問い合わせ・カレンダーから目利きして書き替えます（月刊誌方式）。</div>
+        </div>
+        <div class="card">
+          <h2>✅ 今日やること3つ</h2>
+          <div id="todos"></div>
+          <div class="note">チェックはこの端末に保存されます（デモ）。毎号、VERAが新しい3つに入れ替えてお届けします。</div>
+        </div>
+      </div>
+
+      <div class="grid g2 mt">
+        <div class="card">
+          <h2>🙋 今日決めること 3件（承認待ち）<span class="dummy">案件は架空</span></h2>
+          <div id="approvals"></div>
+          <div class="note">※デモ：ボタンを押しても通知やメールは送信されません（気持ちの整理用の表示のみ）。本番では「決めた結果」を次号の更新に反映します。</div>
+        </div>
+        <div class="card">
+          <h2>📊 経営メーター（5指標だけ）<span class="dummy">数値はすべてサンプル</span></h2>
+          <div id="meters"></div>
+          <svg viewBox="0 0 280 70" style="width:100%;max-width:280px;display:block;margin:6px auto 0;">
+            <polyline points="10,52 55,48 100,44 145,40 190,33 235,26 270,22" fill="none" stroke="#C9A44C" stroke-width="2.5"/>
+            <polyline points="10,60 55,58 100,53 145,50 190,44 235,40 270,35" fill="none" stroke="#E08A96" stroke-width="2.5" stroke-dasharray="4 3"/>
+            <text x="10" y="12" font-size="9" fill="#8A8494">━ 講師数の推移　┅ 会員加入の推移（直近6か月・ダミー）</text>
+          </svg>
+          <div class="chart-cap">グラフの形もサンプルです（実データではありません）</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== ② 全国マップ ========== -->
+    <section class="view" id="v-map">
+      <div class="card">
+        <h2>🗾 講師ネットワーク健康ボード（47都道府県）<span class="dummy">全数値ダミー</span></h2>
+        <div class="map-flex">
+          <div>
+            <div class="jp-map" id="jpmap"></div>
+            <div class="legend">
+              <span><i class="t1"></i>〜24名</span><span><i class="t2"></i>25〜59名</span>
+              <span><i class="t3"></i>60〜149名</span><span><i class="t4"></i>150名〜</span>
+              <span style="margin-left:auto;">※配置は簡略タイル表示・人数は架空</span>
+            </div>
+          </div>
+          <div class="pref-detail card" style="box-shadow:none;">
+            <h2 id="pd-name">全国合計</h2>
+            <div class="big"><span id="pd-count">-</span>名<small style="font-size:12px;color:var(--muted);">（ダミー）</small></div>
+            <div class="stat-row"><span>今月のイベント開催</span><b id="pd-ev">-</b></div>
+            <div class="stat-row"><span>今月の新規認定</span><b id="pd-new">-</b></div>
+            <div class="stat-row"><span>掲示板の投稿（今週）</span><b id="pd-post">-</b></div>
+            <div class="note" id="pd-voice">タイルをクリックすると、その県の様子（ダミー）が出ます。</div>
+          </div>
+        </div>
+        <div class="note">指標を増やさず「人の温度」を色で見る画面です。実在の県別データと誤認されないよう、数値はすべて架空にしてあります。</div>
+      </div>
+    </section>
+
+    <!-- ========== ③ 講師の声 ========== -->
+    <section class="view" id="v-voice">
+      <div class="grid g21">
+        <div class="card">
+          <h2>💬 講師の声・今週のハイライト <span class="dummy">文面は創作・匿名化</span></h2>
+          <div id="voices"></div>
+          <div class="note">ここに映るのは「講師の部屋（掲示板・別デモ）」のダイジェストだけです。講師どうしのやりとり本体は掲示板側にあり、このファイルの中にデータは入っていません。</div>
+        </div>
+        <div class="card">
+          <h2>📈 今週の相談傾向トップ5 <span class="dummy">件数ダミー</span></h2>
+          <ul class="rank" id="ranks"></ul>
+          <div class="note">掲示板と問い合わせをVERAが集計して毎号差し替えます。「いま全国の講師が何に困っているか」が1分でわかる欄です。</div>
+        </div>
+      </div>
+      <div class="card mt">
+        <h2>📥 講師サポート受信箱 <span class="dummy">案件は架空</span></h2>
+        <div class="kanban" id="kanban"></div>
+        <div class="note">カードをクリックすると 未対応 → 対応中 → 完了 と動きます（この端末にのみ保存・デモ）。動かすと「朝の司令室」の未対応件数も連動します。</div>
+      </div>
+    </section>
+
+    <!-- ========== ④ お知らせ配信 ========== -->
+    <section class="view" id="v-notice">
+      <div class="grid g3">
+        <div class="card">
+          <h2>✅ 配信済み</h2>
+          <div class="notice"><div class="t">夏の体験会 開催キット配布のお知らせ</div>
+            <div class="m">7/10 配信（ダミー）</div>
+            <div style="margin-top:6px;"><span class="reaction">既読 68%（ダミー）</span><span class="reaction">スタンプ反応 214（ダミー）</span></div></div>
+          <div class="notice"><div class="t">認定更新スケジュール（2026下期）</div>
+            <div class="m">7/3 配信（ダミー）</div>
+            <div style="margin-top:6px;"><span class="reaction">既読 82%（ダミー）</span><span class="reaction">質問 9件（ダミー）</span></div></div>
+        </div>
+        <div class="card">
+          <h2>✍️ 下書き</h2>
+          <div class="notice"><div class="t">夏休み特別レッスン 応援キャンペーン</div>
+            <div class="m">VERA下書き済み・社長の確認待ち（架空の例）</div></div>
+          <div class="note">下書きはVERAが用意し、社長は「見て直すだけ」。周知文をゼロから書く時間をなくします。</div>
+        </div>
+        <div class="card">
+          <h2>🗓 次に出す予定</h2>
+          <div class="notice"><div class="t">敬老の日 作品テンプレ配布</div><div class="m">8月上旬 予定（ダミー）</div></div>
+          <div class="notice"><div class="t">ハロウィン企画 先行告知</div><div class="m">9月上旬 予定（ダミー）</div></div>
+        </div>
+      </div>
+      <div class="grid g21 mt">
+        <div class="card">
+          <h2>🔗 講師の部屋（掲示板）の新着ダイジェスト <span class="dummy">ダミー</span></h2>
+          <div class="notice"><div class="t">「体験会の集客どうしてる？」に返信15件（ダミー）</div><div class="m">相談カテゴリ｜盛り上がり中</div></div>
+          <div class="notice"><div class="t">今週の作品投稿 24件（ダミー）— 七夕の手形短冊が人気</div><div class="m">作品カテゴリ</div></div>
+          <div class="notice"><div class="t">先輩講師のコツ「イヤイヤ期の手形の取り方」が保存数1位（ダミー）</div><div class="m">ノウハウカテゴリ</div></div>
+          <div class="note">講師会員の部屋（別デモ）が動くほど、この欄が面白くなります。講師が喜ぶ → 会費が回る → 社長には全部見える、の順につながる設計です。</div>
+        </div>
+        <div class="card">
+          <h2>🕊 正直なお知らせ（この画面の仕組み）</h2>
+          <div style="font-size:13px; line-height:1.9;">
+            この画面は<b>リアルタイム配信システムではありません</b>。<br>
+            配信そのものは公式LINE等で行い、その結果（既読・反応）を<b>毎月VERAが集計して、この1枚に焼き直して差し替えます</b>（月刊誌方式・月1回更新）。<br>
+            「いつでも書き込める掲示板」は講師の部屋側、「毎朝ひらく読み物」がこのポータル側、と役割を分けています。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== ⑤ カレンダー ========== -->
+    <section class="view" id="v-cal">
+      <div class="grid g21">
+        <div class="card">
+          <h2>📅 2026年7月 季節ネタ・行事カレンダー <span class="dummy">予定はダミー</span></h2>
+          <div class="cal" id="cal"></div>
+          <div class="note">季節行事＋全国の講師イベント予定（架空）を1枚に。毎月、翌月分をVERAが仕込んでお届けします。</div>
+        </div>
+        <div class="card">
+          <h2>⏰ 先回り提案（VERAより）<span class="vera-badge">毎月VERAがお届け</span></h2>
+          <div class="ahead">🎑 <b>敬老の日（9/21）</b>：作品テンプレの配布は<b>8月上旬</b>がおすすめ。祖父母ギフト需要は手形アートの得意分野です。</div>
+          <div class="ahead">🎃 <b>ハロウィン</b>：9月上旬に先行告知 → 10月本番。告知文の下書きはVERAが用意します。</div>
+          <div class="ahead">🎄 <b>クリスマス・年賀状足形</b>：10月中の仕込みで年内の教室満席を狙えます（過去傾向は架空の例）。</div>
+          <div class="note">手形アートは季節行事のビジネス。この欄が「毎朝ひらきたくなる」いちばんのフックであり、毎月中身が変わる＝更新の実体のひとつです。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== ⑥ ニュースウォッチ ========== -->
+    <section class="view" id="v-news">
+      <div class="grid g2">
+        <div class="card">
+          <h2>📰 手形アート・子育て市場ウォッチ <span class="vera-badge">毎月VERAが目利きしてお届け</span></h2>
+          <div id="news-market"></div>
+          <div class="note">社長がいま手作業でされているであろう「検索して回る時間」を、VERAが肩代わりする欄です。見出しはすべて架空のサンプルです。</div>
+        </div>
+        <div class="card">
+          <h2>🛡 petapeta-art® 商標見守り <span class="vera-badge">毎月VERAが目利きしてお届け</span></h2>
+          <div id="news-tm"></div>
+          <div class="note">類似品・無断使用らしき動きの「気づき」までを毎月お届けします（すべて架空の例）。対応の要否は定例でご相談、判断は必ず人間（社長・専門家）が行います。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== ⑦ 運用・発射台 ========== -->
+    <section class="view" id="v-ops">
+      <div class="grid g2">
+        <div class="card">
+          <h2>🧾 更新履歴（毎月これが届きます）<span class="dummy">履歴は架空</span></h2>
+          <ul class="hist">
+            <li><b>2026/07 VERA更新</b>：講師の声3件追加・全国マップ更新・ニュース7本差し替え・8月カレンダー仕込み・先回り提案3本</li>
+            <li><b>2026/06 VERA更新</b>：夏の体験会特集・相談傾向トップ5開始・商標見守り欄を新設（架空の履歴）</li>
+            <li><b>2026/05 VERA更新</b>：初号お届け・合言葉の扉を設置（架空の履歴）</li>
+          </ul>
+          <div class="compare mt">
+            <div class="old"><h4>📖 先月号（6月号）</h4><ul><li>体験会特集</li><li>ニュース5本</li><li>相談傾向トップ5（初回）</li></ul></div>
+            <div><h4>📕 今月号（7月号）</h4><ul><li>七夕ふりかえり＋夏休み特集</li><li>ニュース7本に増量</li><li>商標見守りが定番欄に</li></ul></div>
+          </div>
+          <div class="note">「毎月これが届く」を口で説明せず、見比べで実感していただく欄です（内容はダミー）。</div>
+        </div>
+        <div class="card">
+          <h2>🕊 もし更新を止めたら（正直な図解）</h2>
+          <div class="freeze-flow">
+            <div class="step"><b>1. 更新停止のご連絡</b>理由を聞いたりお引き止めはしません</div>
+            <div class="arr">→</div>
+            <div class="step"><b>2. 最終号のまま凍結</b>画面は消えません。そのまま使い続けられます</div>
+            <div class="arr">→</div>
+            <div class="step"><b>3. 再開はいつでも</b>データも画面も人質に取りません</div>
+          </div>
+          <div class="note" style="font-size:12px;">
+            続けるかどうかは、毎月の中身だけで選んでいただく——それがVERAの「選ぶ自由」です。
+            止めても壊れない設計を先にお見せするのは、そのほうが安心して長く使っていただけると信じているからです。
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt">
+        <h2>🚀 発射台（よく使う場所へ1タップ）</h2>
+        <div class="launch">
+          <a href="#" onclick="return demoLink()"><span>📷</span>Instagram</a>
+          <a href="#" onclick="return demoLink()"><span>💬</span>公式LINE</a>
+          <a href="#" onclick="return demoLink()"><span>🎨</span>Canva</a>
+          <a href="#" onclick="return demoLink()"><span>📇</span>講師名簿</a>
+          <a href="#" onclick="return demoLink()"><span>🏠</span>petapeta公式サイト</a>
+          <a href="#" onclick="return demoLink()"><span>🗒</span>講師の部屋（掲示板）</a>
+          <a href="#" onclick="return demoLink()"><span>🎬</span>CPへ制作依頼</a>
+          <a href="#" onclick="return demoLink()"><span>🤝</span>VERA相談窓口</a>
+        </div>
+        <div class="note">※デモのためリンク先は未設定です。本番では実際のURL（LINE・メール等）につなぎます。</div>
+      </div>
+
+      <div class="card mt consult">
+        <h2>🤝 VERAに相談ボックス</h2>
+        <textarea id="consult-text" placeholder="気になったこと・頼みたいことを、思いついた言葉のままどうぞ。（例）ハロウィンの告知文、先にたたき台つくれる？"></textarea>
+        <button class="send" id="consult-save">書き留めておく</button>
+        <div class="note">※デモ：この端末にのみ保存され、送信はされません。本番ではLINE/メールのリンクで届き、次回の定例でVERAが回答します。</div>
+        <div id="consult-list"></div>
+      </div>
+    </section>
+
+    <!-- ========== 検索結果 ========== -->
+    <section class="view" id="v-search">
+      <div class="card">
+        <h2>🔎 横断検索の結果：<span id="s-word" style="color:var(--sakura-d);"></span><span class="dummy">検索対象はダミーデータ</span></h2>
+        <div id="s-results"></div>
+        <div class="note">講師の声・お知らせ・ニュース・カレンダーを一度に横断します。全国の現場の声が、1つの窓に集まる体験です。</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div>🌸 このポータルは毎月、VERAが中身を更新してお届けします<span class="gold">（更新号: 2026年7月号）</span></div>
+      <div>© petapeta-art（デモ）／ 企画・制作・運営: VERA Holdings ／ 無断複製・転載・再配布を禁じます</div>
+      <div class="gold">produced by VERA Holdings × CreativePocket（デモ）</div>
+      <div class="tiny">Build: ASANOTE-DEMO-2026-0716-A（デモ用ビルドID）｜本デモの数値・氏名・記事はすべてサンプル（架空）です</div>
+    </div>
+  </footer>
+</div>
+
+<script>
+"use strict";
+/* ============ 合言葉ゲート（SHA-256照合・JSに平文を書かない） ============ */
+var GATE_HASH = "d80bbb843ab86995acb3d7030a4b85ee1aaf17ee2eb1d1e76b8fb08a4e321cbf"; /* デモ用の合言葉のSHA-256ハッシュ */
+function sha256Hex(str){
+  var ascii = unescape(encodeURIComponent(str));
+  function rr(v,a){ return (v>>>a)|(v<<(32-a)); }
+  var maxWord=Math.pow(2,32), result="", words=[], asciiBitLength=ascii.length*8;
+  var hash=[], k=[], primeCounter=0, isComposite={};
+  for(var candidate=2; primeCounter<64; candidate++){
+    if(!isComposite[candidate]){
+      for(var i=0;i<313;i+=candidate){ isComposite[i]=candidate; }
+      hash[primeCounter]=(Math.pow(candidate,.5)*maxWord)|0;
+      k[primeCounter++]=(Math.pow(candidate,1/3)*maxWord)|0;
+    }
+  }
+  ascii += "\x80";
+  while(ascii.length%64-56) ascii += "\x00";
+  for(i=0;i<ascii.length;i++){
+    var j=ascii.charCodeAt(i);
+    if(j>>8) return "";
+    words[i>>2] |= j << ((3-i)%4)*8;
+  }
+  words[words.length]=((asciiBitLength/maxWord)|0);
+  words[words.length]=(asciiBitLength);
+  for(j=0;j<words.length;){
+    var w=words.slice(j,j+=16), oldHash=hash;
+    hash=hash.slice(0,8);
+    for(i=0;i<64;i++){
+      var w15=w[i-15], w2=w[i-2], a=hash[0], e=hash[4];
+      var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]
+        +(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+      var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+      hash=[(temp1+temp2)|0].concat(hash);
+      hash[4]=(hash[4]+temp1)|0;
+    }
+    for(i=0;i<8;i++){ hash[i]=(hash[i]+oldHash[i])|0; }
+  }
+  for(i=0;i<8;i++){ for(j=3;j+1;j--){ var b=(hash[i]>>(j*8))&255; result+=((b<16)?0:"")+b.toString(16); } }
+  return result;
+}
+function openPortal(){
+  document.getElementById("gate").style.display="none";
+  document.getElementById("portal").style.display="block";
+}
+function tryGate(){
+  var v=document.getElementById("gate-input").value.trim();
+  if(sha256Hex(v)===GATE_HASH){
+    try{ sessionStorage.setItem("asanote_gate","ok"); }catch(e){}
+    openPortal();
+  }else{
+    document.getElementById("gate-err").textContent="合言葉が違うようです。もう一度どうぞ。";
+    document.getElementById("gate-input").value="";
+  }
+}
+document.getElementById("gate-btn").addEventListener("click",tryGate);
+document.getElementById("gate-input").addEventListener("keydown",function(e){ if(e.key==="Enter") tryGate(); });
+try{ if(sessionStorage.getItem("asanote_gate")==="ok") openPortal(); }catch(e){}
+
+/* ============ 共通：localStorage ============ */
+function store(key,val){ try{ localStorage.setItem("asanote_"+key,JSON.stringify(val)); }catch(e){} }
+function load(key,fallback){
+  try{ var v=localStorage.getItem("asanote_"+key); return v?JSON.parse(v):fallback; }catch(e){ return fallback; }
+}
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+/* ============ タブ切替 ============ */
+var tabsEl=document.getElementById("tabs");
+tabsEl.addEventListener("click",function(e){
+  var btn=e.target.closest("button"); if(!btn) return;
+  showView(btn.dataset.v);
+});
+function showView(id){
+  document.querySelectorAll(".view").forEach(function(v){ v.classList.toggle("active", v.id===id); });
+  document.querySelectorAll("#tabs button").forEach(function(b){ b.classList.toggle("active", b.dataset.v===id); });
+  window.scrollTo(0,0);
+}
+
+/* ============ 今日やること3つ（チェック=localStorage） ============ */
+var TODOS=[
+  "掲示板「今週のハイライト」に目を通す（3分・ダミー）",
+  "未対応の問い合わせ（受信箱）の担当を決める",
+  "7月お知らせ「夏休み特別レッスン」の下書きを確認する"
+];
+function renderTodos(){
+  var done=load("todos",[false,false,false]);
+  document.getElementById("todos").innerHTML=TODOS.map(function(t,i){
+    return '<div class="todo'+(done[i]?" done":"")+'" data-i="'+i+'"><div class="box">'+(done[i]?"✓":"")+'</div><div class="txt">'+esc(t)+"</div></div>";
+  }).join("");
+}
+document.getElementById("todos").addEventListener("click",function(e){
+  var el=e.target.closest(".todo"); if(!el) return;
+  var done=load("todos",[false,false,false]);
+  done[el.dataset.i]=!done[el.dataset.i];
+  store("todos",done); renderTodos();
+});
+
+/* ============ 承認待ち3件（YES/保留/NO） ============ */
+var APPROVALS=[
+  {t:"新規認定講師の承認（3名・ダミー）", d:"研修修了・課題提出済み（架空データ）。プロフィールは講師名簿（発射台）から確認できます。"},
+  {t:"コラボ企画の可否：（株）サンプルきっず玩具", d:"手形スタンプ台の共同企画の打診（架空の案件）。条件メモは受信箱「対応中」にあります。"},
+  {t:"取材依頼への回答：月刊こそだてサンプル 8月号", d:"手形アートの安全性について本部コメント依頼（架空の媒体）。回答たたき台はVERAが下書き済みです。"}
+];
+function renderApprovals(){
+  var st=load("approvals",[null,null,null]);
+  document.getElementById("approvals").innerHTML=APPROVALS.map(function(a,i){
+    return '<div class="approve"><div class="t">'+esc(a.t)+'</div><div class="d">'+esc(a.d)+'</div>'+
+      '<div class="btns" data-i="'+i+'">'+
+      '<button data-v="yes" class="'+(st[i]==="yes"?"on-yes":"")+'">YES</button>'+
+      '<button data-v="hold" class="'+(st[i]==="hold"?"on-hold":"")+'">保留</button>'+
+      '<button data-v="no" class="'+(st[i]==="no"?"on-no":"")+'">NO</button>'+
+      (st[i]?'<span style="font-size:11px;color:var(--muted);">決めた気持ちをメモしました（デモ）</span>':"")+
+      "</div></div>";
+  }).join("");
+}
+document.getElementById("approvals").addEventListener("click",function(e){
+  var b=e.target.closest("button"); if(!b) return;
+  var wrap=b.closest(".btns"), st=load("approvals",[null,null,null]);
+  st[wrap.dataset.i]=(st[wrap.dataset.i]===b.dataset.v)?null:b.dataset.v;
+  store("approvals",st); renderApprovals();
+});
+
+/* ============ 受信箱かんばん（クリックで状態が回る） ============ */
+var KANBAN_INIT=[
+  {id:"k1", t:"認定更新の手続き相談", from:"A.Y さん・宮城（ダミー）", st:0},
+  {id:"k2", t:"教材キット再販の希望", from:"K.M さん・愛知（ダミー）", st:0},
+  {id:"k3", t:"体験会チラシの添削依頼", from:"T.H さん・岡山（ダミー）", st:0},
+  {id:"k4", t:"商標ロゴの使用範囲の質問", from:"N.F さん・千葉（ダミー）", st:0},
+  {id:"k5", t:"取材日程の調整", from:"月刊こそだてサンプル（架空）", st:1},
+  {id:"k6", t:"コラボ企画の条件確認", from:"（株）サンプルきっず玩具（架空）", st:1},
+  {id:"k7", t:"7月お知らせの入稿", from:"本部作業（ダミー）", st:2},
+  {id:"k8", t:"講師名簿の更新", from:"本部作業（ダミー）", st:2}
+];
+var LANES=["🔴 未対応","🟡 対応中","🟢 完了"];
+function renderKanban(){
+  var items=load("kanban",KANBAN_INIT);
+  var html=LANES.map(function(name,li){
+    var inLane=items.filter(function(it){ return it.st===li; });
+    var cards=inLane.map(function(it){
+      return '<div class="k-item" data-id="'+it.id+'"><div>'+esc(it.t)+'</div><div class="from">'+esc(it.from)+"</div></div>";
+    }).join("");
+    return '<div class="lane"><h3>'+name+'<span class="cnt-b">'+inLane.length+"件</span></h3>"+(cards||'<div class="note">なし</div>')+"</div>";
+  }).join("");
+  document.getElementById("kanban").innerHTML=html;
+  var open=items.filter(function(it){ return it.st===0; }).length;
+  document.getElementById("sum-open").textContent=open;
+  renderMeters(open);
+}
+document.getElementById("kanban").addEventListener("click",function(e){
+  var el=e.target.closest(".k-item"); if(!el) return;
+  var items=load("kanban",KANBAN_INIT);
+  items.forEach(function(it){ if(it.id===el.dataset.id) it.st=(it.st+1)%3; });
+  store("kanban",items); renderKanban();
+});
+
+/* ============ 経営メーター（未対応件数は受信箱と連動） ============ */
+function renderMeters(openCount){
+  var M=[
+    {l:"認定講師数", v:"2,847名（ダミー）", pct:85, sub:"前月比 +23（ダミー）"},
+    {l:"認定更新率", v:"91.2%（ダミー）", pct:91, sub:"目安90%（サンプル値）"},
+    {l:"今月のイベント開催", v:"128件（ダミー）", pct:64, sub:"夏休み前で増加傾向（架空）"},
+    {l:"講師会員（部屋）加入", v:"412名（ダミー）", pct:41, sub:"掲示板デモと連動する指標（架空）"},
+    {l:"未対応の問い合わせ", v:openCount+"件（ダミー）", pct:Math.min(100,openCount*12), sub:"受信箱かんばんと連動（デモ）", pink:true}
+  ];
+  document.getElementById("meters").innerHTML=M.map(function(m){
+    return '<div class="meter"><div class="lbl"><span>'+esc(m.l)+"｜<b>"+esc(m.v)+'</b></span><span style="color:var(--muted);font-size:11px;">'+esc(m.sub)+"</span></div>"+
+      '<div class="bar"><div class="fill'+(m.pink?" pink":"")+'" style="width:'+m.pct+'%"></div></div></div>';
+  }).join("");
+}
+
+/* ============ 47都道府県タイルマップ（人数は架空） ============ */
+var PREFS=[ /* [名称, col, row, 講師数(ダミー)] */
+  ["北海道",14,1,125],["青森",14,2,24],["秋田",13,3,15],["岩手",14,3,22],["山形",13,4,18],["宮城",14,4,70],
+  ["新潟",12,5,55],["福島",13,5,30],["群馬",12,6,40],["栃木",13,6,45],["茨城",14,6,60],
+  ["石川",10,6,22],["富山",11,6,17],["長野",12,7,50],["埼玉",13,7,150],["千葉",14,7,140],
+  ["福井",10,7,10],["岐阜",11,7,45],["山梨",12,8,12],["東京",13,8,300],
+  ["滋賀",10,8,30],["愛知",11,8,180],["静岡",12,9,90],["神奈川",13,9,195],
+  ["京都",9,7,90],["大阪",9,8,230],["奈良",10,9,25],["三重",11,9,33],["和歌山",9,9,14],["兵庫",8,7,135],
+  ["島根",6,7,8],["鳥取",7,7,6],["山口",5,8,28],["広島",6,8,95],["岡山",7,8,40],
+  ["愛媛",6,9,28],["香川",7,9,15],["徳島",8,9,10],["高知",7,10,10],
+  ["長崎",2,9,25],["佐賀",3,9,12],["福岡",4,9,145],["大分",5,9,20],
+  ["熊本",4,10,38],["宮崎",5,10,18],["鹿児島",4,11,35],["沖縄",2,11,42]
+];
+function tier(n){ return n>=150?"t4":n>=60?"t3":n>=25?"t2":"t1"; }
+function renderMap(){
+  var el=document.getElementById("jpmap");
+  el.innerHTML=PREFS.map(function(p,i){
+    return '<div class="pref '+tier(p[3])+'" data-i="'+i+'" style="grid-column:'+p[1]+';grid-row:'+p[2]+';" title="'+p[0]+" "+p[3]+'名（ダミー）">'+p[0]+"</div>";
+  }).join("");
+  var total=PREFS.reduce(function(s,p){ return s+p[3]; },0);
+  document.getElementById("pd-count").textContent=total.toLocaleString();
+  document.getElementById("pd-ev").textContent="128件（ダミー）";
+  document.getElementById("pd-new").textContent="23名（ダミー）";
+  document.getElementById("pd-post").textContent="86件（ダミー）";
+}
+document.getElementById("jpmap").addEventListener("click",function(e){
+  var el=e.target.closest(".pref"); if(!el) return;
+  document.querySelectorAll(".pref").forEach(function(p){ p.classList.remove("sel"); });
+  el.classList.add("sel");
+  var p=PREFS[el.dataset.i];
+  document.getElementById("pd-name").textContent=p[0];
+  document.getElementById("pd-count").textContent=p[3].toLocaleString();
+  document.getElementById("pd-ev").textContent=Math.max(1,Math.round(p[3]/22))+"件（ダミー）";
+  document.getElementById("pd-new").textContent=Math.max(0,Math.round(p[3]/95))+"名（ダミー）";
+  document.getElementById("pd-post").textContent=Math.max(1,Math.round(p[3]/33))+"件（ダミー）";
+  document.getElementById("pd-voice").textContent="「"+p[0]+"の講師仲間で夏の体験会の告知をそろえました！」（架空の声のサンプル）";
+});
+
+/* ============ 講師の声（創作・匿名化ダミー） ============ */
+var VOICES=[
+  {ini:"M.S", av:"av1", area:"東京（ダミー）", tag:"作品アイデア", txt:"敬老の日の足形フクロウ、配布テンプレのおかげで準備が半日で終わりました。"},
+  {ini:"A.K", av:"av2", area:"広島（ダミー）", tag:"教室運営", txt:"初めての出張教室。持ち物チェックリストが本当に助かりました。"},
+  {ini:"Y.T", av:"av3", area:"福岡（ダミー）", tag:"先輩のコツ", txt:"イヤイヤ期の子の手形、先輩講師のコツで泣かずに取れました！"},
+  {ini:"R.N", av:"av4", area:"北海道（ダミー）", tag:"つながり", txt:"雪の結晶アートの見本を道内の講師仲間と共有。冬の企画が楽しみです。"},
+  {ini:"S.I", av:"av2", area:"大阪（ダミー）", tag:"集客", txt:"体験会の案内文を掲示板のひな形に変えたら、申込の反応が良くなりました（体感・ダミー）。"}
+];
+function renderVoices(){
+  document.getElementById("voices").innerHTML=VOICES.map(function(v){
+    return '<div class="voice"><div class="avatar '+v.av+'">'+v.ini+'</div><div>'+
+      '<div class="meta">'+v.ini+" さん・"+esc(v.area)+'</div><div class="body">'+esc(v.txt)+'</div>'+
+      '<span class="tag">'+esc(v.tag)+"</span></div></div>";
+  }).join("");
+}
+var RANKS=[["集客（体験会の告知文）","18件"],["絵の具・スタンプ台の選び方","12件"],["教室会場の探し方","9件"],["SNS投稿の写真・著作権の扱い","7件"],["認定更新の手続き","5件"]];
+function renderRanks(){
+  document.getElementById("ranks").innerHTML=RANKS.map(function(r,i){
+    return '<li><span class="no">'+(i+1)+"</span>"+esc(r[0])+'<span class="cnt">'+r[1]+"（ダミー）</span></li>";
+  }).join("");
+}
+
+/* ============ ニュース（見出しはすべて架空） ============ */
+var NEWS_MARKET=[
+  ["親子ワークショップ市場、体験型ギフトの需要が拡大","サンプル経済オンライン（架空の記事）"],
+  ["自治体の子育て支援イベント、民間講師との連携事例が増加","架空自治体ニュース（サンプル）"],
+  ["「手形・足形の成長記録」SNS投稿が前年比で増加傾向","SNSトレンド調査（架空）"],
+  ["ベビー用インク・スタンプ台の安全基準に関する話題","業界メディア（架空の記事）"]
+];
+var NEWS_TM=[
+  ["フリマアプリ上の類似キット出品 2件を検知（架空の例）","→ 対応の要否は次回定例でご相談"],
+  ["SNSで「petapeta」表記の無断使用らしき投稿 1件（架空の例）","→ 講師経由でのやんわり確認を提案"],
+  ["「手形アート 資格」検索での競合講座の出稿が増加（架空）","→ 公式認定の見せ方強化を提案"]
+];
+function renderNews(){
+  document.getElementById("news-market").innerHTML=NEWS_MARKET.map(function(n){
+    return '<div class="news"><div class="t">'+esc(n[0])+'</div><div class="src">'+esc(n[1])+"</div></div>";
+  }).join("");
+  document.getElementById("news-tm").innerHTML=NEWS_TM.map(function(n){
+    return '<div class="news"><div class="t">'+esc(n[0])+'</div><div class="src">'+esc(n[1])+"</div></div>";
+  }).join("");
+}
+
+/* ============ カレンダー（2026年7月・7/1は水曜） ============ */
+var CAL_EVENTS={7:"🎋 七夕（手形短冊の投稿ピーク・ダミー)",16:"📌 今日",20:"🌊 海の日（親子イベント多数・ダミー)",23:"☀ 夏休み体験会ウィーク開始（ダミー)",31:"🗓 認定更新の月末締め（ダミー)"};
+function renderCal(){
+  var html=["日","月","火","水","木","金","土"].map(function(d){ return '<div class="dow">'+d+"</div>"; }).join("");
+  for(var i=0;i<3;i++) html+='<div class="day empty"></div>';
+  for(var d=1;d<=31;d++){
+    html+='<div class="day'+(d===16?" today":"")+'"><span class="n">'+d+"</span>"+
+      (CAL_EVENTS[d]?'<span class="ev">'+CAL_EVENTS[d]+"</span>":"")+"</div>";
+  }
+  document.getElementById("cal").innerHTML=html;
+}
+
+/* ============ 横断検索（静的インデックス・全部ダミー） ============ */
+function buildIndex(){
+  var idx=[];
+  VOICES.forEach(function(v){ idx.push({cat:"講師の声", t:v.ini+" さん・"+v.area, b:v.txt, view:"v-voice"}); });
+  RANKS.forEach(function(r){ idx.push({cat:"相談傾向", t:r[0], b:"今週の相談傾向トップ5（"+r[1]+"・ダミー）", view:"v-voice"}); });
+  NEWS_MARKET.concat(NEWS_TM).forEach(function(n){ idx.push({cat:"ニュース", t:n[0], b:n[1], view:"v-news"}); });
+  [["夏の体験会 開催キット配布のお知らせ","7/10配信・既読68%（ダミー）"],
+   ["認定更新スケジュール（2026下期）","7/3配信・既読82%（ダミー）"],
+   ["夏休み特別レッスン 応援キャンペーン","下書き・社長確認待ち（架空）"],
+   ["敬老の日 作品テンプレ配布","8月上旬予定（ダミー）"],
+   ["ハロウィン企画 先行告知","9月上旬予定（ダミー）"]].forEach(function(n){ idx.push({cat:"お知らせ", t:n[0], b:n[1], view:"v-notice"}); });
+  Object.keys(CAL_EVENTS).forEach(function(d){ idx.push({cat:"カレンダー", t:"7月"+d+"日", b:CAL_EVENTS[d], view:"v-cal"}); });
+  KANBAN_INIT.forEach(function(k){ idx.push({cat:"受信箱", t:k.t, b:k.from, view:"v-voice"}); });
+  return idx;
+}
+function doSearch(){
+  var q=document.getElementById("search-input").value.trim();
+  if(!q) return;
+  var hits=buildIndex().filter(function(it){ return (it.t+it.b).indexOf(q)>=0; });
+  document.getElementById("s-word").textContent="「"+q+"」（"+hits.length+"件）";
+  var re=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"g");
+  function hl(s){ return esc(s).replace(re,function(m){ return "<mark>"+m+"</mark>"; }); }
+  document.getElementById("s-results").innerHTML = hits.length
+    ? hits.map(function(h){
+        return '<div class="s-hit"><span class="cat">'+esc(h.cat)+"</span><b>"+hl(h.t)+'</b><div style="margin-top:3px;color:var(--muted);">'+hl(h.b)+"</div></div>";
+      }).join("")
+    : '<div class="note">見つかりませんでした。「ハロウィン」「認定」「商標」「体験会」などで試せます（デモ用データのため）。</div>';
+  showView("v-search");
+}
+document.getElementById("search-btn").addEventListener("click",doSearch);
+document.getElementById("search-input").addEventListener("keydown",function(e){ if(e.key==="Enter") doSearch(); });
+
+/* ============ VERA相談ボックス（端末内保存のみ・送信なし） ============ */
+function renderConsult(){
+  var list=load("consult",[]);
+  document.getElementById("consult-list").innerHTML=list.map(function(c){
+    return '<div class="saved"><div class="d">'+esc(c.d)+"｜次回定例でVERAが回答（デモ）</div>"+esc(c.t)+"</div>";
+  }).join("");
+}
+document.getElementById("consult-save").addEventListener("click",function(){
+  var el=document.getElementById("consult-text"), t=el.value.trim();
+  if(!t) return;
+  var list=load("consult",[]);
+  list.unshift({t:t, d:new Date().toLocaleString("ja-JP")});
+  store("consult",list.slice(0,20)); el.value=""; renderConsult();
+});
+
+/* ============ 発射台（デモリンク） ============ */
+function demoLink(){ alert("デモのためリンク先は未設定です。\n本番ではInstagram・公式LINE・Canva等の実URLにつなぎます。"); return false; }
+
+/* ============ 初期描画 ============ */
+renderTodos(); renderApprovals(); renderKanban(); renderMap();
+renderVoices(); renderRanks(); renderNews(); renderCal(); renderConsult();
+</script>
+</body>
+</html>

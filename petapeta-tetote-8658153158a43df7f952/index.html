@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>てとて広場（デモ）〜petapeta-art®認定講師のひろば〜</title>
+<style>
+/* ============================================================
+   てとて広場 デモ — petapeta-art(R) 認定講師コミュニティ掲示板
+   単一HTML / 外部依存ゼロ / 全データはダミー(架空)
+   palette: 桜 #F7C8CC / クリーム #FBF6EE / 茶 #8A6A54 / 深緑 #3F6B57
+   ============================================================ */
+:root{
+  --sakura:#F7C8CC; --sakura-deep:#EBA8B2; --cream:#FBF6EE;
+  --brown:#8A6A54; --brown-dark:#6B5140; --green:#3F6B57;
+  --paper:#FFFFFF; --line:#EBDCCB; --ink:#4A3B30; --muted:#9B8672;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{background:#EFE7DA;}
+body{
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif;
+  color:var(--ink); line-height:1.65; font-size:15px;
+}
+/* ---- スマホ端末風フレーム（PCで見てもスマホデモに見える） ---- */
+.phone{
+  max-width:480px; margin:0 auto; min-height:100vh;
+  background:var(--cream); position:relative;
+  display:flex; flex-direction:column;
+  box-shadow:0 0 0 1px #d9cbb8, 0 12px 40px rgba(107,81,64,.25);
+}
+/* ---- 常設デモ帯 ---- */
+.demo-band{
+  position:sticky; top:0; z-index:60;
+  background:var(--green); color:#fff; text-align:center;
+  font-size:11.5px; font-weight:700; letter-spacing:.06em;
+  padding:6px 8px;
+}
+/* ---- ヘッダー ---- */
+header.app{
+  background:linear-gradient(135deg,var(--sakura) 0%,#FADCD9 60%,var(--cream) 100%);
+  padding:14px 16px 12px; border-bottom:1px solid var(--line);
+}
+header.app h1{font-size:21px; color:var(--brown-dark); letter-spacing:.04em;}
+header.app h1 .maru{color:var(--green); font-size:14px; vertical-align:middle;}
+header.app p{font-size:11.5px; color:var(--brown); margin-top:2px;}
+/* ---- 本文 ---- */
+main{flex:1; padding:14px 14px 18px;}
+.screen{display:none;}
+.screen.active{display:block; animation:fadein .25s ease;}
+@keyframes fadein{from{opacity:0; transform:translateY(6px);}to{opacity:1; transform:none;}}
+/* ---- カード共通 ---- */
+.card{
+  background:var(--paper); border:1px solid var(--line); border-radius:16px;
+  padding:14px 14px 12px; margin-bottom:12px;
+  box-shadow:0 2px 6px rgba(138,106,84,.06);
+}
+.card h2{font-size:15px; color:var(--brown-dark); margin-bottom:8px; display:flex; align-items:center; gap:6px;}
+.card h2 .tag{font-size:10px; background:var(--sakura); color:var(--brown-dark); border-radius:999px; padding:2px 8px; font-weight:700;}
+.note{font-size:11px; color:var(--muted); margin-top:8px;}
+.dummy{font-size:10px; color:#B0836F; font-weight:700;}
+/* ---- ボタン（親指圏内の大きめタップ領域） ---- */
+.btn{
+  display:block; width:100%; border:none; cursor:pointer;
+  background:var(--green); color:#fff; font-size:15px; font-weight:700;
+  padding:14px; border-radius:14px; margin-top:10px; letter-spacing:.05em;
+}
+.btn.sub{background:#fff; color:var(--green); border:2px solid var(--green);}
+.btn:active{transform:scale(.98);}
+/* ---- お知らせ固定枠 ---- */
+.notice{
+  background:#FFF6EC; border:1.5px solid var(--sakura-deep); border-radius:16px;
+  padding:12px 14px; margin-bottom:12px;
+}
+.notice .head{font-size:12px; font-weight:800; color:var(--brown-dark); display:flex; gap:6px; align-items:center;}
+.notice .pin{background:var(--sakura-deep); color:#fff; font-size:10px; border-radius:999px; padding:2px 8px;}
+.notice ul{list-style:none; margin-top:6px;}
+.notice li{font-size:13px; padding:5px 0; border-bottom:1px dashed var(--line);}
+.notice li:last-child{border-bottom:none;}
+/* ---- 季節カレンダー ---- */
+.season li{
+  display:flex; gap:10px; align-items:flex-start; padding:8px 0;
+  border-bottom:1px dashed var(--line); font-size:13px;
+}
+.season li:last-child{border-bottom:none;}
+.season .when{
+  flex:0 0 62px; text-align:center; background:var(--cream);
+  border:1px solid var(--line); border-radius:10px; font-size:11px;
+  font-weight:800; color:var(--green); padding:5px 2px;
+}
+/* ---- サブタブ（掲示板内） ---- */
+.subtabs{display:flex; gap:6px; margin-bottom:12px;}
+.subtabs button{
+  flex:1; border:1.5px solid var(--brown); background:#fff; color:var(--brown);
+  font-size:12.5px; font-weight:700; padding:10px 2px; border-radius:12px; cursor:pointer;
+}
+.subtabs button.on{background:var(--brown); color:#fff;}
+/* ---- カテゴリチップ ---- */
+.chips{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;}
+.chips button{
+  border:1.5px solid var(--sakura-deep); background:#fff; color:var(--brown-dark);
+  font-size:12px; font-weight:700; padding:8px 12px; border-radius:999px; cursor:pointer;
+}
+.chips button.on{background:var(--sakura-deep); color:#fff;}
+.chips.green button{border-color:var(--green); color:var(--green);}
+.chips.green button.on{background:var(--green); color:#fff;}
+/* ---- 投稿カード ---- */
+.post{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:12px 13px; margin-bottom:10px;}
+.post .who{display:flex; align-items:center; gap:9px;}
+.avatar{
+  width:38px; height:38px; border-radius:50%; flex:0 0 38px;
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-weight:800; font-size:14px; letter-spacing:.02em;
+}
+.post .meta{font-size:12px; color:var(--muted);}
+.post .meta b{color:var(--brown-dark); font-size:13.5px;}
+.post .body{font-size:13.5px; margin:8px 2px 4px; white-space:pre-line;}
+.badge-cat{display:inline-block; font-size:10px; background:var(--cream); border:1px solid var(--line); color:var(--brown); border-radius:999px; padding:2px 8px; font-weight:700;}
+.badge-mine{display:inline-block; font-size:10px; background:var(--green); color:#fff; border-radius:999px; padding:2px 8px; font-weight:700;}
+/* ---- 共感スタンプ ---- */
+.stamps{display:flex; gap:6px; margin-top:9px; flex-wrap:wrap; align-items:center;}
+.stamp{
+  position:relative; border:1.5px solid var(--sakura); background:#FFF9F5;
+  color:var(--brown-dark); font-size:12px; font-weight:700;
+  padding:8px 11px; border-radius:999px; cursor:pointer; overflow:visible;
+}
+.stamp .n{color:var(--muted); font-weight:600; margin-left:3px; font-size:11px;}
+.stamp.pop{animation:pop .35s ease;}
+@keyframes pop{0%{transform:scale(1);}40%{transform:scale(1.18);}100%{transform:scale(1);}}
+.fly{
+  position:absolute; left:50%; top:-4px; transform:translateX(-50%);
+  font-size:12px; font-weight:800; color:var(--sakura-deep); pointer-events:none;
+  animation:flyup .8s ease forwards;
+}
+@keyframes flyup{from{opacity:1; top:-4px;}to{opacity:0; top:-26px;}}
+.replies-toggle{border:none; background:none; color:var(--green); font-size:12px; font-weight:700; cursor:pointer; padding:6px 0 0;}
+.reply{display:flex; gap:8px; margin-top:8px; padding:9px 10px; background:var(--cream); border-radius:12px;}
+.reply .avatar{width:28px; height:28px; flex:0 0 28px; font-size:11px;}
+.reply p{font-size:12.5px;}
+.reply p b{font-size:12px; color:var(--brown-dark); display:block;}
+/* ---- 投稿フォーム ---- */
+.form-wrap{display:none;}
+.form-wrap.open{display:block;}
+.form-wrap label{font-size:12px; font-weight:700; color:var(--brown-dark); display:block; margin:8px 0 3px;}
+.form-wrap input,.form-wrap select,.form-wrap textarea{
+  width:100%; border:1.5px solid var(--line); border-radius:10px; padding:11px;
+  font-size:14px; font-family:inherit; background:#fff; color:var(--ink);
+}
+.form-wrap textarea{min-height:84px; resize:vertical;}
+/* ---- 仲間さがし ---- */
+.teacher{display:flex; gap:10px; align-items:center; background:#fff; border:1px solid var(--line); border-radius:14px; padding:10px 12px; margin-bottom:8px;}
+.teacher .info b{font-size:13.5px; color:var(--brown-dark);}
+.teacher .info span{display:block; font-size:11.5px; color:var(--muted);}
+.hit-count{font-size:12.5px; font-weight:800; color:var(--green); margin:2px 0 10px;}
+/* ---- 素材室 ---- */
+.mat-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.mat{background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; position:relative;}
+.mat .thumb{height:86px; display:flex; align-items:center; justify-content:center;}
+.mat .name{font-size:12px; font-weight:700; color:var(--brown-dark); padding:8px 9px 2px; line-height:1.4;}
+.mat .dl{
+  margin:7px 9px 10px; display:block; width:calc(100% - 18px); border:none; cursor:pointer;
+  background:var(--brown); color:#fff; font-size:12px; font-weight:700; padding:9px; border-radius:10px;
+}
+.mat .new{
+  position:absolute; top:7px; left:7px; background:var(--green); color:#fff;
+  font-size:9.5px; font-weight:800; border-radius:999px; padding:2px 8px; z-index:2;
+}
+/* ---- まなび（知恵袋） ---- */
+.search-box{display:flex; gap:6px; margin-bottom:10px;}
+.search-box input{flex:1; border:1.5px solid var(--line); border-radius:12px; padding:12px; font-size:14px; font-family:inherit;}
+.search-box button{border:none; background:var(--green); color:#fff; font-weight:700; font-size:13px; padding:0 16px; border-radius:12px; cursor:pointer;}
+.article{border:1px solid var(--line); border-radius:14px; background:#fff; margin-bottom:10px; overflow:hidden;}
+.article .head{width:100%; text-align:left; border:none; background:none; cursor:pointer; padding:12px 13px; font-family:inherit;}
+.article .head b{font-size:13.5px; color:var(--brown-dark); display:block;}
+.article .head span{font-size:11px; color:var(--muted);}
+.article .body{display:none; padding:0 13px 12px; font-size:13px; white-space:pre-line; border-top:1px dashed var(--line);}
+.article.open .body{display:block; padding-top:10px;}
+/* ---- 価値カード ---- */
+.value-card{
+  background:linear-gradient(160deg,#FFF9F5,var(--cream));
+  border:2px solid var(--sakura-deep); border-radius:18px; padding:16px 15px; margin-bottom:12px;
+}
+.value-card h3{font-size:16px; color:var(--brown-dark); text-align:center; margin-bottom:8px;}
+.value-card table{width:100%; border-collapse:collapse; margin:10px 0 4px; font-size:12.5px;}
+.value-card th,.value-card td{border:1px solid var(--line); padding:8px 6px; text-align:center; background:#fff;}
+.value-card th{background:var(--cream); color:var(--brown-dark); font-size:11.5px;}
+/* ---- ひろがる予定地（オプション棚） ---- */
+.opt{display:flex; gap:10px; align-items:flex-start; padding:11px 2px; border-bottom:1px dashed var(--line);}
+.opt:last-child{border-bottom:none;}
+.opt .txt b{font-size:13px; color:var(--brown-dark); display:block;}
+.opt .txt span{font-size:11.5px; color:var(--muted); display:block; line-height:1.5;}
+.toggle{
+  flex:0 0 46px; width:46px; height:26px; border-radius:999px; border:none; cursor:pointer;
+  background:#DCCFC0; position:relative; transition:background .2s; margin-top:2px;
+}
+.toggle::after{
+  content:""; position:absolute; top:3px; left:3px; width:20px; height:20px;
+  border-radius:50%; background:#fff; transition:left .2s; box-shadow:0 1px 3px rgba(0,0,0,.2);
+}
+.toggle.on{background:var(--green);}
+.toggle.on::after{left:23px;}
+/* ---- マイページ ---- */
+.member-card{
+  background:linear-gradient(135deg,var(--sakura),#FADCD9); border-radius:18px;
+  padding:16px; color:var(--brown-dark); margin-bottom:12px;
+  border:1px solid var(--sakura-deep); position:relative; overflow:hidden;
+}
+.member-card .brand{font-size:10px; letter-spacing:.14em; font-weight:800; color:var(--brown);}
+.member-card .who{display:flex; align-items:center; gap:12px; margin:10px 0 8px;}
+.member-card .who .avatar{width:52px; height:52px; flex:0 0 52px; font-size:18px;}
+.member-card .who b{font-size:17px;}
+.member-card .who span{display:block; font-size:11.5px; color:var(--brown);}
+.stats{display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:6px;}
+.stats div{background:rgba(255,255,255,.75); border-radius:12px; text-align:center; padding:9px 2px;}
+.stats b{font-size:19px; color:var(--green); display:block; line-height:1.2;}
+.stats span{font-size:10px; color:var(--brown);}
+.history li{list-style:none; display:flex; gap:10px; padding:8px 0; border-bottom:1px dashed var(--line); font-size:12.5px; align-items:center;}
+.history li:last-child{border-bottom:none;}
+.history .d{flex:0 0 58px; font-size:10.5px; color:var(--muted); font-weight:700;}
+/* ---- タイムライン ---- */
+.report{background:#fff; border:1px solid var(--line); border-radius:16px; overflow:hidden; margin-bottom:12px;}
+.report .art{height:120px; display:flex; align-items:center; justify-content:center; position:relative;}
+.report .art .dummy-tag{
+  position:absolute; right:8px; bottom:8px; background:rgba(107,81,64,.85);
+  color:#fff; font-size:9.5px; font-weight:700; border-radius:999px; padding:2px 8px;
+}
+.report .inner{padding:11px 13px 12px;}
+.report .lines{font-size:13px; margin:7px 0 2px; white-space:pre-line;}
+.fab-report{
+  position:sticky; bottom:74px; margin-left:auto; display:flex; align-items:center; gap:6px;
+  background:var(--sakura-deep); color:#fff; border:none; border-radius:999px;
+  padding:13px 18px; font-size:13.5px; font-weight:800; cursor:pointer;
+  box-shadow:0 4px 12px rgba(235,168,178,.5); z-index:30;
+}
+/* ---- モーダル ---- */
+.modal-bg{
+  display:none; position:fixed; inset:0; background:rgba(74,59,48,.5); z-index:80;
+  align-items:flex-end; justify-content:center;
+}
+.modal-bg.open{display:flex;}
+.modal{
+  width:100%; max-width:480px; background:var(--cream); border-radius:22px 22px 0 0;
+  padding:18px 16px 24px; animation:up .25s ease;
+}
+@keyframes up{from{transform:translateY(40px); opacity:0;}to{transform:none; opacity:1;}}
+.modal h3{font-size:15px; color:var(--brown-dark); margin-bottom:10px;}
+.mock-photo{
+  height:110px; border:2px dashed var(--sakura-deep); border-radius:14px;
+  display:flex; align-items:center; justify-content:center; color:var(--brown);
+  font-size:12.5px; font-weight:700; background:#fff; margin-bottom:10px;
+}
+.mock-line{background:#fff; border:1.5px solid var(--line); border-radius:10px; padding:11px; font-size:13px; color:var(--muted); margin-bottom:8px;}
+/* ---- トースト ---- */
+#toast{
+  position:fixed; left:50%; bottom:96px; transform:translateX(-50%);
+  background:var(--brown-dark); color:#fff; font-size:12.5px; font-weight:700;
+  padding:11px 18px; border-radius:999px; opacity:0; pointer-events:none;
+  transition:opacity .25s; z-index:90; max-width:88%; text-align:center;
+}
+#toast.show{opacity:1;}
+/* ---- フッター＋下部タブバー ---- */
+footer.credit{text-align:center; font-size:10.5px; color:var(--muted); padding:10px 0 14px;}
+nav.tabbar{
+  position:sticky; bottom:0; z-index:50; display:flex;
+  background:#fff; border-top:1px solid var(--line);
+  box-shadow:0 -4px 12px rgba(138,106,84,.08);
+}
+nav.tabbar button{
+  flex:1; border:none; background:none; cursor:pointer; padding:9px 0 11px;
+  font-size:10.5px; font-weight:700; color:var(--muted); font-family:inherit;
+}
+nav.tabbar button .ic{display:block; font-size:19px; line-height:1.3;}
+nav.tabbar button.on{color:var(--green);}
+nav.tabbar button.on .ic{transform:scale(1.1);}
+.sec-note{
+  background:#FFF3E8; border:1px dashed var(--brown); border-radius:12px;
+  font-size:11.5px; color:var(--brown-dark); padding:9px 11px; margin-bottom:12px;
+}
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <div class="demo-band">デモ版 ・ 掲載されている投稿 / 人物 / 数値はすべて架空（ダミー）です</div>
+
+  <header class="app">
+    <h1>てとて広場 <span class="maru">〜petapeta-art<span style="font-size:9px;vertical-align:super;">®</span>認定講師のひろば〜</span></h1>
+    <p>全国47都道府県の先生の「て」と「て」がつながる場所（デモ）</p>
+  </header>
+
+  <main>
+
+  <!-- ================= ① ホーム ================= -->
+  <section class="screen active" id="scr-home">
+
+    <div class="notice">
+      <div class="head"><span class="pin">固定</span>📢 本部からのお知らせ</div>
+      <ul>
+        <li>秋の認定講師オンライン茶話会、日程が決まりました <span class="dummy">※ダミー</span></li>
+        <li>新しい素材テンプレ「ハロウィン告知セット」を素材室に追加しました <span class="dummy">※ダミー</span></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>☀️ 今日のひとこと</h2>
+      <p style="font-size:13.5px;">「うちの教室にも、同じことで悩んでいる先生が全国にいる。<br>それが分かるだけで、今日もがんばれる。」</p>
+      <p class="note">毎朝ひとこと更新のイメージです（デモ・文面は架空）</p>
+    </div>
+
+    <div class="card">
+      <h2>🗓️ 季節の仕込みカレンダー <span class="tag">本部が伴走</span></h2>
+      <ul class="season">
+        <li><span class="when">今週</span><span>ハロウィン企画は今週から告知開始がおすすめ。素材室に告知テンプレあります <span class="dummy">※ダミー</span></span></li>
+        <li><span class="when">今月中</span><span>敬老の日「手形ギフト」体験会の会場予約はお早めに <span class="dummy">※ダミー</span></span></li>
+        <li><span class="when">来月</span><span>クリスマス作品の材料仕入れリスト公開予定 <span class="dummy">※ダミー</span></span></li>
+      </ul>
+      <p class="note">「次に何を仕込めばいいか」を本部が先回りでお知らせする枠のイメージです</p>
+    </div>
+
+    <div class="card">
+      <h2>🧭 デモの歩き方</h2>
+      <p style="font-size:13px;">おすすめの順路：<b>ホーム → 素材室 → 掲示板 → マイページ</b><br>下のタブをタップしてご覧ください。</p>
+      <button class="btn" onclick="goTab('mat')">🎨 素材室を見てみる</button>
+      <button class="btn sub" onclick="goTab('board')">💬 掲示板をのぞいてみる</button>
+    </div>
+
+  </section>
+
+  <!-- ================= ②③⑤ 掲示板 ================= -->
+  <section class="screen" id="scr-board">
+
+    <div class="subtabs">
+      <button class="on" data-sub="qa" onclick="subTab('qa')">Q&A掲示板</button>
+      <button data-sub="find" onclick="subTab('find')">仲間さがし</button>
+      <button data-sub="report" onclick="subTab('report')">開催レポ</button>
+    </div>
+
+    <!-- ---- ② Q&A掲示板 ---- -->
+    <div id="sub-qa">
+      <div class="sec-note">ニックネーム＋都道府県だけで参加できます（実名不要）。ここは比べる場所ではなく「お互いさま」の場所です。</div>
+
+      <button class="btn" id="btn-open-form" onclick="toggleForm()">✏️ 質問・報告を投稿してみる</button>
+      <div class="form-wrap card" id="post-form">
+        <label>ニックネーム（〇〇先生）</label>
+        <input id="f-nick" type="text" placeholder="例：さくら先生" maxlength="20">
+        <label>都道府県</label>
+        <select id="f-pref"></select>
+        <label>カテゴリ</label>
+        <select id="f-cat">
+          <option value="shukyaku">集客</option>
+          <option value="unei">当日運営のコツ</option>
+          <option value="okane">お金・確定申告</option>
+          <option value="hajimete">はじめて質問</option>
+        </select>
+        <label>本文</label>
+        <textarea id="f-body" placeholder="こんなこと聞いていいのかな…？ どんなことでも大丈夫です"></textarea>
+        <button class="btn" onclick="submitPost()">投稿する（デモ）</button>
+        <p class="note">※デモ版：投稿はこの端末のブラウザ内にのみ保存されます。外部には送信されません。</p>
+      </div>
+
+      <div class="chips" id="cat-chips">
+        <button class="on" data-cat="all">すべて</button>
+        <button data-cat="shukyaku">集客</button>
+        <button data-cat="unei">当日運営のコツ</button>
+        <button data-cat="okane">お金・確定申告</button>
+        <button data-cat="hajimete">はじめて質問</button>
+      </div>
+
+      <div id="post-list"></div>
+      <p class="note" style="text-align:center;">投稿・お名前・件数はすべて架空です（ダミー）</p>
+    </div>
+
+    <!-- ---- ③ 都道府県で仲間を探す ---- -->
+    <div id="sub-find" style="display:none;">
+      <div class="sec-note">都道府県をタップすると、近くの先生が見つかります。「近くに仲間がいる」を体感してください。</div>
+      <div class="chips green" id="pref-chips"></div>
+      <div class="chips" id="theme-chips">
+        <button class="on" data-theme="all">テーマ：すべて</button>
+        <button data-theme="集客">集客</button>
+        <button data-theme="材料">材料</button>
+        <button data-theme="イベント">イベント</button>
+        <button data-theme="はじめて">はじめて</button>
+      </div>
+      <p class="hit-count" id="find-count"></p>
+      <div id="teacher-list"></div>
+      <div id="find-posts"></div>
+      <p class="note" style="text-align:center;">講師名・地域・件数はすべて架空です（ダミー）</p>
+    </div>
+
+    <!-- ---- ⑤ 開催レポートタイムライン ---- -->
+    <div id="sub-report" style="display:none;">
+      <div class="sec-note">「写真1枚＋3行」の型だから続けられる。全国の先生の活動が流れるタイムラインです。投稿はそのまま「わたしの実績ノート」に積み上がります。</div>
+      <div id="report-list"></div>
+      <button class="fab-report" onclick="openReportModal()">📷 レポを書く</button>
+      <p class="note" style="text-align:center;">※デモ版：「レポを書く」は投稿画面のモック（見本）が開きます。実際の保存は行いません。<br>写真はすべてイメージ用のダミー画像です。</p>
+    </div>
+
+  </section>
+
+  <!-- ================= ④ 素材室 ================= -->
+  <section class="screen" id="scr-mat">
+    <div class="card" style="background:#FFF9F5;">
+      <h2>🎨 素材室 <span class="tag">今月の新着 4点(ダミー)</span></h2>
+      <p style="font-size:13px;">告知・教室運営にそのまま使えるテンプレート集。<b>月に1枚使えたら、月会費のもとが取れる</b>——そんな棚を目指しています。</p>
+    </div>
+    <div class="mat-grid" id="mat-grid"></div>
+    <p class="note">※デモ版：ダウンロードボタンは動きの見本です。実ファイルの配布は本番環境でのご提供となります。<br>※サムネイル・点数表記はすべて架空（ダミー）です。</p>
+    <div class="card">
+      <h2>🗳️ 素材リクエスト（予定地）</h2>
+      <p style="font-size:13px;">「こんなテンプレが欲しい」に投票 → 翌月の新着に反映するコーナーの予定地です。詳しくは「まなび」タブの<b>ひろがる予定地</b>へ。</p>
+    </div>
+  </section>
+
+  <!-- ================= ⑦⑧ まなび ================= -->
+  <section class="screen" id="scr-learn">
+
+    <div class="card">
+      <h2>🔎 過去Q&A・知恵袋をさがす</h2>
+      <div class="search-box">
+        <input id="q-input" type="text" placeholder="例：集客 / 児童館 / 確定申告">
+        <button onclick="doSearch()">検索</button>
+      </div>
+      <div id="q-result"></div>
+      <p class="note">静かに積み上がった先輩の知恵が、あとから来る先生の資産になります（検索対象はデモ用の架空データ）</p>
+    </div>
+
+    <div class="card">
+      <h2>📖 先輩講師の知恵袋（読み物）</h2>
+      <div id="article-list"></div>
+      <button class="btn sub" onclick="goTab('board');subTab('qa');filterCat('hajimete')">🌱 「はじめて質問」カテゴリはこちら</button>
+    </div>
+
+    <!-- ⑧ 価値カード -->
+    <div class="value-card">
+      <h3>月1,000円(ダミー)で、<br>先輩3,000人(ダミー)の知恵と仲間。</h3>
+      <p style="font-size:13px;">ひとりで教室を続ける毎日に、「同じ道を歩く仲間」と「先に歩いた先輩の知恵」を。</p>
+      <table>
+        <tr><th>もしも…のシナリオ<br>（仮定の計算例）</th><th>参加者数<br>(ダミー)</th><th>月会費計<br>(ダミー)</th></tr>
+        <tr><td>認定講師の1割が参加したら</td><td>300名</td><td>月30万円</td></tr>
+        <tr><td>認定講師の3割が参加したら</td><td>900名</td><td>月90万円</td></tr>
+      </table>
+      <p class="note">※これは予測や約束ではありません。「もしも」を並べた仮定のシナリオで、すべてダミーの数値です。実際の参加率は運営の中身次第です。</p>
+      <p style="font-size:12.5px; margin-top:10px; background:#fff; border-radius:12px; padding:10px 12px; border:1px dashed var(--green);">
+        🍀 <b>立て付けの一言</b>：この広場は VERA が運営する会員サービスです。御社に新しいシステムやツールを入れていただく必要は一切ありません（導入負担ゼロ）。
+      </p>
+    </div>
+
+    <!-- ひろがる予定地（オプション棚） -->
+    <div class="card">
+      <h2>🌱 ひろがる予定地 <span class="tag">面談で選べます</span></h2>
+      <p style="font-size:12.5px; margin-bottom:6px;">この広場は、あとから少しずつ育てられます。気になるものをONにしてみてください（デモ：ONにしても機能はまだ追加されません）。</p>
+      <div id="opt-list"></div>
+      <p class="note">ONの数：<b id="opt-count">0</b>（この端末にのみ記憶されます・デモ）</p>
+    </div>
+
+  </section>
+
+  <!-- ================= ⑥ マイページ ================= -->
+  <section class="screen" id="scr-my">
+
+    <div class="member-card">
+      <div class="brand">petapeta-art&reg; 認定講師会員証（デモ）</div>
+      <div class="who">
+        <div class="avatar" style="background:var(--green);">SY</div>
+        <div><b>さくら先生</b><span>広島県 ・ 認定No. TT-0000 <span class="dummy">※すべてダミー</span></span></div>
+      </div>
+      <div class="stats">
+        <div><b>12回</b><span>開催回数(ダミー)</span></div>
+        <div><b>87組</b><span>参加親子(ダミー)</span></div>
+        <div><b>9件</b><span>レポート(ダミー)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📒 わたしの実績ノート</h2>
+      <p style="font-size:13px;">開催レポを投稿するだけで、開催回数・参加親子数がここに<b>自動で積み上がる</b>見た目のイメージです（数値は架空）。児童館・支援センターへの会場交渉のときの「わたしの実績資料」になります。</p>
+      <ul class="history">
+        <li><span class="d">10/02(ダミー)</span><span>ハロウィン手形アート会 ／ 親子6組(ダミー)</span></li>
+        <li><span class="d">09/18(ダミー)</span><span>敬老の日ギフトの会 ／ 親子8組(ダミー)</span></li>
+        <li><span class="d">09/05(ダミー)</span><span>児童館みなみ 出張開催 ／ 親子11組(ダミー)</span></li>
+        <li><span class="d">08/22(ダミー)</span><span>夏の思い出うちわ会 ／ 親子7組(ダミー)</span></li>
+      </ul>
+      <p class="note">バッジ・称号などの飾りは「ひろがる予定地」のオプションに載せています（比べるためではなく、認めるための飾りとして）。</p>
+    </div>
+
+    <div class="card">
+      <h2>🤝 この広場について</h2>
+      <p style="font-size:12.5px;">てとて広場（デモ）は、petapeta-art&reg;認定講師のための会員コミュニティの<b>見本</b>です。画面・投稿・数値はすべて架空で、実在の講師・実際のデータは一切含まれていません。</p>
+    </div>
+
+  </section>
+
+  </main>
+
+  <footer class="credit">produced by VERA Holdings × CreativePocket（デモ）</footer>
+
+  <nav class="tabbar">
+    <button class="on" data-tab="home" onclick="goTab('home')"><span class="ic">🏠</span>ホーム</button>
+    <button data-tab="board" onclick="goTab('board')"><span class="ic">💬</span>掲示板</button>
+    <button data-tab="mat" onclick="goTab('mat')"><span class="ic">🎨</span>素材室</button>
+    <button data-tab="learn" onclick="goTab('learn')"><span class="ic">📖</span>まなび</button>
+    <button data-tab="my" onclick="goTab('my')"><span class="ic">👤</span>マイページ</button>
+  </nav>
+
+  <!-- ---- 開催レポ投稿モック ---- -->
+  <div class="modal-bg" id="report-modal" onclick="if(event.target===this)closeReportModal()">
+    <div class="modal">
+      <h3>📷 開催レポを書く（投稿画面の見本）</h3>
+      <div class="mock-photo">＋ 写真を1枚えらぶ（デモのため選択できません）</div>
+      <div class="mock-line">1行目：どこで（例：児童館みなみ）</div>
+      <div class="mock-line">2行目：なにをした（例：ハロウィン手形の会、親子6組）</div>
+      <div class="mock-line">3行目：ひとこと（例：初参加のママが涙ぐんでくれました）</div>
+      <button class="btn" onclick="closeReportModal();toast('デモ版のため実際の投稿は行われません（本番では実績ノートに自動で積み上がります）')">この型で投稿する（デモ）</button>
+      <button class="btn sub" onclick="closeReportModal()">とじる</button>
+      <p class="note">「写真1枚＋3行」だけ。入力がしんどいと続かない、を逆にした型です。</p>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+</div>
+
+<script>
+/* =====================================================
+   てとて広場 デモ用スクリプト（素のJS + localStorage）
+   すべてのデータは架空（ダミー）です
+   ===================================================== */
+"use strict";
+
+/* ---------- 共通ヘルパー ---------- */
+var $ = function(s){ return document.querySelector(s); };
+var $$ = function(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); };
+var LS_POSTS = "tetote_demo_posts_v1";
+var LS_STAMP = "tetote_demo_stamps_v1";
+var LS_OPTS  = "tetote_demo_opts_v1";
+function lsGet(k,f){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : f; }catch(e){ return f; } }
+function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+
+var AV_COLORS = ["#EBA8B2","#8A6A54","#3F6B57","#C98D6B","#7B8F6B","#B0836F","#5E7F93"];
+function avatar(initial, i, size){
+  var c = AV_COLORS[i % AV_COLORS.length];
+  return '<div class="avatar" style="background:'+c+';">'+esc(initial)+'</div>';
+}
+function toast(msg){
+  var t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._tm); t._tm = setTimeout(function(){ t.classList.remove("show"); }, 2600);
+}
+
+/* ---------- タブ切替 ---------- */
+function goTab(name){
+  $$(".screen").forEach(function(s){ s.classList.remove("active"); });
+  $("#scr-"+name).classList.add("active");
+  $$("nav.tabbar button").forEach(function(b){ b.classList.toggle("on", b.dataset.tab === name); });
+  window.scrollTo(0,0);
+}
+function subTab(name){
+  ["qa","find","report"].forEach(function(k){ $("#sub-"+k).style.display = (k===name) ? "" : "none"; });
+  $$(".subtabs button").forEach(function(b){ b.classList.toggle("on", b.dataset.sub === name); });
+}
+
+/* ---------- カテゴリ定義 ---------- */
+var CATS = { shukyaku:"集客", unei:"当日運営のコツ", okane:"お金・確定申告", hajimete:"はじめて質問" };
+
+/* ---------- ② Q&A掲示板：架空の投稿データ ---------- */
+var BASE_POSTS = [
+ {id:"p1", nick:"さくらんぼ先生", ini:"SB", pref:"広島", cat:"shukyaku", time:"2時間前(ダミー)", reply:2, theme:"集客",
+  body:"体験会の集客、インスタだけだと申込3組(ダミー)で止まってしまいます…。みなさんインスタ以外に何を組み合わせていますか？",
+  replies:[
+   {nick:"ゆず先生（愛媛）", ini:"YZ", body:"わかりますー！私も最初そうでした。児童館に置きチラシをお願いしたら少しずつ増えました。焦らなくて大丈夫ですよ🌸"},
+   {nick:"もも先生（岡山）", ini:"MM", body:"支援センターの掲示板に貼らせてもらうのもおすすめです。顔を覚えてもらえると次につながりました！"}
+  ]},
+ {id:"p2", nick:"つくし先生", ini:"TK", pref:"新潟", cat:"hajimete", time:"5時間前(ダミー)", reply:1, theme:"はじめて",
+  body:"はじめまして！先月認定をいただいたばかりの新人です。まだ1回も開催できていなくて不安ですが、よろしくお願いします🌱",
+  replies:[
+   {nick:"ひなた先生（長野）", ini:"HN", body:"ようこそ〜！最初はみんな同じです。「はじめて質問」カテゴリなら何を聞いても大丈夫。応援しています！"}
+  ]},
+ {id:"p3", nick:"ひまわり先生", ini:"HM", pref:"福岡", cat:"unei", time:"昨日(ダミー)", reply:4, theme:"イベント",
+  body:"開催中に赤ちゃんがぐずったとき用に、待ち時間で遊べる布おもちゃコーナーを作ったらママの表情がゆるみました。小さな工夫の共有でした！"},
+ {id:"p4", nick:"あんず先生", ini:"AZ", pref:"東京", cat:"shukyaku", time:"昨日(ダミー)", reply:3, theme:"集客",
+  body:"ご報告：近所の児童館に思い切って声をかけたら、置きチラシの許可をいただけました！断られてもともと、の気持ちで行ってよかったです。"},
+ {id:"p5", nick:"すみれ先生", ini:"SM", pref:"大阪", cat:"okane", time:"2日前(ダミー)", reply:5, theme:"はじめて",
+  body:"確定申告の準備、材料費の領収書ってみなさんどうまとめていますか？封筒に月別で入れているだけなのですが…",
+  replies:[
+   {nick:"かえで先生（兵庫）", ini:"KD", body:"私も封筒派でした！最近は月末にスマホで撮ってフォルダ分けしています。それだけでも春がラクになりますよ〜"}
+  ]},
+ {id:"p6", nick:"くるみ先生", ini:"KR", pref:"北海道", cat:"unei", time:"3日前(ダミー)", reply:2, theme:"材料",
+  body:"冬の会場は換気するとスタンプ台のインクの乾きが変わる気がします。北国の先生方、冬の開催で気をつけていることはありますか？"},
+ {id:"p7", nick:"れもん先生", ini:"RM", pref:"愛知", cat:"shukyaku", time:"3日前(ダミー)", reply:6, theme:"イベント",
+  body:"ご報告：園の夏祭りに手形アートコーナーで出店が決まりました！お声がけから決定までのやりとり、知恵袋にまとめてみます。"},
+ {id:"p8", nick:"たんぽぽ先生", ini:"TP", pref:"広島", cat:"hajimete", time:"4日前(ダミー)", reply:7, theme:"材料",
+  body:"はじめて質問です。台紙や絵の具、みなさんどこで買っていますか？100均と画材店の使い分けが知りたいです！"},
+ {id:"p9", nick:"しらす先生", ini:"SR", pref:"神奈川", cat:"unei", time:"5日前(ダミー)", reply:2, theme:"イベント",
+  body:"開催報告：親子8組(ダミー)にご参加いただきました。人見知りだった子が最後に手を広げてくれた瞬間、この仕事をしていてよかったと思いました。"},
+ {id:"p10", nick:"かりん先生", ini:"KA", pref:"宮城", cat:"okane", time:"6日前(ダミー)", reply:4, theme:"集客",
+  body:"参加費の決め方に悩んでいます。材料費が上がったとき、常連のママさんたちへの値上げの伝え方…先輩方はどうされましたか？"}
+];
+var STAMP_DEFS = [ {key:"w", label:"💗 わかる", base:12}, {key:"s", label:"✨ すてき", base:8}, {key:"g", label:"📣 がんばって", base:5} ];
+
+var currentCat = "all";
+function allPosts(){
+  var mine = lsGet(LS_POSTS, []);
+  return mine.concat(BASE_POSTS);
+}
+function stampCount(pid, key, base){
+  var st = lsGet(LS_STAMP, {});
+  var add = (st[pid] && st[pid][key]) || 0;
+  return base + add;
+}
+function postCard(p, i){
+  var stamps = STAMP_DEFS.map(function(d, j){
+    var base = p.mine ? 0 : (d.base + ((i*3+j*5) % 9)); /* ダミーの初期件数をばらす */
+    var n = stampCount(p.id, d.key, base);
+    return '<button class="stamp" onclick="addStamp(this,\''+p.id+'\',\''+d.key+'\')">'+d.label+'<span class="n">'+n+'</span></button>';
+  }).join("");
+  var replyBtn = "";
+  if (p.replies && p.replies.length){
+    replyBtn = '<button class="replies-toggle" onclick="toggleReplies(\''+p.id+'\')">💬 返信を見る（'+p.reply+'件・ダミー）</button>'
+      + '<div id="rep-'+p.id+'" style="display:none;">'
+      + p.replies.map(function(r, k){
+          return '<div class="reply">'+avatar(r.ini, i+k+2)+'<p><b>'+esc(r.nick)+'</b>'+esc(r.body)+'</p></div>';
+        }).join("")
+      + '</div>';
+  } else if (p.reply){
+    replyBtn = '<button class="replies-toggle" onclick="toast(\'デモ版のため返信スレッドは一部のみ収録しています\')">💬 返信 '+p.reply+'件（ダミー）</button>';
+  }
+  return '<div class="post">'
+    + '<div class="who">'+avatar(p.ini, i)
+    + '<div class="meta"><b>'+esc(p.nick)+'</b>（'+esc(p.pref)+'）<br>'+esc(p.time)+'</div></div>'
+    + '<p class="body">'+esc(p.body)+'</p>'
+    + '<span class="badge-cat">'+CATS[p.cat]+'</span> '
+    + (p.mine ? '<span class="badge-mine">あなたの投稿（デモ）</span>' : '<span class="dummy">※架空の投稿です</span>')
+    + '<div class="stamps">'+stamps+'</div>'
+    + replyBtn
+    + '</div>';
+}
+function renderPosts(){
+  var list = allPosts().filter(function(p){ return currentCat==="all" || p.cat===currentCat; });
+  $("#post-list").innerHTML = list.length
+    ? list.map(postCard).join("")
+    : '<p class="note" style="text-align:center;">このカテゴリの投稿はまだありません</p>';
+}
+function filterCat(cat){
+  currentCat = cat;
+  $$("#cat-chips button").forEach(function(b){ b.classList.toggle("on", b.dataset.cat===cat); });
+  renderPosts();
+}
+$$("#cat-chips button").forEach(function(b){
+  b.addEventListener("click", function(){ filterCat(b.dataset.cat); });
+});
+function toggleReplies(pid){
+  var el = $("#rep-"+pid);
+  if (el) el.style.display = (el.style.display==="none") ? "" : "none";
+}
+/* ---- 共感スタンプ：タップでふわっと＋1 ---- */
+function addStamp(btn, pid, key){
+  var st = lsGet(LS_STAMP, {});
+  st[pid] = st[pid] || {};
+  st[pid][key] = (st[pid][key] || 0) + 1;
+  lsSet(LS_STAMP, st);
+  var n = btn.querySelector(".n");
+  n.textContent = parseInt(n.textContent,10) + 1;
+  btn.classList.remove("pop"); void btn.offsetWidth; btn.classList.add("pop");
+  var fly = document.createElement("span");
+  fly.className = "fly"; fly.textContent = "+1";
+  btn.appendChild(fly);
+  setTimeout(function(){ fly.remove(); }, 800);
+}
+/* ---- 新規投稿フォーム ---- */
+var PREFS_ALL = ["北海道","青森","岩手","宮城","秋田","山形","福島","茨城","栃木","群馬","埼玉","千葉","東京","神奈川","新潟","富山","石川","福井","山梨","長野","岐阜","静岡","愛知","三重","滋賀","京都","大阪","兵庫","奈良","和歌山","鳥取","島根","岡山","広島","山口","徳島","香川","愛媛","高知","福岡","佐賀","長崎","熊本","大分","宮崎","鹿児島","沖縄"];
+function toggleForm(){ $("#post-form").classList.toggle("open"); }
+function submitPost(){
+  var nick = $("#f-nick").value.trim() || "ひみつ先生";
+  var pref = $("#f-pref").value;
+  var cat  = $("#f-cat").value;
+  var body = $("#f-body").value.trim();
+  if (!body){ toast("本文を入力してください"); return; }
+  var mine = lsGet(LS_POSTS, []);
+  mine.unshift({
+    id:"mine-"+Date.now(), nick:nick, ini:(nick.charAt(0)||"先"), pref:pref, cat:cat,
+    time:"たった今", reply:0, body:body, mine:true, theme:"はじめて"
+  });
+  lsSet(LS_POSTS, mine);
+  $("#f-body").value = "";
+  $("#post-form").classList.remove("open");
+  filterCat("all");
+  toast("投稿しました（この端末内のみに保存・デモ）");
+}
+
+/* ---------- ③ 都道府県で仲間を探す ---------- */
+var TEACHERS = [
+ {name:"さくらんぼ先生", ini:"SB", pref:"広島", area:"広島市西区(ダミー)", theme:"集客"},
+ {name:"たんぽぽ先生",   ini:"TP", pref:"広島", area:"福山市(ダミー)",     theme:"材料"},
+ {name:"みかん先生",     ini:"MK", pref:"広島", area:"呉市(ダミー)",       theme:"イベント"},
+ {name:"わかば先生",     ini:"WK", pref:"広島", area:"東広島市(ダミー)",   theme:"はじめて"},
+ {name:"あんず先生",     ini:"AZ", pref:"東京", area:"世田谷区(ダミー)",   theme:"集客"},
+ {name:"こだま先生",     ini:"KD", pref:"東京", area:"八王子市(ダミー)",   theme:"イベント"},
+ {name:"しらす先生",     ini:"SR", pref:"神奈川", area:"横浜市(ダミー)",   theme:"イベント"},
+ {name:"れもん先生",     ini:"RM", pref:"愛知", area:"名古屋市(ダミー)",   theme:"イベント"},
+ {name:"すみれ先生",     ini:"SM", pref:"大阪", area:"堺市(ダミー)",       theme:"はじめて"},
+ {name:"くるみ先生",     ini:"KR", pref:"北海道", area:"札幌市(ダミー)",   theme:"材料"},
+ {name:"ひまわり先生",   ini:"HM", pref:"福岡", area:"北九州市(ダミー)",   theme:"イベント"},
+ {name:"かりん先生",     ini:"KA", pref:"宮城", area:"仙台市(ダミー)",     theme:"集客"},
+ {name:"ゆうな先生",     ini:"YN", pref:"沖縄", area:"那覇市(ダミー)",     theme:"はじめて"},
+ {name:"もみじ先生",     ini:"MJ", pref:"京都", area:"京都市(ダミー)",     theme:"集客"}
+];
+var FIND_PREFS = ["全国","北海道","宮城","東京","神奈川","愛知","京都","大阪","広島","福岡","沖縄"];
+var curPref = "全国", curTheme = "all";
+function renderFindChips(){
+  $("#pref-chips").innerHTML = FIND_PREFS.map(function(p){
+    return '<button class="'+(p===curPref?"on":"")+'" onclick="setPref(\''+p+'\')">'+p+'</button>';
+  }).join("");
+}
+function setPref(p){ curPref = p; renderFindChips(); renderFind(); }
+$$("#theme-chips button").forEach(function(b){
+  b.addEventListener("click", function(){
+    curTheme = b.dataset.theme;
+    $$("#theme-chips button").forEach(function(x){ x.classList.toggle("on", x===b); });
+    renderFind();
+  });
+});
+function renderFind(){
+  var ts = TEACHERS.filter(function(t){
+    return (curPref==="全国" || t.pref===curPref) && (curTheme==="all" || t.theme===curTheme);
+  });
+  $("#find-count").textContent = (curPref==="全国" ? "全国" : curPref) + "の仲間：" + ts.length + "名がヒット（ダミー）";
+  $("#teacher-list").innerHTML = ts.length
+    ? ts.map(function(t,i){
+        return '<div class="teacher">'+avatar(t.ini,i)
+          + '<div class="info"><b>'+esc(t.name)+'</b><span>'+esc(t.pref)+'・'+esc(t.area)+' ／ 関心：'+esc(t.theme)+'</span></div></div>';
+      }).join("")
+    : '<p class="note">この条件の先生はまだ登録されていません（デモ）</p>';
+  /* 同じ県の最近の投稿も出す＝「近くに仲間がいる」の可視化 */
+  var ps = BASE_POSTS.filter(function(p){
+    return (curPref==="全国" ? false : p.pref===curPref) && (curTheme==="all" || p.theme===curTheme);
+  });
+  $("#find-posts").innerHTML = ps.length
+    ? '<h2 style="font-size:14px;color:var(--brown-dark);margin:14px 0 8px;">📮 '+esc(curPref)+'の先生の最近の投稿（ダミー）</h2>' + ps.map(postCard).join("")
+    : "";
+}
+
+/* ---------- 手形アートのダミーSVG（自己完結・外部画像なし） ---------- */
+function handSVG(color, bg1, bg2, size){
+  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+   + '<defs><linearGradient id="g'+color.replace("#","")+'" x1="0" y1="0" x2="1" y2="1">'
+   + '<stop offset="0" stop-color="'+bg1+'"/><stop offset="1" stop-color="'+bg2+'"/></linearGradient></defs>'
+   + '<rect width="100" height="100" rx="14" fill="url(#g'+color.replace("#","")+')"/>'
+   + '<g fill="'+color+'" opacity="0.9">'
+   + '<ellipse cx="50" cy="62" rx="16" ry="19"/>'
+   + '<circle cx="31" cy="52" r="5.5"/><circle cx="39" cy="40" r="6"/>'
+   + '<circle cx="50" cy="35" r="6.5"/><circle cx="61" cy="40" r="6"/><circle cx="69" cy="52" r="5.5"/>'
+   + '</g></svg>';
+}
+
+/* ---------- ④ 素材室 ---------- */
+var MATERIALS = [
+ {name:"ハロウィン告知 画像テンプレ（Instagram用）", isNew:true,  c:"#8A6A54", b1:"#F7C8CC", b2:"#FBF6EE"},
+ {name:"教室POP「はじめてさん歓迎」",               isNew:true,  c:"#3F6B57", b1:"#FBF6EE", b2:"#F7C8CC"},
+ {name:"参加費のご案内 ひな形（価格表）",           isNew:false, c:"#EBA8B2", b1:"#FFF9F5", b2:"#F7C8CC"},
+ {name:"公式LINE配信 文例セット（月4本）",          isNew:true,  c:"#8A6A54", b1:"#FBF6EE", b2:"#EFE0D4"},
+ {name:"敬老の日ギフト 告知テンプレ",               isNew:false, c:"#3F6B57", b1:"#F7C8CC", b2:"#FBF6EE"},
+ {name:"体験会アンケート ひな形",                   isNew:true,  c:"#EBA8B2", b1:"#FBF6EE", b2:"#FFF3E8"}
+];
+function renderMaterials(){
+  $("#mat-grid").innerHTML = MATERIALS.map(function(m){
+    return '<div class="mat">'
+      + (m.isNew ? '<span class="new">今月の新着</span>' : "")
+      + '<div class="thumb">'+handSVG(m.c, m.b1, m.b2, 86)+'</div>'
+      + '<div class="name">'+esc(m.name)+' <span class="dummy">※ダミー</span></div>'
+      + '<button class="dl" onclick="toast(\'デモ版のため実ファイルはありません（本番でご提供）\')">⬇ ダウンロード</button>'
+      + '</div>';
+  }).join("");
+}
+
+/* ---------- ⑤ 開催レポートタイムライン ---------- */
+var REPORTS = [
+ {nick:"みかん先生", ini:"MK", pref:"広島", time:"今日(ダミー)", c:"#3F6B57", b1:"#F7C8CC", b2:"#FBF6EE",
+  lines:"呉市の子育てひろばで開催\nハロウィンかぼちゃの手形、親子5組(ダミー)\n2歳さんの「できた！」の顔が最高でした"},
+ {nick:"れもん先生", ini:"RM", pref:"愛知", time:"昨日(ダミー)", c:"#EBA8B2", b1:"#FBF6EE", b2:"#EFE0D4",
+  lines:"園の夏祭りに出店しました\n手形うちわ作り、33組(ダミー)が来てくれました\n来年もぜひと言っていただけて涙…"},
+ {nick:"ゆうな先生", ini:"YN", pref:"沖縄", time:"2日前(ダミー)", c:"#8A6A54", b1:"#FFF9F5", b2:"#F7C8CC",
+  lines:"自宅教室ではじめての開催\n足形のシーサーアート、親子3組(ダミー)\n緊張したけど、やってよかった！"}
+];
+function renderReports(){
+  $("#report-list").innerHTML = REPORTS.map(function(r,i){
+    return '<div class="report">'
+      + '<div class="art">'+handSVG(r.c, r.b1, r.b2, 110)+'<span class="dummy-tag">写真はダミー画像です</span></div>'
+      + '<div class="inner">'
+      + '<div class="who" style="display:flex;gap:9px;align-items:center;">'+avatar(r.ini,i)
+      + '<div class="meta" style="font-size:12px;color:var(--muted);"><b style="color:var(--brown-dark);font-size:13.5px;">'+esc(r.nick)+'</b>（'+esc(r.pref)+'）・'+esc(r.time)+'</div></div>'
+      + '<p class="lines">'+esc(r.lines)+'</p>'
+      + '<div class="stamps">'
+      + STAMP_DEFS.map(function(d,j){
+          var pid = "rep"+i;
+          var n = stampCount(pid, d.key, 4 + ((i*2+j*3)%7));
+          return '<button class="stamp" onclick="addStamp(this,\''+pid+'\',\''+d.key+'\')">'+d.label+'<span class="n">'+n+'</span></button>';
+        }).join("")
+      + '</div></div></div>';
+  }).join("");
+}
+function openReportModal(){ $("#report-modal").classList.add("open"); }
+function closeReportModal(){ $("#report-modal").classList.remove("open"); }
+
+/* ---------- ⑦ 知恵袋（読み物）＋検索 ---------- */
+var ARTICLES = [
+ {title:"体験会の集客、私はこう変えました", by:"もみじ先生（京都）", tags:"集客 インスタ 児童館 チラシ",
+  body:"最初の半年は、告知はインスタだけ。申込は毎回2組(ダミー)ほどでした。\n\n変えたことは2つです。①児童館と支援センターに置きチラシをお願いした ②参加してくれたママに「お友だちと一緒割」を案内した。\n\n3か月後、平均7組(ダミー)に。数字はダミーですが、「オンラインだけで完結させない」が私の学びでした。焦らず、地域に顔を覚えてもらうところから。"},
+ {title:"児童館デビューまでの道のり", by:"うみ先生（千葉）", tags:"会場 児童館 支援センター 交渉",
+  body:"「個人の教室に貸してもらえるのかな」とずっと不安でした。\n\n実際にやったこと：①開催実績をA4一枚にまとめた（実績ノートが役立ちました） ②まず「見学」からお願いした ③職員さんに作品サンプルを見てもらった。\n\n最初のお返事まで3週間(ダミー)。断られた館もありますが、1つOKが出ると次が続きます。同じ挑戦をする先生の参考になればうれしいです。"},
+ {title:"はじめての確定申告、こわくなかった話", by:"かえで先生（兵庫）", tags:"確定申告 お金 領収書 経費",
+  body:"開業1年目、「確定申告」の4文字が怖くて後回しにしていました。\n\nやってよかったのは、月末に領収書をスマホで撮ってフォルダ分けするだけの習慣。それと、この広場の「お金・確定申告」カテゴリで先輩に質問したこと。\n\n※税金の細かい判断は税務署や専門家への確認が安心です。ここでは「先輩はこうしていた」の共有まで。"}
+];
+function renderArticles(){
+  $("#article-list").innerHTML = ARTICLES.map(function(a,i){
+    return '<div class="article" id="art-'+i+'">'
+      + '<button class="head" onclick="document.getElementById(\'art-'+i+'\').classList.toggle(\'open\')">'
+      + '<b>'+esc(a.title)+'</b><span>'+esc(a.by)+' ・ 読み物 ・ 数値はダミー</span></button>'
+      + '<div class="body">'+esc(a.body)+'</div></div>';
+  }).join("");
+}
+/* 静的JSインデックス検索（過去Q&A＋知恵袋） */
+function doSearch(){
+  var q = $("#q-input").value.trim();
+  var box = $("#q-result");
+  if (!q){ box.innerHTML = '<p class="note">キーワードを入れて「検索」を押してください（例：集客）</p>'; return; }
+  var hits = [];
+  ARTICLES.forEach(function(a,i){
+    if ((a.title+a.body+a.tags).indexOf(q) >= 0) hits.push({type:"📖 知恵袋", label:a.title, act:"openArticle("+i+")"});
+  });
+  BASE_POSTS.forEach(function(p){
+    if ((p.body+CATS[p.cat]+p.pref+p.nick).indexOf(q) >= 0) hits.push({type:"💬 過去Q&A", label:p.body.slice(0,34)+"…", act:"jumpPost('"+p.cat+"')"});
+  });
+  box.innerHTML = hits.length
+    ? '<p class="hit-count">「'+esc(q)+'」で '+hits.length+'件ヒット（デモ用データ）</p>'
+      + hits.map(function(h){
+          return '<button class="btn sub" style="margin-top:6px;text-align:left;font-size:12.5px;padding:11px;" onclick="'+h.act+'">'+h.type+'｜'+esc(h.label)+'</button>';
+        }).join("")
+    : '<p class="note">「'+esc(q)+'」のヒットはありませんでした。「集客」「児童館」「確定申告」などでお試しください（デモ）</p>';
+}
+function openArticle(i){
+  goTab("learn");
+  var el = document.getElementById("art-"+i);
+  el.classList.add("open");
+  el.scrollIntoView({behavior:"smooth", block:"center"});
+}
+function jumpPost(cat){ goTab("board"); subTab("qa"); filterCat(cat); }
+
+/* ---------- ひろがる予定地（オプション棚・見せるだけトグル） ---------- */
+var OPTIONS = [
+ {t:"盛り上がりスコア（AI採点）", d:"投稿の熱量をVERA側で自動採点し月間ハイライトを選出（御社側にAIツールは一切入れません）"},
+ {t:"先輩講師バッジ・会員証グレード", d:"開催回数に応じた称号表示。比べるためではなく、続けてきたことを認める飾りとして"},
+ {t:"実績ノートのPDF書き出し", d:"児童館・支援センターへの会場交渉用1枚資料をワンタップで"},
+ {t:"素材リクエスト投票箱", d:"欲しいテンプレをスタンプで投票 → 翌月の新着素材に反映"},
+ {t:"会場開拓マップ", d:"開催実績のある児童館・支援センターを都道府県別に蓄積"},
+ {t:"公式LINE連携「今週の仕込み」配信", d:"季節の仕込みカレンダーを毎週LINEにお届け"},
+ {t:"新人ウェルカム動線", d:"「はじめまして」専用スレ＋先輩の歓迎テンプレ＋最初の30日ガイド"},
+ {t:"オンライン茶話会・講座の告知枠", d:"Zoomリンク掲載のイベント欄。孤独解消の対面接点に"},
+ {t:"お金・確定申告ミニ講座の季節連載", d:"確定申告期に価値が最大化する読み物の月次追加"},
+ {t:"講師専用ミニページ量産", d:"先生ごとの教室紹介1枚ページを量産（追加商品の候補）"},
+ {t:"過去Q&Aの知恵袋アーカイブ化", d:"たまった投稿を月次で読み物に編集。時間が経つほど会費の価値が上がる仕組み"}
+];
+function renderOptions(){
+  var on = lsGet(LS_OPTS, {});
+  $("#opt-list").innerHTML = OPTIONS.map(function(o,i){
+    return '<div class="opt">'
+      + '<button class="toggle '+(on[i]?"on":"")+'" onclick="toggleOpt(this,'+i+')" aria-label="オプション切替"></button>'
+      + '<div class="txt"><b>'+esc(o.t)+'</b><span>'+esc(o.d)+'</span></div></div>';
+  }).join("");
+  updateOptCount();
+}
+function toggleOpt(btn, i){
+  var on = lsGet(LS_OPTS, {});
+  on[i] = !on[i];
+  lsSet(LS_OPTS, on);
+  btn.classList.toggle("on", !!on[i]);
+  updateOptCount();
+  if (on[i]) toast("気になる印を付けました（面談でお聞かせください・デモ）");
+}
+function updateOptCount(){
+  var on = lsGet(LS_OPTS, {});
+  var n = Object.keys(on).filter(function(k){ return on[k]; }).length;
+  $("#opt-count").textContent = n;
+}
+
+/* ---------- 初期化 ---------- */
+(function init(){
+  $("#f-pref").innerHTML = PREFS_ALL.map(function(p){
+    return '<option value="'+p+'"'+(p==="広島"?" selected":"")+'>'+p+'</option>';
+  }).join("");
+  renderPosts();
+  renderFindChips();
+  renderFind();
+  renderMaterials();
+  renderReports();
+  renderArticles();
+  renderOptions();
+})();
+</script>
+</body>
+</html>
