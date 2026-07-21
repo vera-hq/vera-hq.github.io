@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>目の下 やさしい治療ガイド</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Hiragino Kaku Gothic ProN','Yu Gothic Medium','Yu Gothic',Meiryo,sans-serif;
+    background:#f7f5f0; color:#1a2f5e; line-height:1.7; font-size:15px;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap { max-width:520px; margin:0 auto; padding:16px 14px 40px; }
+  .hero {
+    background:#1a2f5e; color:#ffffff; border-radius:16px;
+    padding:26px 20px 22px; text-align:center; margin-bottom:18px;
+  }
+  .hero .eyebrow { color:#c9a44c; font-size:12px; font-weight:700; letter-spacing:.15em; margin-bottom:6px; }
+  .hero h1 { font-size:22px; font-weight:800; margin-bottom:8px; }
+  .hero p { font-size:12.5px; opacity:.85; }
+  .card {
+    background:#ffffff; border:1px solid #e3ded2; border-radius:14px;
+    padding:18px 16px; margin-bottom:16px;
+  }
+  h2 {
+    font-size:16px; font-weight:800; margin-bottom:12px;
+    padding-left:10px; border-left:4px solid #c9a44c;
+  }
+  .lead-item { display:flex; gap:10px; align-items:flex-start; margin-bottom:10px; }
+  .lead-item:last-child { margin-bottom:0; }
+  .lead-num {
+    background:#c9a44c; color:#ffffff; border-radius:50%;
+    width:24px; height:24px; min-width:24px; text-align:center; line-height:24px;
+    font-weight:800; font-size:13px; margin-top:2px;
+  }
+  .lead-item b { display:block; font-size:14px; }
+  .lead-item span { font-size:13px; color:#4a5878; }
+  .type-chips { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 10px; }
+  .chip {
+    background:#eef1f8; border:1px solid #b9c2d8; border-radius:20px;
+    padding:4px 12px; font-size:12.5px; font-weight:700;
+  }
+  .note { font-size:12.5px; color:#4a5878; background:#f4f1e8; border-radius:8px; padding:10px 12px; }
+  .tx { border-radius:12px; padding:13px 14px; margin-bottom:10px; }
+  .tx-gold { background:#faf3e0; border:2px solid #c9a44c; }
+  .tx-navy { background:#eef1f8; border:1px solid #b9c2d8; }
+  .tx .tag { font-size:11px; font-weight:800; color:#8a6d1f; }
+  .tx b.name { font-size:14.5px; display:block; margin:1px 0 3px; }
+  .tx p { font-size:12.5px; color:#3a4a70; }
+  .masui-step { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin:10px 0; }
+  .m-box {
+    background:#eef1f8; border:1px solid #b9c2d8; border-radius:8px;
+    padding:6px 10px; font-size:12px; font-weight:700; text-align:center;
+  }
+  .m-box.big { background:#1a2f5e; color:#ffffff; border:none; }
+  .m-box.big small { color:#c9a44c; display:block; font-weight:700; font-size:10.5px; }
+  .m-arrow { color:#c9a44c; font-weight:800; }
+  .clinic { border-radius:14px; border:1px solid #e3ded2; padding:16px 14px; margin-bottom:14px; background:#ffffff; }
+  .clinic.main { border:2px solid #c9a44c; background:#fffdf6; }
+  .c-tag {
+    display:inline-block; background:#c9a44c; color:#ffffff; font-size:11px;
+    font-weight:800; border-radius:6px; padding:2px 10px; margin-bottom:6px;
+  }
+  .c-tag.navy { background:#1a2f5e; }
+  .clinic h3 { font-size:16.5px; font-weight:800; margin-bottom:4px; }
+  .c-access { font-size:12.5px; color:#4a5878; margin-bottom:8px; }
+  .c-point { font-size:13px; margin-bottom:8px; }
+  .c-price {
+    background:#f4f1e8; border-radius:8px; padding:9px 12px;
+    font-size:12.5px; margin-bottom:10px; color:#3a4a70;
+  }
+  .c-price b { color:#1a2f5e; }
+  .btn-row { display:flex; gap:8px; flex-wrap:wrap; }
+  .btn {
+    flex:1; min-width:100px; text-align:center; text-decoration:none;
+    border-radius:10px; padding:10px 6px; font-size:13px; font-weight:800;
+  }
+  .btn-navy { background:#1a2f5e; color:#ffffff; }
+  .btn-line { background:#ffffff; color:#1a2f5e; border:2px solid #1a2f5e; }
+  .c-hours { font-size:11.5px; color:#7a8298; margin-top:8px; }
+  .q-item { display:flex; gap:10px; align-items:flex-start; padding:9px 0; border-bottom:1px dashed #e3ded2; }
+  .q-item:last-child { border-bottom:none; }
+  .q-item input { width:19px; height:19px; min-width:19px; margin-top:3px; accent-color:#c9a44c; }
+  .q-item label { font-size:13.5px; }
+  .rules { background:#1a2f5e; color:#ffffff; border-radius:14px; padding:18px 16px; margin-bottom:16px; }
+  .rules h2 { color:#ffffff; border-left-color:#c9a44c; }
+  .rules li { list-style:none; font-size:13.5px; margin-bottom:8px; padding-left:24px; position:relative; }
+  .rules li::before { content:"✓"; color:#c9a44c; font-weight:800; position:absolute; left:4px; }
+  .rules p { font-size:11.5px; opacity:.75; margin-top:6px; }
+  footer { text-align:center; font-size:11.5px; color:#7a8298; padding-top:6px; }
+  footer b { display:block; font-size:13px; color:#1a2f5e; margin-bottom:4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">FOR YOU</div>
+    <h1>目の下 やさしい治療ガイド</h1>
+    <p>あなた専用のまとめ ｜ 2026年7月しらべ</p>
+  </div>
+
+  <div class="card">
+    <h2>🌷 まず、安心してほしいこと</h2>
+    <div class="lead-item"><div class="lead-num">1</div><div><b>痛みは麻酔でコントロールできる</b><span>眠っている間に終わる方法（静脈麻酔）もあります</span></div></div>
+    <div class="lead-item"><div class="lead-num">2</div><div><b>顔の表面に傷が残らない術式が主流</b><span>まぶたの裏側から行うので、見た目に傷は残りません</span></div></div>
+    <div class="lead-item"><div class="lead-num">3</div><div><b>焦って決めなくていい</b><span>2〜3院を比べて、じっくり選ぶのがいちばん大事です</span></div></div>
+  </div>
+
+  <div class="card">
+    <h2>🔍 原因は3タイプ</h2>
+    <div class="type-chips">
+      <span class="chip">① 脂肪のふくらみ</span>
+      <span class="chip">② 皮膚のゆるみ</span>
+      <span class="chip">③ くぼみの影（クマ）</span>
+    </div>
+    <div class="note">どれが主な原因かで合う治療が変わります。これは<b>診察でしかわからない</b>ので、最初のカウンセリングで「私の原因はどれですか？」と聞くところからスタートです。</div>
+  </div>
+
+  <div class="card">
+    <h2>💡 治療の選択肢は大きく4つ</h2>
+    <div class="tx tx-gold">
+      <span class="tag">★ 40代の定番</span>
+      <b class="name">脱脂 ＋ 脂肪注入</b>
+      <p>まぶたの裏からふくらみの脂肪を取り、くぼみには自分の脂肪を足して平らに。目安 40〜60万円／腫れ1〜2週間</p>
+    </div>
+    <div class="tx tx-gold">
+      <span class="tag">★ 再発しにくい</span>
+      <b class="name">裏ハムラ法</b>
+      <p>脂肪を捨てずに、くぼみへ移動させて平らに。まぶたの裏から行うので傷は残らない。目安 30〜55万円／腫れ1〜2週間</p>
+    </div>
+    <div class="tx tx-navy">
+      <b class="name">脱脂のみ</b>
+      <p>目安 15〜40万円。ただし40代は取った跡がへこむことがあり、単独は慎重に（先生とよく相談を）</p>
+    </div>
+    <div class="tx tx-navy">
+      <b class="name">切らない系（注射・機械）</b>
+      <p>ダウンタイムほぼなし。ただし脂肪そのものは減らせないので、根本改善には限界があります</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>💤 「痛くない」って、ほんと？</h2>
+    <p style="font-size:13.5px;margin-bottom:4px">麻酔は段階で選べます。</p>
+    <div class="masui-step">
+      <span class="m-box">点眼<br>(目薬)</span><span class="m-arrow">→</span>
+      <span class="m-box">局所<br>(注射)</span><span class="m-arrow">→</span>
+      <span class="m-box">笑気<br>+5千円前後</span><span class="m-arrow">→</span>
+      <span class="m-box big">静脈麻酔<small>眠って受ける +3〜11万円</small></span>
+    </div>
+    <div class="note">術中は麻酔でほぼ無痛にできます。術後2〜3日は鈍い痛みが出ますが、処方の痛み止めで大丈夫な範囲。腫れ・内出血は1〜2週間で、メイクやメガネでカバーできます。</div>
+  </div>
+
+  <div class="card" style="background:transparent;border:none;padding:0">
+    <h2 style="margin-bottom:14px">🏥 候補クリニック3院</h2>
+
+    <div class="clinic main">
+      <span class="c-tag">本命候補</span>
+      <h3>モティーフ銀座クリニック</h3>
+      <div class="c-access">📍 銀座一丁目駅 徒歩30秒 ｜ 草加から日比谷線直通 約45分</div>
+      <div class="c-point">形成外科専門医×美容外科専門医の<b>ダブル資格</b>の先生が執刀。女性の先生（外崎麻里先生）が在籍。全部の術式に対応。</div>
+      <div class="c-price">脱脂 <b>27.5万</b>（モニター19.25万）｜ 裏ハムラ <b>54万</b>（46万）<br>静脈麻酔 +5.5万 ｜ 税込</div>
+      <div class="btn-row">
+        <a class="btn btn-navy" href="https://motif-ginza.com/" target="_blank" rel="noopener">公式サイト</a>
+        <a class="btn btn-line" href="https://www.google.com/maps/search/?api=1&query=%E3%83%A2%E3%83%86%E3%82%A3%E3%83%BC%E3%83%95%E9%8A%80%E5%BA%A7%E3%82%AF%E3%83%AA%E3%83%8B%E3%83%83%E3%82%AF" target="_blank" rel="noopener">地図を開く</a>
+      </div>
+      <div class="c-hours">休診：水・日</div>
+    </div>
+
+    <div class="clinic">
+      <span class="c-tag navy">いちばん近い・女性院長</span>
+      <h3>武蔵浦和 はるの形成外科スキンクリニック</h3>
+      <div class="c-access">📍 武蔵浦和駅 徒歩3分 ｜ 草加から乗換1回 約30分</div>
+      <div class="c-point">形成外科専門医の<b>女性院長</b>。スタッフも全員女性で相談しやすい雰囲気。リスクもきちんと説明してくれる誠実タイプ。</div>
+      <div class="c-price">脱脂 <b>24.2万</b> ｜ 切開たるみ取り <b>33万</b> ｜ 税込<br>※眠る麻酔なし（笑気 +5,500円）・裏ハムラなし</div>
+      <div class="btn-row">
+        <a class="btn btn-navy" href="https://haruno-clinic.com/" target="_blank" rel="noopener">公式サイト</a>
+        <a class="btn btn-line" href="https://www.google.com/maps/search/?api=1&query=%E6%AD%A6%E8%94%B5%E6%B5%A6%E5%92%8C%E3%81%AF%E3%82%8B%E3%81%AE%E5%BD%A2%E6%88%90%E5%A4%96%E7%A7%91%E3%82%B9%E3%82%AD%E3%83%B3%E3%82%AF%E3%83%AA%E3%83%8B%E3%83%83%E3%82%AF" target="_blank" rel="noopener">地図を開く</a>
+      </div>
+      <div class="c-hours">休診：日祝＋不定休 ｜ TEL <a href="tel:048-714-5591" style="color:#1a2f5e">048-714-5591</a></div>
+    </div>
+
+    <div class="clinic">
+      <span class="c-tag navy">裏ハムラの実績重視なら</span>
+      <h3>Designoクリニック 表参道</h3>
+      <div class="c-access">📍 表参道駅 徒歩2分 ｜ 草加から半蔵門線直通 約50分</div>
+      <div class="c-point">裏ハムラ<b>2,000件超</b>の経験を持つ形成外科専門医（稲富先生）が担当。</div>
+      <div class="c-price">脱脂 <b>15.8万</b> ｜ 裏ハムラ <b>50万</b> ｜ 静脈麻酔 +5万<br>※税込かどうかはカウンセリングで確認</div>
+      <div class="btn-row">
+        <a class="btn btn-navy" href="https://designo-clinic.com/" target="_blank" rel="noopener">公式サイト</a>
+        <a class="btn btn-line" href="https://www.google.com/maps/search/?api=1&query=Designo+Clinic+%E8%A1%A8%E5%8F%82%E9%81%93" target="_blank" rel="noopener">地図を開く</a>
+      </div>
+      <div class="c-hours">10:00〜19:00 不定休 ｜ TEL <a href="tel:03-6803-8255" style="color:#1a2f5e">03-6803-8255</a></div>
+    </div>
+
+    <div class="note" style="margin-bottom:16px">価格は2026年7月時点の公式サイト掲載値（変わることがあります）。カウンセリングは3院とも受けてOK。比べてから決めましょう。</div>
+  </div>
+
+  <div class="card">
+    <h2>📝 カウンセリングで聞くことリスト</h2>
+    <div class="q-item"><input type="checkbox" id="q1"><label for="q1">私のたるみの主な原因はどれですか？（脂肪・皮膚・くぼみ）</label></div>
+    <div class="q-item"><input type="checkbox" id="q2"><label for="q2">おすすめの術式と、他の方法との比較を教えてください</label></div>
+    <div class="q-item"><input type="checkbox" id="q3"><label for="q3">先生ご自身の、この手術の症例数はどれくらいですか？</label></div>
+    <div class="q-item"><input type="checkbox" id="q4"><label for="q4">麻酔・お薬代まで込みの「税込総額」はいくらですか？（見積書をもらう）</label></div>
+    <div class="q-item"><input type="checkbox" id="q5"><label for="q5">眠る麻酔（静脈麻酔）は使えますか？追加費用は？</label></div>
+    <div class="q-item"><input type="checkbox" id="q6"><label for="q6">へこみ・左右差が出たときの保証はありますか？（書面で確認）</label></div>
+    <div class="q-item"><input type="checkbox" id="q7"><label for="q7">腫れはどれくらい続きますか？仕事・予定はいつから大丈夫？</label></div>
+  </div>
+
+  <div class="rules">
+    <h2>🛡️ 3つの約束ごと</h2>
+    <li><b>その場で契約しない</b>（かならず1晩持ち帰る）</li>
+    <li><b>「今日だけ割引」には乗らない</b>（モニター条件は書面で確認）</li>
+    <li><b>2〜3院を比べてから決める</b></li>
+    <p>美容医療の消費者相談は2年で約2.8倍に増えています（国民生活センター）。この約束を守れば大丈夫。</p>
+  </div>
+
+  <footer>
+    <b>あなたのペースで、ゆっくり選んでね 🍀</b>
+    このまとめは情報整理です。最終判断はお医者さんの診察で。<br>
+    2026年7月調べ
+  </footer>
+
+</div>
+</body>
+</html>
