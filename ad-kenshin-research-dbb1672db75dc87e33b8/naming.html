@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
+<title>サービス名 30候補 → 5部屋会議 → 上位5案</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Hiragino Kaku Gothic ProN','Yu Gothic UI','Yu Gothic','Meiryo',sans-serif; background:#f4f6fa; color:#22304e; line-height:1.75; }
+  .wrap { max-width:1040px; margin:0 auto; padding:0 20px 60px; }
+  header { background:#1a2f5e; color:#fff; padding:30px 20px 26px; }
+  .h-in { max-width:1040px; margin:0 auto; }
+  .badge { display:inline-block; background:#c9a44c; color:#1a2f5e; font-weight:700; font-size:12px; padding:3px 12px; border-radius:20px; }
+  h1 { font-size:23px; margin:10px 0 4px; }
+  .h-sub { color:#c8d2e8; font-size:13px; }
+  section { margin-top:36px; }
+  h2 { font-size:18px; color:#1a2f5e; border-left:5px solid #c9a44c; padding-left:12px; margin-bottom:10px; }
+  .card { background:#fff; border-radius:12px; border:1px solid #e2e7f1; padding:18px 22px; }
+  .note { font-size:12px; color:#7a86a0; margin-top:8px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; background:#fff; }
+  th { background:#1a2f5e; color:#fff; font-weight:600; padding:7px 9px; text-align:center; white-space:nowrap; }
+  th:first-child { text-align:left; }
+  td { padding:8px 9px; border-bottom:1px solid #edf0f6; text-align:center; font-variant-numeric:tabular-nums; }
+  td:first-child { text-align:left; white-space:nowrap; }
+  tr:last-child td { border-bottom:none; }
+  tr.win { background:#fdf6e8; }
+  tr.win td { font-weight:700; }
+  .tblwrap { overflow-x:auto; background:#fff; border-radius:12px; border:1px solid #e2e7f1; padding:6px; }
+  .ng { color:#c0392b; font-weight:700; }
+  .ok { color:#2e7d51; }
+
+  .top5 { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:14px; }
+  .n { background:#fff; border:1px solid #e2e7f1; border-radius:12px; padding:18px 20px; position:relative; }
+  .n.first { border:2.5px solid #c9a44c; }
+  .rank { display:inline-flex; width:30px; height:30px; border-radius:50%; background:#1a2f5e; color:#c9a44c; font-weight:700; align-items:center; justify-content:center; font-size:14px; }
+  .n h3 { font-size:20px; color:#1a2f5e; margin:8px 0 2px; }
+  .score { font-size:12px; color:#8a6d1f; font-weight:700; }
+  .n p { font-size:13px; margin-top:8px; }
+  .rooms { font-size:11.5px; color:#7a86a0; margin-top:8px; border-top:1px solid #eef1f6; padding-top:8px; }
+  .caution { background:#fdf6e8; border-radius:8px; padding:8px 12px; font-size:12px; color:#5a4a1e; margin-top:10px; }
+
+  .room { background:#fff; border-radius:12px; border:1px solid #e2e7f1; padding:16px 20px; margin-top:12px; }
+  .room b.rn { color:#1a2f5e; font-size:14px; }
+  .room .v { font-size:13px; margin-top:6px; }
+  .verdict { background:#1a2f5e; color:#fff; border-radius:12px; padding:22px 26px; margin-top:16px; }
+  .verdict h2 { color:#c9a44c; border-color:#c9a44c; }
+  .verdict li { margin:8px 0; font-size:14px; }
+  .verdict b { color:#c9a44c; }
+  footer { margin-top:36px; padding-top:14px; border-top:1px solid #d8dfec; font-size:11.5px; color:#7a86a0; }
+</style>
+</head>
+<body>
+<script>(function(){try{if(localStorage.getItem('vk_gate')==='1')return;}catch(e){return;}
+var PW="kenshin2026";
+var o=document.createElement('div');
+o.setAttribute('style','position:fixed;inset:0;z-index:2147483647;background:#1a2f5e;display:flex;align-items:center;justify-content:center;font-family:"Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic","Meiryo",sans-serif;');
+o.innerHTML='<div style="background:#fff;border-radius:14px;padding:34px 30px;max-width:380px;width:88%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.3)">'
++'<div style="font-size:13px;font-weight:700;letter-spacing:.18em;color:#c9a44c">VERA</div>'
++'<h2 style="font-size:18px;color:#1a2f5e;margin:10px 0 6px;border:none;padding:0">合言葉を入力してください</h2>'
++'<p style="font-size:12.5px;color:#5a6b8c;line-height:1.7;margin-bottom:16px">このページは関係者限定です。<br>お渡しした合言葉をご入力ください。</p>'
++'<input id="vki" type="password" autocomplete="off" placeholder="合言葉" style="width:100%;padding:11px 14px;font-size:15px;border:1px solid #c3ccdd;border-radius:8px;outline:none;box-sizing:border-box">'
++'<button id="vkb" style="width:100%;margin-top:12px;padding:11px;font-size:15px;font-weight:700;color:#1a2f5e;background:#c9a44c;border:none;border-radius:8px;cursor:pointer">ひらく</button>'
++'<div id="vke" style="color:#c0392b;font-size:12.5px;margin-top:10px;min-height:18px"></div></div>';
+var run=function(){document.body.appendChild(o);
+var i=document.getElementById('vki'),b=document.getElementById('vkb'),e=document.getElementById('vke');
+var ok=function(){if(i.value===PW){try{localStorage.setItem('vk_gate','1')}catch(x){}location.reload()}else{e.textContent='合言葉が違います';i.value='';i.focus()}};
+b.addEventListener('click',ok);i.addEventListener('keydown',function(ev){if(ev.key==='Enter')ok()});i.focus();};
+if(document.body){run()}else{document.addEventListener('DOMContentLoaded',run)}
+})();</script>
+<header><div class="h-in">
+  <span class="badge">社内検討用・A2A会議の議事録</span>
+  <h1>サービス名 30候補 → 5部屋の合議 → 上位5案</h1>
+  <div class="h-sub">2026-07-23（VERA管理本部室）｜営業室・広報室・美術室・法務統制室・顧客成功室が並列で評価</div>
+</div></header>
+<div class="wrap">
+
+  <section>
+    <h2>1. 結論 ─ 上位5案</h2>
+    <div class="top5">
+      <div class="n first"><span class="rank">1</span>
+        <h3>広告カルテ</h3>
+        <div class="score">13点／5部屋すべてが上位5に入れた唯一の案・NG指定ゼロ</div>
+        <p>「カルテ」は本来<b>積み重なる記録</b>。毎月届く前提が名前に内蔵され、単発に聞こえない。「先月のカルテと比べて」が自然に言え、蓄積そのものが解約防止になる。</p>
+        <div class="rooms">顧客成功室1位／法務3位／営業3位／広報5位／美術5位</div>
+        <div class="caution">美術室：シンボルが紙・バインダー止まりで図の伸びしろは小さい。医療色（赤・十字）を避ける配色設計が必要。</div>
+      </div>
+      <div class="n"><span class="rank">2</span>
+        <h3>広告健診</h3>
+        <div class="score">14点（最高得点）・NG指定ゼロ</div>
+        <p>説明ゼロで意味が伝わる＝<b>人に説明できる＝口コミが回る</b>。「健診が届きました」と社内で言いやすく、上司への説明コストがゼロ。</p>
+        <div class="rooms">営業2位／広報2位／顧客成功2位／法務4位（美術は上位入りせず）</div>
+        <div class="caution">顧客成功室：「健診」は年1〜数回の語感がわずかに弱点。営業室：広告を出していない既存客には入口が狭い。</div>
+      </div>
+      <div class="n"><span class="rank">3</span>
+        <h3>霧ばらい</h3>
+        <div class="score">10点・広報1位／法務1位、ただし営業室がNG指定</div>
+        <p>VUCA（先の見えない霧）と直結し、<b>「霧が晴れる体験」を名前だけで伝える</b>。造語性が高く商標も取りやすい部類。</p>
+        <div class="rooms">広報1位／法務1位（造語で衝突リスク最小）</div>
+        <div class="caution">営業室：単体では意味が立たず「で、それ何？」が必ず来る＝説明コストを名前が生む。<b>→ 単独名でなく、キャッチ／副題での起用が有力。</b></div>
+      </div>
+      <div class="n"><span class="rank">4</span>
+        <h3>数字の窓</h3>
+        <div class="score">4点・NG指定ゼロ・法務2位</div>
+        <p>「見せるだけ」＝運用しない実態と名前が一致し、<b>業務範囲の誤認リスクが全候補で最も低い</b>。効果保証の含意もなし。</p>
+        <div class="rooms">法務2位（安全性が最高評価）</div>
+      </div>
+      <div class="n"><span class="rank">5</span>
+        <h3>マンスリー・コンパス</h3>
+        <div class="score">3点・NG指定ゼロ・顧客成功3位</div>
+        <p>「マンスリー」が継続を名前で確定させ、コンパスは<b>「毎月方角を確かめる」＝終わりがない行為</b>。「もう分かったからいい」になりにくい。</p>
+        <div class="rooms">顧客成功3位（継続の手触り）</div>
+        <div class="caution">美術室・法務室：カタカナ長音を含む長めの名前は、12回並べたときに字面が疲れる／同種語の存在を要調査。</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. 採点表（1位5点〜5位1点で集計）</h2>
+    <div class="tblwrap"><table>
+      <tr><th>候補</th><th>営業室</th><th>広報室</th><th>美術室</th><th>法務統制室</th><th>顧客成功室</th><th>合計</th><th>NG指定</th></tr>
+      <tr class="win"><td>#3 広告カルテ</td><td>3</td><td>1</td><td>1</td><td>3</td><td>5</td><td>13</td><td class="ok">なし（5/5部屋）</td></tr>
+      <tr class="win"><td>#1 広告健診</td><td>4</td><td>4</td><td>—</td><td>2</td><td>4</td><td>14</td><td class="ok">なし</td></tr>
+      <tr><td>#13 霧ばらい</td><td>—</td><td>5</td><td>—</td><td>5</td><td>—</td><td>10</td><td class="ng">営業室</td></tr>
+      <tr><td>#2 売上健診</td><td>5</td><td>—</td><td>—</td><td>—</td><td>—</td><td>5</td><td class="ng">顧客成功・法務注意</td></tr>
+      <tr><td>#10 灯台</td><td>—</td><td>—</td><td>5</td><td>—</td><td>—</td><td>5</td><td class="ng">法務（「東大」と同音）</td></tr>
+      <tr><td>#7 アドコンパス</td><td>—</td><td>—</td><td>4</td><td>—</td><td>—</td><td>4</td><td>法務：要調査</td></tr>
+      <tr><td>#15 数字の窓</td><td>—</td><td>—</td><td>—</td><td>4</td><td>—</td><td>4</td><td class="ok">なし</td></tr>
+      <tr><td>#21 育つ広告</td><td>—</td><td>3</td><td>—</td><td>—</td><td>—</td><td>3</td><td class="ng">営業・美術・法務</td></tr>
+      <tr><td>#17 アドレンズ</td><td>—</td><td>—</td><td>3</td><td>—</td><td>—</td><td>3</td><td>法務：要調査</td></tr>
+      <tr><td>#12 マンスリー・コンパス</td><td>—</td><td>—</td><td>—</td><td>—</td><td>3</td><td>3</td><td class="ok">なし</td></tr>
+      <tr><td>#22 LTVレンズ</td><td>—</td><td>—</td><td>—</td><td>1</td><td>2</td><td>3</td><td class="ng">営業室</td></tr>
+      <tr><td>#28 ミカタ</td><td>—</td><td>2</td><td>—</td><td>—</td><td>1</td><td>3</td><td class="ng">営業室</td></tr>
+      <tr><td>#5 数字の定期健診</td><td>2</td><td>—</td><td>—</td><td>—</td><td>—</td><td>2</td><td class="ok">なし</td></tr>
+      <tr><td>#14 ミチシルベ</td><td>—</td><td>—</td><td>2</td><td>—</td><td>—</td><td>2</td><td>法務：要調査</td></tr>
+      <tr><td>#11 広告の羅針盤</td><td>1</td><td>—</td><td>—</td><td>—</td><td>—</td><td>1</td><td class="ok">なし</td></tr>
+    </table></div>
+    <div class="note">得点だけなら「広告健診」が1位（14点）。ただし<b>5部屋すべてが上位に入れたのは「広告カルテ」だけ</b>（合意度で1位）。上の順位はNG指定の有無を加味しています。</div>
+  </section>
+
+  <section>
+    <h2>3. 各部屋が全会一致で外した候補</h2>
+    <div class="card">
+      <table style="text-align:left">
+        <tr><th style="text-align:left">候補</th><th style="text-align:left">外した理由（複数部屋が指摘）</th></tr>
+        <tr><td>#18 広告の通信簿</td><td style="text-align:left">受け取る担当者＝広告の当事者。毎月「自分の成績表」が届く構図で、解約動機を毎月配ることになる（営業・広報・美術・法務・顧客成功の5部屋が指摘）</td></tr>
+        <tr><td>#23 一年後の売上を見る</td><td style="text-align:left">将来売上の予測・約束と受け取られる余地（景表法リスク）。長くて口頭で言えず、ロゴにもできない</td></tr>
+        <tr><td>#26 後方支援レポート／#27 黒子の目</td><td style="text-align:left">VERAの内部語。お客様が受け取る価値の名前になっていない。「目」は監視の含みも</td></tr>
+        <tr><td>#20 みえる化レポート</td><td style="text-align:left">一般名詞すぎて埋没。安く見え、月5万プランと釣り合わない</td></tr>
+        <tr><td>#8/#9 CLARITY 系</td><td style="text-align:left">同名の著名な無償ツールが同じ広告・解析領域に存在（出所混同の懸念）。口頭でも綴りを聞き返される</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>4. 各部屋の独自の気づき（原文の要点）</h2>
+    <div class="room"><b class="rn">営業室</b>
+      <div class="v">健診・カルテ系の最大の営業価値は差別化ではなく<b>免罪符</b>。運用代行を求められたときに「うちは診る側です」と名前で断れるので、既存代理店がいる会社にも敵対せず入れる＝紹介が回りやすい。／3プランの格は名前でなく<b>呼び方</b>で作れる。</div>
+    </div>
+    <div class="room"><b class="rn">広報室</b>
+      <div class="v">商品の本質は「レポート」ではなく<b>「霧が晴れる瞬間」</b>。名前は体験で取り、説明語を副題に置く二段構えが最も発信しやすい。<br>キャッチ案：<b>「広告の数字は、読めないんじゃない。霧がかかっているだけ。」</b></div>
+    </div>
+    <div class="room"><b class="rn">美術室</b>
+      <div class="v">本サービスは毎月手元に届く定期便なので、単発の派手さより<b>12回並べて飽きない字面</b>で選ぶべき。カタカナ長音を含む候補は反復で疲れる。</div>
+    </div>
+    <div class="room"><b class="rn">法務・統制室</b>
+      <div class="v">名称以上に<b>納品物の呼称が要注意</b>——「診断書」は医師作成文書を想起させるため、対外表記は<b>「月次レポート／診断レポート」</b>に置き換えるのが無難。／お預かりする広告CSVに個人データが混ざる場合、<b>個人情報の取扱い委託に該当し得る</b>（委託契約・安全管理措置・再委託条項の整備が必要）。／名称確定後：①J-PlatPatで類似商標調査（想定区分35類・42類）→弁理士確認 ②ドメイン・SNSハンドル確保 ③効果表示の根拠資料を保存する運用の整備。</div>
+    </div>
+    <div class="room"><b class="rn">顧客成功室</b>
+      <div class="v">継続商品の名前は「診断（一度で終わる行為）」より<b>「記録・観測（続けるほど価値が増す行為）」</b>を指す語のほうが強い。／名前が「採点」に寄るほど社内で共有されず、更新判断の場に商品名が出てこない＝責められ感の回避はMRR防衛策。</div>
+    </div>
+    <div class="note">※上記は各部屋の評価をそのまま集約したものです。最終決定は社長。</div>
+  </section>
+
+  <div class="verdict">
+    <h2>5. 管理本部室からの推奨（決めるのは社長）</h2>
+    <ol style="margin-left:22px">
+      <li><b>「広告カルテ」を本体名に</b>——5部屋すべてが賛成した唯一の案。毎月積み上がる＝サブスクの必然性が名前に入っており、顧客成功室が最重視する「解約防止」に直結します。</li>
+      <li><b>「霧ばらい」はキャッチに回す</b>——広報室・法務室の1位を捨てずに活かす形。VUCA（先の見えない霧）と直結し、営業室が指摘した「単体では意味が立たない」弱点も、副題なら問題になりません。</li>
+      <li>推奨する組み合わせ：<br><b style="font-size:17px">広告カルテ ── 広告の霧を、毎月晴らす。</b></li>
+      <li><b>納品物の呼称は「診断書」→「月次レポート」に変更</b>（法務室指摘）。資料側は修正済みです。</li>
+    </ol>
+  </div>
+
+  <footer>
+    <p>本ページはA2A（部屋間の並列会議）の議事録です。30候補の全リストは同フォルダの「候補リスト.md」にあります。採点は各部屋が独立に出した上位5案を1位5点〜5位1点で集計したもので、部屋どうしの相談は行っていません（独立評価）。</p>
+  </footer>
+</div>
+</body>
+</html>

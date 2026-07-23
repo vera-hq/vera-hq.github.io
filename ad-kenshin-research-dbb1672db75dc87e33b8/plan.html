@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>広告×LTV 月次健診（仮称）商品化 叩き台 v1｜VERA社内検討用</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Hiragino Kaku Gothic ProN','Yu Gothic UI','Yu Gothic','Meiryo',sans-serif; background:#f4f6fa; color:#22304e; line-height:1.75; }
+  .wrap { max-width:1000px; margin:0 auto; padding:0 20px 60px; }
+  header { background:#1a2f5e; color:#ffffff; padding:30px 20px 26px; }
+  .h-in { max-width:1000px; margin:0 auto; }
+  .badge { display:inline-block; background:#c9a44c; color:#1a2f5e; font-weight:700; font-size:12px; padding:3px 12px; border-radius:20px; margin-right:6px; }
+  .badge.ghost { background:transparent; color:#c9a44c; border:1px solid #c9a44c; }
+  h1 { font-size:24px; margin:10px 0 4px; }
+  .h-sub { color:#c8d2e8; font-size:13px; }
+  section { margin-top:34px; }
+  h2 { font-size:18px; color:#1a2f5e; border-left:5px solid #c9a44c; padding-left:12px; margin-bottom:10px; }
+  .card { background:#ffffff; border-radius:12px; border:1px solid #e2e7f1; padding:18px 22px; }
+  .note { font-size:12px; color:#7a86a0; margin-top:8px; }
+  b.gold { color:#8a6d1f; }
+  td, th { font-variant-numeric: tabular-nums; }
+
+  /* 商品の芯 */
+  .core { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; }
+  .core .c { background:#ffffff; border:1px solid #e2e7f1; border-radius:10px; padding:14px 16px; }
+  .core .c b { color:#1a2f5e; display:block; margin-bottom:4px; }
+  .core .c span { font-size:13px; }
+
+  /* プラン表 */
+  .plans { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px; }
+  .plan { background:#ffffff; border:1px solid #e2e7f1; border-radius:12px; padding:20px; position:relative; }
+  .plan.reco { border:2px solid #c9a44c; }
+  .plan .tag { position:absolute; top:-12px; left:18px; background:#c9a44c; color:#1a2f5e; font-size:11.5px; font-weight:700; padding:2px 12px; border-radius:14px; }
+  .plan h3 { color:#1a2f5e; font-size:16px; }
+  .plan .price { font-size:26px; font-weight:700; color:#1a2f5e; margin:6px 0 2px; }
+  .plan .price small { font-size:13px; font-weight:400; color:#7a86a0; }
+  .plan ul { margin:10px 0 0 18px; font-size:13px; }
+  .plan li { margin:4px 0; }
+  .plan .for { font-size:12px; color:#8a6d1f; background:#fdf6e8; border-radius:6px; padding:6px 10px; margin-top:12px; }
+
+  /* 流れ図 */
+  .flow { display:flex; flex-wrap:wrap; gap:0; align-items:stretch; }
+  .step { flex:1 1 200px; background:#ffffff; border:1px solid #e2e7f1; border-radius:10px; padding:14px 16px; margin:6px; }
+  .step .no { display:inline-flex; width:26px; height:26px; border-radius:50%; background:#1a2f5e; color:#c9a44c; font-weight:700; align-items:center; justify-content:center; font-size:13px; margin-bottom:6px; }
+  .step b { display:block; color:#1a2f5e; font-size:14px; }
+  .step span { font-size:12.5px; }
+  .step.goldstep { background:#1a2f5e; border-color:#1a2f5e; }
+  .step.goldstep b { color:#c9a44c; }
+  .step.goldstep span { color:#c8d2e8; }
+  .step.goldstep .no { background:#c9a44c; color:#1a2f5e; }
+
+  table { width:100%; border-collapse:collapse; font-size:13.5px; background:#ffffff; }
+  th { background:#1a2f5e; color:#ffffff; font-weight:600; padding:8px 12px; text-align:left; }
+  td { padding:9px 12px; border-bottom:1px solid #edf0f6; }
+  tr:last-child td { border-bottom:none; }
+  .num { text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  td.was { color:#a4adc0; text-decoration:line-through; font-size:12.5px; }
+  td.now { color:#1a2f5e; font-weight:700; }
+  th.now { background:#c9a44c; color:#1a2f5e; }
+  .updated { display:inline-block; background:#fdf6e8; border:1px solid #c9a44c; border-radius:8px; padding:10px 14px; font-size:13px; color:#5a4a1e; margin-bottom:12px; }
+
+  .ask { background:#ffffff; border:2px solid #1a2f5e; border-radius:12px; padding:18px 22px; }
+  .ask ol { margin-left:20px; }
+  .ask li { margin:8px 0; }
+  footer { margin-top:40px; padding-top:14px; border-top:1px solid #d8dfec; font-size:12px; color:#7a86a0; }
+  @media print { body{background:#fff} section{break-inside:avoid} }
+</style>
+</head>
+<body>
+<script>(function(){try{if(localStorage.getItem('vk_gate')==='1')return;}catch(e){return;}
+var PW="kenshin2026";
+var o=document.createElement('div');
+o.setAttribute('style','position:fixed;inset:0;z-index:2147483647;background:#1a2f5e;display:flex;align-items:center;justify-content:center;font-family:"Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic","Meiryo",sans-serif;');
+o.innerHTML='<div style="background:#fff;border-radius:14px;padding:34px 30px;max-width:380px;width:88%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.3)">'
++'<div style="font-size:13px;font-weight:700;letter-spacing:.18em;color:#c9a44c">VERA</div>'
++'<h2 style="font-size:18px;color:#1a2f5e;margin:10px 0 6px;border:none;padding:0">合言葉を入力してください</h2>'
++'<p style="font-size:12.5px;color:#5a6b8c;line-height:1.7;margin-bottom:16px">このページは関係者限定です。<br>お渡しした合言葉をご入力ください。</p>'
++'<input id="vki" type="password" autocomplete="off" placeholder="合言葉" style="width:100%;padding:11px 14px;font-size:15px;border:1px solid #c3ccdd;border-radius:8px;outline:none;box-sizing:border-box">'
++'<button id="vkb" style="width:100%;margin-top:12px;padding:11px;font-size:15px;font-weight:700;color:#1a2f5e;background:#c9a44c;border:none;border-radius:8px;cursor:pointer">ひらく</button>'
++'<div id="vke" style="color:#c0392b;font-size:12.5px;margin-top:10px;min-height:18px"></div></div>';
+var run=function(){document.body.appendChild(o);
+var i=document.getElementById('vki'),b=document.getElementById('vkb'),e=document.getElementById('vke');
+var ok=function(){if(i.value===PW){try{localStorage.setItem('vk_gate','1')}catch(x){}location.reload()}else{e.textContent='合言葉が違います';i.value='';i.focus()}};
+b.addEventListener('click',ok);i.addEventListener('keydown',function(ev){if(ev.key==='Enter')ok()});i.focus();};
+if(document.body){run()}else{document.addEventListener('DOMContentLoaded',run)}
+})();</script>
+<header>
+  <div class="h-in">
+    <span class="badge">社内検討用・叩き台</span><span class="badge ghost">全価格は代表承認までは仮</span>
+    <h1>広告×LTV 月次健診（仮称）— 商品化 叩き台 v1.1</h1>
+    <div class="h-sub">継続収益（サブスク）商品の新弾｜作成 2026-07-23（VERA管理本部室）｜v1.1＝オペ所要時間を実測値に更新・競合36サービスの相場を反映</div>
+  </div>
+</header>
+<div class="wrap">
+
+  <section>
+    <h2>1. 商品の芯（何を毎月届けるか）</h2>
+    <div class="core">
+      <div class="c"><b>📊 Excel 2冊</b><span>キャンペーン×クリエイティブ月次＋登録経路×LTV。現場が触れる生データの作業台。</span></div>
+      <div class="c"><b>📑 月次レポート（HTML） 1枚</b><span>社長が5分で読む結論。「今月の3行」と改善5手（金額つき）。</span></div>
+      <div class="c"><b>🔁 答え合わせ</b><span>先月の改善提案がどうなったかを毎月冒頭で検証。続けるほど価値が積もる＝解約防止線。</span></div>
+      <div class="c"><b>🧮 数字の信用</b><span>全KPIをプログラム計算で整合（検算38項目）。「表のどこを電卓で叩いても合う」が売り。</span></div>
+    </div>
+    <div class="note">立ち位置：広告の<b>運用代行はしない</b>（運用者は客側 or 既存代理店のまま）。「見える化と改善の指し手」だけを売る＝既存代理店と競合せず、むしろ相乗り可能。表現は「後方支援」で統一（「コンサル」は使わない）。</div>
+  </section>
+
+  <section>
+    <h2>2. 価格の叩き台（3プラン・最後はお客様が選ぶ）</h2>
+    <div class="plans">
+      <div class="plan">
+        <h3>ライト</h3>
+        <div class="price">月 1.5万円<small>（仮）</small></div>
+        <ul>
+          <li>1媒体（Metaなど）の月次健診</li>
+          <li>Excel2冊＋月次レポート（HTML）</li>
+          <li>改善5手（金額試算つき）</li>
+          <li>納品はLINE/メールのリンク1本</li>
+        </ul>
+        <div class="for">まず数字を見える化したい店舗・小規模EC向け</div>
+      </div>
+      <div class="plan reco">
+        <span class="tag">おすすめの真ん中</span>
+        <h3>スタンダード</h3>
+        <div class="price">月 3万円<small>（仮）</small></div>
+        <ul>
+          <li>全媒体統合（Meta/Google/LINE ほか）</li>
+          <li>登録経路×LTV分析つき</li>
+          <li><b>月1回30分のオンライン読み合わせ</b></li>
+          <li>先月提案の答え合わせレポート</li>
+        </ul>
+        <div class="for">広告費 月50万円以上・リピート商材の会社向け</div>
+      </div>
+      <div class="plan">
+        <h3>プレミアム</h3>
+        <div class="price">月 5万円<small>（仮）</small></div>
+        <ul>
+          <li>スタンダードの全部</li>
+          <li><b>週次の勝ち負けアラート</b>（クリエイティブ疲弊の早期検知）</li>
+          <li>LINE登録導線などLTV施策の伴走</li>
+          <li>四半期ごとのLTV再計算</li>
+        </ul>
+        <div class="for">広告費 月150万円以上・攻めの投資判断をしたい会社向け</div>
+      </div>
+    </div>
+    <div class="note">値ごろ感の根拠：デモ版の改善5手の試算が<b class="gold">月+147万円</b>——月3万円の健診費はその<b>約2%</b>。「レポート代は改善益の誤差」と言える位置に置いた。サブスク商品の積み上げ粒度（月1.5万×多数）とも同じ桁。<b>個社ごとの値引き交渉には割らない</b>（パッケージ固定の鉄則）。協業先には「協業パッケージの定番オプション」としてこの型のまま載せる。<br>
+    <b>📊 競合36サービス（35社）を調査した結果（2026-07-23）</b>：レポート自動化ツールは<b>月2〜5万</b>（Lisket 2万／アドレポ 3万／Databeat 3.3万／ATOM 5万）、同じことを人がやるコンサル型は<b>月10〜30万</b>（THE MOLTS 15万〜／ユニアド 20万〜）。<b class="gold">この3プランは「ツールの値段で、コンサルの中身」の位置</b>＝価格に違和感なく、中身で差がつく。むしろプレミアム5万は<b>7〜8万まで上げても相場内</b>（実績が付いた後の選択肢）。</div>
+  </section>
+
+  <section>
+    <h2>3. 入り方（確立済みプレイブックの適用）</h2>
+    <div class="flow">
+      <div class="step"><span class="no">1</span><b>実績パートナー 2社</b><span>初月は<b>お客様が値段を決める</b>。引き換えに事例化への協力（名前の出し方は別途同意＝軸B）。</span></div>
+      <div class="step"><span class="no">2</span><b>2ヶ月目からプラン選択</b><span>3プランを並べ「選ぶのはあなたです」。継続希望者だけが正式サブスクへ自然移行。</span></div>
+      <div class="step goldstep"><span class="no">3</span><b>事例→横展開</b><span>Before/After事例を武器に、協業先リストの広告実施客へ定番オプションとして展開。</span></div>
+    </div>
+    <div class="note">この3段は 既存商品で設計済みの段階移行戦略をそのまま適用します（新規に発明する部分はありません）。</div>
+  </section>
+
+  <section>
+    <h2>4. 毎月のオペレーション（VERA側の原価）</h2>
+    <div class="updated">⚙ <b>2026-07-23 更新</b>：専用エンジン（広告健診エンジン）が完成し、実測で <b>70〜100分 → 約25分/社</b> になりました。以下は実測値です。</div>
+    <table>
+      <tr><th>工程</th><th>やること</th><th class="num">手作業だと</th><th class="num now">エンジン導入後</th></tr>
+      <tr><td>① データ受領</td><td>お客様からCSVを受け取り、所定のフォルダに置く（依頼文もエンジンが下書き）</td><td class="num was">15分</td><td class="num now">5分</td></tr>
+      <tr><td>② 生成</td><td><b>「健診を実行」をダブルクリックするだけ</b>。Excel2冊＋診断書＋納品文が自動で出る</td><td class="num was">15分</td><td class="num now">1分</td></tr>
+      <tr><td>③ 所見の最終確認</td><td>自動抽出された改善5手に、人の目で赤を入れる（<b>ここは残す＝商品の価値</b>）</td><td class="num was">30分</td><td class="num now">15分</td></tr>
+      <tr><td>④ 納品</td><td>自動生成された文面にリンクを入れて送付（送信は人）</td><td class="num was">10分</td><td class="num now">3分</td></tr>
+      <tr><td colspan="2"><b>合計（ライト/スタンダード）</b>　※スタンダードは読み合わせ30分を加算</td><td class="num was">70〜100分</td><td class="num now"><b>約25分/社</b></td></tr>
+    </table>
+    <div class="note">初回のみセットアップ半日/社（媒体・経路・LTVの前提値づくり）。<b>10社受けても月4〜5時間</b>＝高単価の伴走事業の伴走時間をほぼ圧迫しない。数値の突合検算もエンジンが自動で行うため、<b>手計算ミスによる事故がゼロ</b>になったのも実務上の大きな変化。</div>
+  </section>
+
+  <section>
+    <h2>5. MRRへの寄与（10社構成の一例・仮）</h2>
+    <table>
+      <tr><th>構成（例）</th><th class="num">単価（仮）</th><th class="num">社数</th><th class="num">月額MRR</th></tr>
+      <tr><td>ライト</td><td class="num">15,000円</td><td class="num">5</td><td class="num">75,000円</td></tr>
+      <tr><td>スタンダード</td><td class="num">30,000円</td><td class="num">4</td><td class="num">120,000円</td></tr>
+      <tr><td>プレミアム</td><td class="num">50,000円</td><td class="num">1</td><td class="num">50,000円</td></tr>
+      <tr><td><b>合計</b></td><td></td><td class="num"><b>10</b></td><td class="num"><b>245,000円</b></td></tr>
+    </table>
+    <div class="note">月次継続収益の目標ロードマップに<b class="gold">「広告健診 約25万円」の新しい柱</b>を1本足せる規模。既存商材とのクロスセルも効く：口コミ支援先・理念浸透支援先・見守り支援先は全員「広告数字を見たい」動機を持つ。<br>
+    <b>時間あたりで見ると</b>——スタンダード（月3万円／所要55分＝健診25分＋読み合わせ30分）で<b class="gold">時給換算 約3.3万円</b>、ライト（月1.5万円／25分）で<b class="gold">約3.6万円</b>。エンジンが原価を潰したぶんが、そのまま利益として残る構造です。</div>
+  </section>
+
+  <section>
+    <h2>6. 守り（先に固めておく3点）</h2>
+    <div class="card">
+      <ul style="margin-left:18px; font-size:13.5px">
+        <li style="margin:6px 0"><b>NDAを先に</b> — 売上・広告費という機微数字を預かるため、データ受領前にNDAたたき台を一言提案（協業の鉄則を適用。締結は人間承認）。</li>
+        <li style="margin:6px 0"><b>成果は保証しない</b> — 利用規約に「数値は媒体管理画面に準拠／改善提案は『私はこう思います、なぜなら』の共有であり成果保証ではない」を明記。診断書フッターにも常設。</li>
+        <li style="margin:6px 0"><b>請求はfreee一本</b> — インボイス対応請求書＋顧客請求カルテに乗せる（請求・入金の土台PJと接続。請求先は協業先リストと照合）。</li>
+      </ul>
+    </div>
+    <div class="note">個人調査を扱う商品と違い、扱うのは<b>集計済みの広告数値のみ（個人データなし）</b>のため、業法リスクは軽い。規約たたき台は着手承認後に法務・統制室で作成。</div>
+  </section>
+
+  <section>
+    <h2>7. 決めてほしいこと（この叩き台の承認ポイント）</h2>
+    <div class="ask">
+      <ol>
+        <li><b>価格帯</b> — 1.5万／3万／5万（月）の3階建て。高すぎる・安すぎる・妥当のどれですか？（エンジンBの粒度に合わせ意図的に軽めに置いています）</li>
+        <li><b>商品名</b> — 仮称「広告×LTV 月次健診」。健診の比喩を正式名にしてよいか、別案（例:「売上の定期健診」「アドドック」）にするか。</li>
+        <li><b>実績パートナー2社の人選</b> — 候補：候補4社を選定済み（実名は口頭でお伝えします）。どこから声をかけるべきでしょうか？</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    <p>本ページは社内検討用の叩き台です。全価格・全数値は代表承認までは「仮」。確定後に商談用ページ（相手メリット前面・内部語なし）を別途作成します。</p>
+    <p style="margin-top:4px">根拠にした型：段階移行の価格プレイブック（既存商品で設計済）／サブスク商品の積み上げ粒度／パッケージ固定の鉄則／選ぶ自由クロージング。型の実物デモ: artifacts/2026-07-20_0015_メタ広告月次レポートパック_v1</p>
+    <p style="margin-top:8px"><b>更新履歴</b>　v1.0（2026-07-23 16:29）初版／<b>v1.1（同日）</b>：①4章のオペ所要時間を、広告健診エンジン完成後の実測値（70〜100分→約25分/社）に更新 ②5章に時間あたり利益を追記 ③2章に競合36サービス調査の相場（ツール型2〜5万・コンサル型10〜30万）を反映。</p>
+  </footer>
+</div>
+</body>
+</html>

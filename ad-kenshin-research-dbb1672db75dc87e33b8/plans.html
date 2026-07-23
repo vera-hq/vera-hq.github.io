@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
+<title>広告カルテ｜3プランのご案内</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Hiragino Kaku Gothic ProN','Yu Gothic UI','Yu Gothic','Meiryo',sans-serif; background:#f4f6fa; color:#22304e; line-height:1.75; }
+  .wrap { max-width:1040px; margin:0 auto; padding:0 20px 60px; }
+  header { background:#1a2f5e; color:#fff; padding:40px 20px 34px; border-left:14px solid #c9a44c; }
+  .h-in { max-width:1040px; margin:0 auto; }
+  .en { font-size:13px; letter-spacing:.28em; color:#c9a44c; }
+  h1 { font-size:36px; margin:8px 0 0; letter-spacing:.02em; }
+  .rule { width:150px; height:3px; background:#c9a44c; margin:14px 0 12px; }
+  .tagline { font-size:16px; color:#c8d2e8; }
+  .provider { font-size:12px; color:#8fa0c0; margin-top:16px; }
+  section { margin-top:40px; }
+  h2 { font-size:20px; color:#1a2f5e; border-left:5px solid #c9a44c; padding-left:12px; }
+  .lead { font-size:13.5px; color:#7a86a0; margin:6px 0 14px; padding-left:17px; }
+  .card { background:#fff; border-radius:12px; border:1px solid #e2e7f1; padding:20px 24px; }
+  .note { font-size:11.5px; color:#7a86a0; margin-top:10px; }
+
+  .twocol { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .do, .dont { background:#fff; border-radius:12px; padding:18px 22px; }
+  .do { border:2px solid #1a2f5e; } .dont { border:2px solid #c9a44c; background:#fdf6e8; }
+  .do h4 { color:#1a2f5e; font-size:14px; } .dont h4 { color:#8a6d1f; font-size:14px; }
+  .do ul, .dont ul { margin:8px 0 0 20px; font-size:13.5px; }
+  .do li, .dont li { margin:5px 0; }
+  .why { background:#1a2f5e; color:#c9a44c; border-radius:12px; padding:16px 22px; margin-top:14px; font-size:15px; font-weight:700; }
+
+  .plans { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; }
+  .plan { background:#fff; border:1px solid #e2e7f1; border-radius:12px; padding:20px; position:relative; display:flex; flex-direction:column; }
+  .plan.reco { border:2.5px solid #c9a44c; }
+  .tag { position:absolute; top:-12px; left:18px; background:#c9a44c; color:#1a2f5e; font-size:11.5px; font-weight:700; padding:2px 12px; border-radius:14px; }
+  .plan h3 { font-size:16px; color:#1a2f5e; }
+  .price { font-size:27px; font-weight:700; color:#1a2f5e; margin:4px 0 2px; font-variant-numeric:tabular-nums; }
+  .plan.reco .price { color:#8a6d1f; }
+  .scope { font-size:12px; color:#7a86a0; border-bottom:1px solid #e2e7f1; padding-bottom:10px; margin-bottom:10px; }
+  .plan ul { margin:0 0 0 18px; font-size:13px; flex:1; }
+  .plan li { margin:7px 0; }
+  .plan li small { color:#7a86a0; font-size:11.5px; }
+  .cannot { background:#f7f4ec; border-radius:8px; padding:8px 12px; font-size:11.5px; color:#5a4a1e; margin-top:12px; }
+  .target { font-size:11.5px; color:#8a6d1f; background:#fdf6e8; border-radius:8px; padding:8px 12px; margin-top:8px; }
+  .ratio { font-size:12px; color:#fff; background:#1a2f5e; border-radius:8px; padding:8px 12px; margin-top:8px; text-align:center; }
+  .ratio b { color:#c9a44c; font-size:17px; }
+
+  .chartrow { display:flex; gap:26px; align-items:center; flex-wrap:wrap; }
+  .legendbox { flex:1; min-width:250px; }
+  .lg { display:flex; gap:9px; align-items:flex-start; font-size:12.5px; margin:7px 0; }
+  .lg i { flex:0 0 auto; width:13px; height:13px; border-radius:3px; margin-top:4px; }
+  .lg small { color:#7a86a0; font-size:11px; }
+
+  .big { background:#1a2f5e; color:#fff; border-radius:12px; padding:22px 26px; display:flex; gap:26px; align-items:center; flex-wrap:wrap; margin-top:14px; }
+  .big .n { font-size:52px; font-weight:700; color:#c9a44c; line-height:1; }
+  .big p { font-size:13.5px; color:#c8d2e8; flex:1; min-width:260px; }
+
+  .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
+  .step { background:#fff; border:1.5px solid #e2e7f1; border-radius:12px; padding:16px 18px; }
+  .step.human { background:#c9a44c; border-color:#c9a44c; }
+  .step .no { display:inline-flex; width:30px; height:30px; border-radius:50%; background:#1a2f5e; color:#fff; font-weight:700; align-items:center; justify-content:center; font-size:14px; }
+  .step.human .no { color:#c9a44c; }
+  .step b { display:block; color:#1a2f5e; margin-top:8px; font-size:14px; }
+  .step span { font-size:12px; color:#7a86a0; }
+  .step.human span { color:#5a4a1e; }
+
+  .closing { background:#1a2f5e; color:#fff; border-radius:12px; padding:30px 30px 24px; margin-top:40px; border-top:6px solid #c9a44c; }
+  .closing h2 { color:#fff; border:none; padding:0; font-size:26px; }
+  .closing p { color:#c8d2e8; font-size:14px; margin-top:6px; }
+  footer { margin-top:34px; padding-top:14px; border-top:1px solid #d8dfec; font-size:11.5px; color:#7a86a0; }
+  @media (max-width:760px){ .twocol{grid-template-columns:1fr} }
+  @media print { body{background:#fff} section{break-inside:avoid} }
+</style>
+</head>
+<body>
+<script>(function(){try{if(localStorage.getItem('vk_gate')==='1')return;}catch(e){return;}
+var PW="kenshin2026";
+var o=document.createElement('div');
+o.setAttribute('style','position:fixed;inset:0;z-index:2147483647;background:#1a2f5e;display:flex;align-items:center;justify-content:center;font-family:"Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic","Meiryo",sans-serif;');
+o.innerHTML='<div style="background:#fff;border-radius:14px;padding:34px 30px;max-width:380px;width:88%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.3)">'
++'<div style="font-size:13px;font-weight:700;letter-spacing:.18em;color:#c9a44c">VERA</div>'
++'<h2 style="font-size:18px;color:#1a2f5e;margin:10px 0 6px;border:none;padding:0">合言葉を入力してください</h2>'
++'<p style="font-size:12.5px;color:#5a6b8c;line-height:1.7;margin-bottom:16px">このページは関係者限定です。<br>お渡しした合言葉をご入力ください。</p>'
++'<input id="vki" type="password" autocomplete="off" placeholder="合言葉" style="width:100%;padding:11px 14px;font-size:15px;border:1px solid #c3ccdd;border-radius:8px;outline:none;box-sizing:border-box">'
++'<button id="vkb" style="width:100%;margin-top:12px;padding:11px;font-size:15px;font-weight:700;color:#1a2f5e;background:#c9a44c;border:none;border-radius:8px;cursor:pointer">ひらく</button>'
++'<div id="vke" style="color:#c0392b;font-size:12.5px;margin-top:10px;min-height:18px"></div></div>';
+var run=function(){document.body.appendChild(o);
+var i=document.getElementById('vki'),b=document.getElementById('vkb'),e=document.getElementById('vke');
+var ok=function(){if(i.value===PW){try{localStorage.setItem('vk_gate','1')}catch(x){}location.reload()}else{e.textContent='合言葉が違います';i.value='';i.focus()}};
+b.addEventListener('click',ok);i.addEventListener('keydown',function(ev){if(ev.key==='Enter')ok()});i.focus();};
+if(document.body){run()}else{document.addEventListener('DOMContentLoaded',run)}
+})();</script>
+<header><div class="h-in">
+  <div class="en">AD KARTE</div>
+  <h1>広告カルテ</h1>
+  <div class="rule"></div>
+  <div class="tagline">広告の数字と、お客様の育ちを、毎月1枚に。</div>
+  <div class="provider">株式会社VERA Holdings　|　後方支援　|　2026-07-23</div>
+</div></header>
+<div class="wrap">
+
+  <section>
+    <h2>1. このサービスは何か</h2>
+    <p class="lead">広告の「運用」ではなく、「見える化と次の一手」だけをお預かりします。</p>
+    <div class="twocol">
+      <div class="do"><h4>お引き受けすること</h4><ul><li>数字を正しく見えるようにする</li><li>次の一手を、金額の試算つきで示す</li><li>毎月続けて、答え合わせをする</li></ul></div>
+      <div class="dont"><h4>お引き受けしないこと</h4><ul><li>広告の運用代行はしません（運用はお客様 or 既存の代理店のまま）</li><li>成果をお約束するものではありません</li></ul></div>
+    </div>
+    <div class="why">運用を持たないから、どの媒体・どの代理店にも遠慮なく「ここが漏れています」と言えます。</div>
+  </section>
+
+  <section>
+    <h2>2. 3つのプラン ─ できることの「深さ」で分かれています</h2>
+    <p class="lead">最後に選ぶのはお客様です。いつでも上げ下げできます。</p>
+    <div class="plans">
+  <div class="plan">
+    
+    <h3>ライト</h3>
+    <div class="price">月 1.5万円</div>
+    <div class="scope">対象媒体：1媒体（Meta など）</div>
+    <ul><li><b>月次の数値レポート（Excel 2冊）</b><br><small>キャンペーン別・クリエイティブ別・日別の全指標</small></li><li><b>診断書（1枚・5分で読める）</b><br><small>今月の結論3行＋どこが効いて、どこが漏れているか</small></li><li><b>改善の指し手 5つ</b><br><small>各手に「いくら増えるか」の試算つき</small></li><li><b>リンク1本で納品</b><br><small>パソコンでもスマホでも開ける。social共有も可</small></li></ul>
+    <div class="cannot"><b>含まないもの</b><br>複数媒体をまたいだ比較／登録経路別のLTV分析／読み合わせの時間</div>
+    <div class="target">まず自社の数字を見えるようにしたい店舗・小規模EC</div>
+    <div class="ratio">同種サービスの平均の <b>20%</b> の価格</div>
+  </div>
+  <div class="plan reco">
+    <span class="tag">おすすめ</span>
+    <h3>スタンダード</h3>
+    <div class="price">月 3万円</div>
+    <div class="scope">対象媒体：全媒体（Meta／Google／LINE ほか）</div>
+    <ul><li><b>ライトの全部</b></li><li><b>全媒体を1枚に統合</b><br><small>媒体ごとの「刈り取り」と「新規の仕入れ」を分けて可視化</small></li><li><b>登録経路 × LTV 分析</b><br><small>LINE経由・メール経由・ゲスト購入で1年後の価値がどう違うか</small></li><li><b>月1回30分の読み合わせ</b><br><small>画面を一緒に見ながら、次の一手を決める（オンライン）</small></li><li><b>先月提案の答え合わせ</b><br><small>打った手がどうなったかを毎月の冒頭で検証</small></li></ul>
+    <div class="cannot"><b>含まないもの</b><br>週次のアラート／LTV施策そのものの伴走</div>
+    <div class="target">広告費 月50万円以上・リピート購入がある会社</div>
+    <div class="ratio">同種サービスの平均の <b>40%</b> の価格</div>
+  </div>
+  <div class="plan">
+    
+    <h3>プレミアム</h3>
+    <div class="price">月 5万円</div>
+    <div class="scope">対象媒体：全媒体＋週次モニタリング</div>
+    <ul><li><b>スタンダードの全部</b></li><li><b>週次の勝ち負けアラート</b><br><small>クリエイティブが疲れ始めた瞬間に通知（数字が折れる前に交代）</small></li><li><b>LTV施策の伴走</b><br><small>登録導線の設計など、お客様が育つ仕組みづくりを一緒に</small></li><li><b>四半期ごとのLTV再計算</b><br><small>前提を貼り替え、許容CPA（いくらまで新規に払えるか）を更新</small></li></ul>
+    <div class="cannot"><b>含まないもの</b><br>広告の運用代行（当社は運用しません）</div>
+    <div class="target">広告費 月150万円以上・攻めの投資判断をしたい会社</div>
+    <div class="ratio">同種サービスの平均の <b>67%</b> の価格</div>
+  </div></div>
+    <div class="note">※価格はすべて税別・月額。広告の運用代行は含みません。「同種サービスの平均」＝月額を公開している13サービスの単純平均 74,446円（2026-07-23時点の公開情報）。</div>
+  </section>
+
+  <section>
+    <h2>3. 同じ領域のサービスは、いくらか</h2>
+    <p class="lead">2026-07-23時点で公開情報を調べた 36サービス（35社）の内訳</p>
+    <div class="card"><div class="chartrow">
+    <svg viewBox="0 0 300 300" role="img" aria-label="価格帯の分布" style="width:300px;max-width:100%;height:auto"><path d="M150.0,32.0 A118,118 0 0,1 268.0,150.0 L212.0,150.0 A62,62 0 0,0 150.0,88.0 Z" fill="#c9a44c"/><text x="213.6" y="91.4" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">9</text><path d="M268.0,150.0 A118,118 0 0,1 240.4,225.8 L197.5,189.9 A62,62 0 0,0 212.0,150.0 Z" fill="#1a2f5e"/><text x="234.6" y="185.8" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">4</text><path d="M240.4,225.8 A118,118 0 0,1 150.0,268.0 L150.0,212.0 A62,62 0 0,0 197.5,189.9 Z" fill="#b0453a"/><text x="188.0" y="236.6" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">5</text><path d="M150.0,268.0 A118,118 0 0,1 109.6,260.9 L128.8,208.3 A62,62 0 0,0 150.0,212.0 Z" fill="#8fa0c0"/><path d="M109.6,260.9 A118,118 0 0,1 91.0,252.2 L119.0,203.7 A62,62 0 0,0 128.8,208.3 Z" fill="#c3ccdd"/><path d="M91.0,252.2 A118,118 0 0,1 150.0,32.0 L150.0,88.0 A62,62 0 0,0 119.0,203.7 Z" fill="#e2e7f1"/><text x="63.1" y="131.7" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">15</text>
+      <text x="150" y="143" text-anchor="middle" font-size="13" fill="#7a86a0">調査</text>
+      <text x="150" y="170" text-anchor="middle" font-size="30" font-weight="700" fill="#1a2f5e">36</text>
+      <text x="150" y="188" text-anchor="middle" font-size="12" fill="#7a86a0">サービス</text>
+    </svg><div class="legendbox"><div class="lg"><i style="background:#c9a44c"></i><span><b>月2〜5万円（固定）</b>　9件<br><small>レポート自動化ツール中心</small></span></div><div class="lg"><i style="background:#1a2f5e"></i><span><b>月10〜30万円（固定）</b>　4件<br><small>人が助言する型</small></span></div><div class="lg"><i style="background:#b0453a"></i><span><b>広告費に連動（20%等）</b>　5件<br><small>運用代行型</small></span></div><div class="lg"><i style="background:#8fa0c0"></i><span><b>無料</b>　2件<br><small>受注前の入口診断</small></span></div><div class="lg"><i style="background:#c3ccdd"></i><span><b>時間単価</b>　1件<br><small>作業代行型</small></span></div><div class="lg"><i style="background:#e2e7f1"></i><span><b>非公開・要問い合わせ</b>　15件<br><small>価格を出していない</small></span></div></div></div></div>
+    <div class="note">価格は各社Webの公開情報。「〜円〜」は最低価格であり、要件次第で上振れします。</div>
+  </section>
+
+  <section>
+    <h2>4.「広告 × お客様の育ち × 次の一手」を1枚にしている先は</h2>
+    <p class="lead">36サービスのうち、何社が対応しているか</p>
+    <div class="card"><svg viewBox="0 0 880 184" role="img" aria-label="横棒グラフ" style="width:100%;height:auto"><text x="240" y="22" text-anchor="end" font-size="13" fill="#22304e">数字を並べる（レポート）</text>
+      <rect x="250" y="0" width="486.0" height="34" rx="4" fill="#1a2f5e"/>
+      <text x="744.0" y="22" font-size="13" font-weight="700" fill="#1a2f5e">36件</text><text x="240" y="68" text-anchor="end" font-size="13" fill="#22304e">次の一手まで言う</text>
+      <rect x="250" y="46" width="324.0" height="34" rx="4" fill="#1a2f5e"/>
+      <text x="582.0" y="68" font-size="13" font-weight="700" fill="#1a2f5e">24件</text><text x="240" y="114" text-anchor="end" font-size="13" fill="#22304e">お客様の育ち（LTV）まで見る</text>
+      <rect x="250" y="92" width="27.0" height="34" rx="4" fill="#8fa0c0"/>
+      <text x="285.0" y="114" font-size="13" font-weight="700" fill="#1a2f5e">2件</text><text x="240" y="160" text-anchor="end" font-size="13" fill="#22304e">広告 × LTV × 指し手 の3点セット</text>
+      <rect x="250" y="138" width="2.0" height="34" rx="4" fill="#b0453a"/>
+      <text x="260.0" y="160" font-size="13" font-weight="700" fill="#1a2f5e">0件</text></svg></div>
+    <div class="big">
+      <div><div class="n">0</div><div style="font-size:13px;color:#c8d2e8">サービス</div></div>
+      <p>お客様の育ち（LTV）を見る2サービスは、いずれも顧客管理の道具であって、広告レポートではありません。つまり<b style="color:#c9a44c">「広告の数字」と「お客様の育ち」は、今も別々の場所に置かれたまま</b>になっています。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>5. 他の選び方と、何が違うのか</h2>
+    <p class="lead">固有名詞は伏せ、3つの型に整理して比較しています</p>
+    <div class="card"><div class="chartrow"><svg viewBox="-95 0 610 400" role="img" aria-label="4タイプの比較" style="width:100%;max-width:520px;height:auto"><polygon points="210.0,173.0 235.7,191.7 225.9,221.8 194.1,221.8 184.3,191.7" fill="none" stroke="#e2e7f1" stroke-width="1"/><polygon points="210.0,146.0 261.4,183.3 241.7,243.7 178.3,243.7 158.6,183.3" fill="none" stroke="#e2e7f1" stroke-width="1"/><polygon points="210.0,119.0 287.0,175.0 257.6,265.5 162.4,265.5 133.0,175.0" fill="none" stroke="#e2e7f1" stroke-width="1"/><polygon points="210.0,92.0 312.7,166.6 273.5,287.4 146.5,287.4 107.3,166.6" fill="none" stroke="#e2e7f1" stroke-width="1"/><polygon points="210.0,65.0 338.4,158.3 289.4,309.2 130.6,309.2 81.6,158.3" fill="none" stroke="#e2e7f1" stroke-width="1"/><line x1="210" y1="200" x2="210.0" y2="65.0" stroke="#e2e7f1"/><line x1="210" y1="200" x2="338.4" y2="158.3" stroke="#e2e7f1"/><line x1="210" y1="200" x2="289.4" y2="309.2" stroke="#e2e7f1"/><line x1="210" y1="200" x2="130.6" y2="309.2" stroke="#e2e7f1"/><line x1="210" y1="200" x2="81.6" y2="158.3" stroke="#e2e7f1"/><polygon points="210.0,92.0 338.4,158.3 225.9,221.8 194.1,221.8 158.6,183.3" fill="#b9c2d4" fill-opacity="0.08" stroke="#b9c2d4" stroke-width="1.8"/><circle cx="210.0" cy="92.0" r="3" fill="#b9c2d4"/><circle cx="338.4" cy="158.3" r="3" fill="#b9c2d4"/><circle cx="225.9" cy="221.8" r="3" fill="#b9c2d4"/><circle cx="194.1" cy="221.8" r="3" fill="#b9c2d4"/><circle cx="158.6" cy="183.3" r="3" fill="#b9c2d4"/><polygon points="210.0,173.0 312.7,166.6 289.4,309.2 178.3,243.7 107.3,166.6" fill="#8fa0c0" fill-opacity="0.08" stroke="#8fa0c0" stroke-width="1.8"/><circle cx="210.0" cy="173.0" r="3" fill="#8fa0c0"/><circle cx="312.7" cy="166.6" r="3" fill="#8fa0c0"/><circle cx="289.4" cy="309.2" r="3" fill="#8fa0c0"/><circle cx="178.3" cy="243.7" r="3" fill="#8fa0c0"/><circle cx="107.3" cy="166.6" r="3" fill="#8fa0c0"/><polygon points="210.0,146.0 287.0,175.0 289.4,309.2 178.3,243.7 81.6,158.3" fill="#c3ccdd" fill-opacity="0.08" stroke="#c3ccdd" stroke-width="1.8"/><circle cx="210.0" cy="146.0" r="3" fill="#c3ccdd"/><circle cx="287.0" cy="175.0" r="3" fill="#c3ccdd"/><circle cx="289.4" cy="309.2" r="3" fill="#c3ccdd"/><circle cx="178.3" cy="243.7" r="3" fill="#c3ccdd"/><circle cx="81.6" cy="158.3" r="3" fill="#c3ccdd"/><polygon points="210.0,92.0 312.7,166.6 289.4,309.2 130.6,309.2 107.3,166.6" fill="#c9a44c" fill-opacity="0.22" stroke="#c9a44c" stroke-width="3"/><circle cx="210.0" cy="92.0" r="4.5" fill="#c9a44c"/><circle cx="312.7" cy="166.6" r="4.5" fill="#c9a44c"/><circle cx="289.4" cy="309.2" r="4.5" fill="#c9a44c"/><circle cx="130.6" cy="309.2" r="4.5" fill="#c9a44c"/><circle cx="107.3" cy="166.6" r="4.5" fill="#c9a44c"/><text x="210.0" y="49.6" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1a2f5e">価格の手頃さ</text><text x="356.9" y="156.3" text-anchor="start" font-size="12.5" font-weight="700" fill="#1a2f5e">数字の網羅性</text><text x="300.8" y="328.9" text-anchor="start" font-size="12.5" font-weight="700" fill="#1a2f5e">次の一手の具体性</text><text x="119.2" y="328.9" text-anchor="end" font-size="12.5" font-weight="700" fill="#1a2f5e">お客様の育ち(LTV)</text><text x="63.1" y="156.3" text-anchor="end" font-size="12.5" font-weight="700" fill="#1a2f5e">手間の少なさ</text></svg><div class="legendbox"><div class="lg"><i style="background:#b9c2d4"></i><span>A社型（レポート自動化ツール）　月2〜5万</span></div><div class="lg"><i style="background:#8fa0c0"></i><span>B社型（人が助言する型）　月10〜30万</span></div><div class="lg"><i style="background:#c3ccdd"></i><span>C社型（運用代行）　広告費の20%</span></div><div class="lg"><i style="background:#c9a44c"></i><span>広告カルテ（当社）　月1.5〜5万</span></div><div class="note" style="margin-top:10px">5段階の点数は、公開情報をもとに当社が相対的に評価した目安です（絶対的な優劣ではありません）。</div></div></div></div>
+    <div class="twocol" style="margin-top:14px">
+      <div class="card" style="">
+        <b style="color:#1a2f5e;font-size:14px">A社型（レポート自動化ツール）　月2〜5万</b>
+        <div style="font-size:12.5px;color:#7a86a0;margin-top:4px">データは豊富に並ぶ。ただし「で、どうする？」は自社で考える</div></div><div class="card" style="">
+        <b style="color:#1a2f5e;font-size:14px">B社型（人が助言する型）　月10〜30万</b>
+        <div style="font-size:12.5px;color:#7a86a0;margin-top:4px">次の一手は言ってくれる。ただし価格が5〜10倍</div></div><div class="card" style="">
+        <b style="color:#1a2f5e;font-size:14px">C社型（運用代行）　広告費の20%</b>
+        <div style="font-size:12.5px;color:#7a86a0;margin-top:4px">丸ごと任せられる。ただしレポートは付帯物で、評価者と実行者が同じ</div></div><div class="card" style="background:#1a2f5e;border-color:#c9a44c;border-width:2px">
+        <b style="color:#c9a44c;font-size:14px">広告カルテ（当社）　月1.5〜5万</b>
+        <div style="font-size:12.5px;color:#c8d2e8;margin-top:4px">ツールの価格帯で、指し手とLTVまで。運用は持たない</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>6. 価格の位置</h2>
+    <p class="lead">月額を公開している 13サービスと並べたとき</p>
+    <div class="card"><svg viewBox="0 0 880 276" role="img" aria-label="横棒グラフ" style="width:100%;height:auto"><text x="240" y="22" text-anchor="end" font-size="13" fill="#22304e">当社ライト</text>
+      <rect x="250" y="0" width="40.5" height="34" rx="4" fill="#c9a44c"/>
+      <text x="298.5" y="22" font-size="13" font-weight="700" fill="#1a2f5e">15,000円</text><text x="240" y="68" text-anchor="end" font-size="13" fill="#22304e">当社スタンダード</text>
+      <rect x="250" y="46" width="81.0" height="34" rx="4" fill="#c9a44c"/>
+      <text x="339.0" y="68" font-size="13" font-weight="700" fill="#1a2f5e">30,000円</text><text x="240" y="114" text-anchor="end" font-size="13" fill="#22304e">当社プレミアム</text>
+      <rect x="250" y="92" width="135.0" height="34" rx="4" fill="#c9a44c"/>
+      <text x="393.0" y="114" font-size="13" font-weight="700" fill="#1a2f5e">50,000円</text><text x="240" y="160" text-anchor="end" font-size="13" fill="#22304e">道具型の平均</text>
+      <rect x="250" y="138" width="97.1" height="34" rx="4" fill="#8fa0c0"/>
+      <text x="355.1" y="160" font-size="13" font-weight="700" fill="#1a2f5e">35,975円</text><text x="240" y="206" text-anchor="end" font-size="13" fill="#22304e">公開全体の平均</text>
+      <rect x="250" y="184" width="201.0" height="34" rx="4" fill="#1a2f5e"/>
+      <text x="459.0" y="206" font-size="13" font-weight="700" fill="#1a2f5e">74,446円</text><text x="240" y="252" text-anchor="end" font-size="13" fill="#22304e">助言型の平均</text>
+      <rect x="250" y="230" width="438.8" height="34" rx="4" fill="#c3ccdd"/>
+      <text x="696.8" y="252" font-size="13" font-weight="700" fill="#1a2f5e">162,500円</text></svg></div>
+    <div class="note">単純平均（2026-07-23時点の公開情報）。運用代行型は広告費に連動するため、この比較には含めていません。</div>
+  </section>
+
+  <section>
+    <h2>7. なぜ、この価格でお出しできるのか</h2>
+    <p class="lead">人がやる部分を残し、機械でよい部分は機械に任せているためです</p>
+    <div class="steps">
+      <div class="step"><span class="no">1</span><b>データを受け取る</b><span>お客様は管理画面から書き出して送るだけ</span></div>
+      <div class="step"><span class="no">2</span><b>自動で組み上げる</b><span>レポート・診断・改善案の下書きまで機械が作る</span></div>
+      <div class="step human"><span class="no">3</span><b>人が最終確認する</b><span>お客様の商売に合っているかを人の目で確かめる（ここは残す）</span></div>
+      <div class="step"><span class="no">4</span><b>お届けする</b><span>リンク1本。パソコンでもスマホでも</span></div>
+    </div>
+    <div class="why" style="color:#fff">機械が下書きし、<span style="color:#c9a44c">人が仕上げる</span>。だから、道具の価格帯で、人の目まで付けられます。</div>
+    <div class="note">※お預かりしたデータは目的外に使いません。ご希望があれば秘密保持の取り決めを先に交わします。</div>
+  </section>
+
+  <div class="closing">
+    <h2>選ぶのは、お客様です。</h2>
+    <p>私たちは、そのための引き出しを用意するだけです。</p>
+    <div class="plans" style="margin-top:20px">
+      <div style="background:#1e3a6e;border:1px solid #3a5080;border-radius:12px;padding:16px 18px">
+        <div style="font-size:13px;font-weight:700;color:#fff">ライト</div>
+        <div style="font-size:22px;font-weight:700;color:#c9a44c;margin:2px 0">月 1.5万円</div>
+        <div style="font-size:11.5px;color:#c8d2e8">1媒体（Meta など）</div></div><div style="background:#1e3a6e;border:2px solid #c9a44c;border-radius:12px;padding:16px 18px">
+        <div style="font-size:13px;font-weight:700;color:#fff">スタンダード</div>
+        <div style="font-size:22px;font-weight:700;color:#c9a44c;margin:2px 0">月 3万円</div>
+        <div style="font-size:11.5px;color:#c8d2e8">全媒体（Meta／Google／LINE ほか）</div></div><div style="background:#1e3a6e;border:1px solid #3a5080;border-radius:12px;padding:16px 18px">
+        <div style="font-size:13px;font-weight:700;color:#fff">プレミアム</div>
+        <div style="font-size:22px;font-weight:700;color:#c9a44c;margin:2px 0">月 5万円</div>
+        <div style="font-size:11.5px;color:#c8d2e8">全媒体＋週次モニタリング</div></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>株式会社VERA Holdings（後方支援）｜広告の数字と、お客様の育ちを、毎月1枚に。</p>
+    <p style="margin-top:5px">本資料の競合データは 2026-07-23 時点で各社Webの公開情報を調査したものです（36サービス／35社）。価格は変動しますので、比較検討の際は各社の最新情報をご確認ください。改善のご提案は「私はこう思います、なぜなら」の共有であり、成果をお約束するものではありません。</p>
+  </footer>
+</div>
+</body>
+</html>
