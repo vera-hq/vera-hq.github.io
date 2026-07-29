@@ -4,25 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#F7C8CC">
 <title>てとて広場（デモ）〜petapeta-art®認定講師のひろば〜</title>
 <style>
 /* ============================================================
-   てとて広場 デモ — petapeta-art(R) 認定講師コミュニティ掲示板
+   てとて広場 デモ v2 — petapeta-art(R) 認定講師コミュニティ掲示板
    単一HTML / 外部依存ゼロ / 全データはダミー(架空)
-   palette: 桜 #F7C8CC / クリーム #FBF6EE / 茶 #8A6A54 / 深緑 #3F6B57
+   base: 桜 #F7C8CC / クリーム #FBF6EE / 茶 #8A6A54 / 深緑 #3F6B57
+   虹パステル差し色: --h1〜--h6（手形アートのカラフルさ）
    ============================================================ */
 :root{
   --sakura:#F7C8CC; --sakura-deep:#EBA8B2; --cream:#FBF6EE;
   --brown:#8A6A54; --brown-dark:#6B5140; --green:#3F6B57;
   --paper:#FFFFFF; --line:#EBDCCB; --ink:#4A3B30; --muted:#9B8672;
+  --h1:#F6A9B8; --h2:#F7C08A; --h3:#F5D97E; --h4:#9FD6AE; --h5:#9FC1E8; --h6:#C7A8E0;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{background:#EFE7DA;}
 body{
-  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Meiryo",system-ui,sans-serif;
+  font-family:"Hiragino Maru Gothic ProN","Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",system-ui,sans-serif;
   color:var(--ink); line-height:1.65; font-size:15px;
 }
-/* ---- スマホ端末風フレーム（PCで見てもスマホデモに見える） ---- */
 .phone{
   max-width:480px; margin:0 auto; min-height:100vh;
   background:var(--cream); position:relative;
@@ -36,37 +38,74 @@ body{
   font-size:11.5px; font-weight:700; letter-spacing:.06em;
   padding:6px 8px;
 }
-/* ---- ヘッダー ---- */
+/* ---- ヘッダー（虹色手形アーチ＋花びら） ---- */
 header.app{
-  background:linear-gradient(135deg,var(--sakura) 0%,#FADCD9 60%,var(--cream) 100%);
-  padding:14px 16px 12px; border-bottom:1px solid var(--line);
+  background:linear-gradient(150deg,var(--sakura) 0%,#FADCD9 45%,#FFF3E0 80%,var(--cream) 100%);
+  padding:12px 16px 10px; border-bottom:1px solid var(--line);
+  position:relative; overflow:hidden;
 }
-header.app h1{font-size:21px; color:var(--brown-dark); letter-spacing:.04em;}
-header.app h1 .maru{color:var(--green); font-size:14px; vertical-align:middle;}
-header.app p{font-size:11.5px; color:var(--brown); margin-top:2px;}
+.hand-arch{display:flex; justify-content:center; align-items:flex-end; gap:7px; margin-bottom:2px;}
+.hand-arch svg{filter:drop-shadow(0 1px 1px rgba(107,81,64,.18)); animation:handfloat 3.4s ease-in-out infinite alternate;}
+.hand-arch svg:nth-child(1){animation-delay:0s;}
+.hand-arch svg:nth-child(2){animation-delay:.4s;}
+.hand-arch svg:nth-child(3){animation-delay:.8s;}
+.hand-arch svg:nth-child(4){animation-delay:1.2s;}
+.hand-arch svg:nth-child(5){animation-delay:1.6s;}
+@keyframes handfloat{to{transform:translateY(-4px) rotate(3deg);}}
+header.app h1{font-size:21px; color:var(--brown-dark); letter-spacing:.04em; text-align:center; position:relative; z-index:2;}
+header.app h1 .maru{color:var(--green); font-size:13px; vertical-align:middle;}
+header.app p.lead{font-size:11.5px; color:var(--brown); margin-top:2px; text-align:center; position:relative; z-index:2;}
+.rainbow-rule{
+  height:4px; border-radius:999px; margin:8px auto 0; max-width:250px;
+  background:linear-gradient(90deg,var(--h1),var(--h2),var(--h3),var(--h4),var(--h5),var(--h6));
+}
+.petal{position:absolute; top:-18px; font-size:13px; opacity:0; pointer-events:none; z-index:1; animation:petalfall 8s linear infinite;}
+.petal.p1{left:12%; animation-delay:0s;}
+.petal.p2{left:55%; animation-delay:2.6s; font-size:11px;}
+.petal.p3{left:82%; animation-delay:5.2s;}
+@keyframes petalfall{
+  0%{transform:translateY(0) rotate(0); opacity:0;}
+  12%{opacity:.8;}
+  100%{transform:translateY(130px) rotate(220deg); opacity:0;}
+}
+/* ---- にぎわいティッカー ---- */
+.ticker{
+  display:flex; justify-content:center; gap:14px; align-items:center;
+  background:rgba(255,255,255,.62); font-size:11px; color:var(--brown-dark);
+  padding:6px 10px; border-bottom:1px solid var(--line);
+}
+.ticker b{color:var(--green); font-size:13px;}
+.ticker .dm{font-size:9.5px; color:#B0836F; font-weight:700;}
 /* ---- 本文 ---- */
 main{flex:1; padding:14px 14px 18px;}
 .screen{display:none;}
 .screen.active{display:block; animation:fadein .25s ease;}
 @keyframes fadein{from{opacity:0; transform:translateY(6px);}to{opacity:1; transform:none;}}
-/* ---- カード共通 ---- */
+/* ---- カード共通（スタッガー登場） ---- */
 .card{
   background:var(--paper); border:1px solid var(--line); border-radius:16px;
   padding:14px 14px 12px; margin-bottom:12px;
   box-shadow:0 2px 6px rgba(138,106,84,.06);
+  transition:box-shadow .2s ease;
 }
-.card h2{font-size:15px; color:var(--brown-dark); margin-bottom:8px; display:flex; align-items:center; gap:6px;}
+.screen.active .card,.screen.active .notice,.screen.active .post,.screen.active .report,
+.screen.active .value-card,.screen.active .member-card{animation:fadein .35s ease both;}
+.card h2{font-size:15px; color:var(--brown-dark); margin-bottom:8px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;}
 .card h2 .tag{font-size:10px; background:var(--sakura); color:var(--brown-dark); border-radius:999px; padding:2px 8px; font-weight:700;}
 .note{font-size:11px; color:var(--muted); margin-top:8px;}
 .dummy{font-size:10px; color:#B0836F; font-weight:700;}
-/* ---- ボタン（親指圏内の大きめタップ領域） ---- */
+/* ---- ボタン ---- */
 .btn{
   display:block; width:100%; border:none; cursor:pointer;
   background:var(--green); color:#fff; font-size:15px; font-weight:700;
   padding:14px; border-radius:14px; margin-top:10px; letter-spacing:.05em;
+  transition:transform .12s ease;
 }
 .btn.sub{background:#fff; color:var(--green); border:2px solid var(--green);}
 .btn:active{transform:scale(.98);}
+/* ---- 今日のハイライト ---- */
+.hilite-head{font-size:12px; font-weight:800; color:var(--brown-dark); margin-bottom:6px; display:flex; gap:6px; align-items:center;}
+.hilite-head .hn{background:linear-gradient(90deg,var(--h1),var(--h6)); color:#fff; font-size:10px; border-radius:999px; padding:2px 9px;}
 /* ---- お知らせ固定枠 ---- */
 .notice{
   background:#FFF6EC; border:1.5px solid var(--sakura-deep); border-radius:16px;
@@ -77,10 +116,28 @@ main{flex:1; padding:14px 14px 18px;}
 .notice ul{list-style:none; margin-top:6px;}
 .notice li{font-size:13px; padding:5px 0; border-bottom:1px dashed var(--line);}
 .notice li:last-child{border-bottom:none;}
+/* ---- 今日のひとこと（吹き出し） ---- */
+.kotoba{
+  position:relative; background:#FFF9F5; border-radius:14px;
+  padding:12px 14px 12px 36px; font-size:13.5px;
+}
+.kotoba::before{
+  content:"\201C"; position:absolute; left:8px; top:-4px;
+  font-size:46px; color:var(--sakura-deep); font-family:Georgia,serif; line-height:1;
+}
+.kotoba .khand{position:absolute; right:8px; bottom:6px; opacity:.45;}
+/* ---- 代表メッセージ枠 ---- */
+.daihyo{
+  background:linear-gradient(135deg,var(--sakura),#FADCD9); border:1px solid var(--sakura-deep);
+  border-radius:16px; padding:14px; margin-bottom:12px; position:relative; overflow:hidden;
+}
+.daihyo h2{font-size:14px; color:var(--brown-dark); margin-bottom:6px;}
+.daihyo p{font-size:12.5px; color:var(--brown-dark);}
+.daihyo .wm{position:absolute; right:-10px; bottom:-16px; opacity:.16; transform:rotate(-12deg);}
 /* ---- 季節カレンダー ---- */
 .season li{
   display:flex; gap:10px; align-items:flex-start; padding:8px 0;
-  border-bottom:1px dashed var(--line); font-size:13px;
+  border-bottom:1px dashed var(--line); font-size:13px; list-style:none;
 }
 .season li:last-child{border-bottom:none;}
 .season .when{
@@ -88,42 +145,70 @@ main{flex:1; padding:14px 14px 18px;}
   border:1px solid var(--line); border-radius:10px; font-size:11px;
   font-weight:800; color:var(--green); padding:5px 2px;
 }
-/* ---- サブタブ（掲示板内） ---- */
-.subtabs{display:flex; gap:6px; margin-bottom:12px;}
+.month-flip{
+  border:1.5px solid var(--green); background:#fff; color:var(--green);
+  font-size:11px; font-weight:800; border-radius:999px; padding:5px 11px; cursor:pointer; margin-left:auto;
+}
+.month-flip.on{background:var(--green); color:#fff;}
+/* ---- サブタブ ---- */
+.subtabs{display:flex; gap:6px; margin-bottom:12px; scroll-margin-top:44px;}
 .subtabs button{
   flex:1; border:1.5px solid var(--brown); background:#fff; color:var(--brown);
   font-size:12.5px; font-weight:700; padding:10px 2px; border-radius:12px; cursor:pointer;
+  transition:background .15s ease,color .15s ease;
 }
 .subtabs button.on{background:var(--brown); color:#fff;}
-/* ---- カテゴリチップ ---- */
+/* ---- カテゴリチップ（4色システム） ---- */
 .chips{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;}
 .chips button{
   border:1.5px solid var(--sakura-deep); background:#fff; color:var(--brown-dark);
   font-size:12px; font-weight:700; padding:8px 12px; border-radius:999px; cursor:pointer;
+  transition:background .15s ease,color .15s ease;
 }
 .chips button.on{background:var(--sakura-deep); color:#fff;}
 .chips.green button{border-color:var(--green); color:var(--green);}
 .chips.green button.on{background:var(--green); color:#fff;}
+.chips button.c-shukyaku{border-color:#E98CA0; color:#B44A62;}
+.chips button.c-shukyaku.on{background:#E98CA0; color:#fff;}
+.chips button.c-unei{border-color:#7FBF92; color:#2F6B47;}
+.chips button.c-unei.on{background:#7FBF92; color:#fff;}
+.chips button.c-okane{border-color:#D9B45A; color:#8A6A1E;}
+.chips button.c-okane.on{background:#D9B45A; color:#fff;}
+.chips button.c-hajimete{border-color:#A98BCB; color:#6B4E92;}
+.chips button.c-hajimete.on{background:#A98BCB; color:#fff;}
 /* ---- 投稿カード ---- */
-.post{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:12px 13px; margin-bottom:10px;}
+.post{background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:12px 13px; margin-bottom:10px; border-left:4px solid var(--line);}
+.post.b-shukyaku{border-left-color:#E98CA0;}
+.post.b-unei{border-left-color:#7FBF92;}
+.post.b-okane{border-left-color:#D9B45A;}
+.post.b-hajimete{border-left-color:#A98BCB;}
+.post.flash{animation:postflash 1.4s ease;}
+@keyframes postflash{0%,55%{background:#FFF0F3; border-color:var(--sakura-deep);}100%{background:var(--paper);}}
 .post .who{display:flex; align-items:center; gap:9px;}
 .avatar{
   width:38px; height:38px; border-radius:50%; flex:0 0 38px;
   display:flex; align-items:center; justify-content:center;
-  color:#fff; font-weight:800; font-size:14px; letter-spacing:.02em;
+  color:#fff; font-weight:800; font-size:15px; letter-spacing:.02em;
 }
 .post .meta{font-size:12px; color:var(--muted);}
 .post .meta b{color:var(--brown-dark); font-size:13.5px;}
 .post .body{font-size:13.5px; margin:8px 2px 4px; white-space:pre-line;}
-.badge-cat{display:inline-block; font-size:10px; background:var(--cream); border:1px solid var(--line); color:var(--brown); border-radius:999px; padding:2px 8px; font-weight:700;}
+.badge-cat{display:inline-block; font-size:10px; border-radius:999px; padding:2px 8px; font-weight:700; border:1px solid var(--line); background:var(--cream); color:var(--brown);}
+.badge-cat.c-shukyaku{background:#FDEFF2; border-color:#E98CA0; color:#B44A62;}
+.badge-cat.c-unei{background:#EDF7F0; border-color:#7FBF92; color:#2F6B47;}
+.badge-cat.c-okane{background:#FBF4DF; border-color:#D9B45A; color:#8A6A1E;}
+.badge-cat.c-hajimete{background:#F4EEFA; border-color:#A98BCB; color:#6B4E92;}
 .badge-mine{display:inline-block; font-size:10px; background:var(--green); color:#fff; border-radius:999px; padding:2px 8px; font-weight:700;}
-/* ---- 共感スタンプ ---- */
+/* ---- 共感スタンプ（トグル式＋花びらバースト） ---- */
 .stamps{display:flex; gap:6px; margin-top:9px; flex-wrap:wrap; align-items:center;}
 .stamp{
   position:relative; border:1.5px solid var(--sakura); background:#FFF9F5;
   color:var(--brown-dark); font-size:12px; font-weight:700;
   padding:8px 11px; border-radius:999px; cursor:pointer; overflow:visible;
+  transition:background .15s ease,color .15s ease,border-color .15s ease;
 }
+.stamp.pressed{background:var(--sakura-deep); border-color:var(--sakura-deep); color:#fff;}
+.stamp.pressed .n{color:#FFEBEF;}
 .stamp .n{color:var(--muted); font-weight:600; margin-left:3px; font-size:11px;}
 .stamp.pop{animation:pop .35s ease;}
 @keyframes pop{0%{transform:scale(1);}40%{transform:scale(1.18);}100%{transform:scale(1);}}
@@ -133,9 +218,14 @@ main{flex:1; padding:14px 14px 18px;}
   animation:flyup .8s ease forwards;
 }
 @keyframes flyup{from{opacity:1; top:-4px;}to{opacity:0; top:-26px;}}
-.replies-toggle{border:none; background:none; color:var(--green); font-size:12px; font-weight:700; cursor:pointer; padding:6px 0 0;}
+.pburst{
+  position:absolute; left:50%; top:0; font-size:10px; pointer-events:none;
+  animation:pburst .7s ease forwards;
+}
+@keyframes pburst{from{opacity:1; transform:translate(0,0) rotate(0);}to{opacity:0; transform:translate(var(--dx,0),-30px) rotate(160deg);}}
+.replies-toggle{border:none; background:none; color:var(--green); font-size:12px; font-weight:700; cursor:pointer; padding:10px 4px 4px; display:block; width:100%; text-align:left;}
 .reply{display:flex; gap:8px; margin-top:8px; padding:9px 10px; background:var(--cream); border-radius:12px;}
-.reply .avatar{width:28px; height:28px; flex:0 0 28px; font-size:11px;}
+.reply .avatar{width:28px; height:28px; flex:0 0 28px; font-size:12px;}
 .reply p{font-size:12.5px;}
 .reply p b{font-size:12px; color:var(--brown-dark); display:block;}
 /* ---- 投稿フォーム ---- */
@@ -144,7 +234,7 @@ main{flex:1; padding:14px 14px 18px;}
 .form-wrap label{font-size:12px; font-weight:700; color:var(--brown-dark); display:block; margin:8px 0 3px;}
 .form-wrap input,.form-wrap select,.form-wrap textarea{
   width:100%; border:1.5px solid var(--line); border-radius:10px; padding:11px;
-  font-size:14px; font-family:inherit; background:#fff; color:var(--ink);
+  font-size:16px; font-family:inherit; background:#fff; color:var(--ink);
 }
 .form-wrap textarea{min-height:84px; resize:vertical;}
 /* ---- 仲間さがし ---- */
@@ -154,8 +244,9 @@ main{flex:1; padding:14px 14px 18px;}
 .hit-count{font-size:12.5px; font-weight:800; color:var(--green); margin:2px 0 10px;}
 /* ---- 素材室 ---- */
 .mat-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
-.mat{background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; position:relative;}
-.mat .thumb{height:86px; display:flex; align-items:center; justify-content:center;}
+.mat{background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; position:relative; transition:transform .15s ease,box-shadow .15s ease;}
+.mat:active{transform:translateY(-3px) scale(1.01); box-shadow:0 6px 14px rgba(138,106,84,.18);}
+.mat .thumb{height:92px; display:flex; align-items:center; justify-content:center;}
 .mat .name{font-size:12px; font-weight:700; color:var(--brown-dark); padding:8px 9px 2px; line-height:1.4;}
 .mat .dl{
   margin:7px 9px 10px; display:block; width:calc(100% - 18px); border:none; cursor:pointer;
@@ -164,10 +255,12 @@ main{flex:1; padding:14px 14px 18px;}
 .mat .new{
   position:absolute; top:7px; left:7px; background:var(--green); color:#fff;
   font-size:9.5px; font-weight:800; border-radius:999px; padding:2px 8px; z-index:2;
+  animation:twinkle 1.8s ease-in-out infinite;
 }
-/* ---- まなび（知恵袋） ---- */
-.search-box{display:flex; gap:6px; margin-bottom:10px;}
-.search-box input{flex:1; border:1.5px solid var(--line); border-radius:12px; padding:12px; font-size:14px; font-family:inherit;}
+@keyframes twinkle{50%{opacity:.55;}}
+/* ---- まなび ---- */
+.search-box{display:flex; gap:6px; margin-bottom:8px;}
+.search-box input{flex:1; border:1.5px solid var(--line); border-radius:12px; padding:12px; font-size:16px; font-family:inherit;}
 .search-box button{border:none; background:var(--green); color:#fff; font-weight:700; font-size:13px; padding:0 16px; border-radius:12px; cursor:pointer;}
 .article{border:1px solid var(--line); border-radius:14px; background:#fff; margin-bottom:10px; overflow:hidden;}
 .article .head{width:100%; text-align:left; border:none; background:none; cursor:pointer; padding:12px 13px; font-family:inherit;}
@@ -184,7 +277,7 @@ main{flex:1; padding:14px 14px 18px;}
 .value-card table{width:100%; border-collapse:collapse; margin:10px 0 4px; font-size:12.5px;}
 .value-card th,.value-card td{border:1px solid var(--line); padding:8px 6px; text-align:center; background:#fff;}
 .value-card th{background:var(--cream); color:var(--brown-dark); font-size:11.5px;}
-/* ---- ひろがる予定地（オプション棚） ---- */
+/* ---- ひろがる予定地 ---- */
 .opt{display:flex; gap:10px; align-items:flex-start; padding:11px 2px; border-bottom:1px dashed var(--line);}
 .opt:last-child{border-bottom:none;}
 .opt .txt b{font-size:13px; color:var(--brown-dark); display:block;}
@@ -199,29 +292,50 @@ main{flex:1; padding:14px 14px 18px;}
 }
 .toggle.on{background:var(--green);}
 .toggle.on::after{left:23px;}
-/* ---- マイページ ---- */
+/* ---- マイページ（会員証シャイン＋透かし） ---- */
 .member-card{
   background:linear-gradient(135deg,var(--sakura),#FADCD9); border-radius:18px;
   padding:16px; color:var(--brown-dark); margin-bottom:12px;
   border:1px solid var(--sakura-deep); position:relative; overflow:hidden;
 }
+.member-card::after{
+  content:""; position:absolute; top:-60%; left:-90%; width:45%; height:220%;
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);
+  transform:rotate(8deg); animation:shine 4s ease-in-out infinite;
+}
+@keyframes shine{0%,55%{left:-90%;}100%{left:150%;}}
+.member-card .wm{position:absolute; right:-12px; bottom:-20px; opacity:.18; transform:rotate(-12deg); pointer-events:none;}
 .member-card .brand{font-size:10px; letter-spacing:.14em; font-weight:800; color:var(--brown);}
-.member-card .who{display:flex; align-items:center; gap:12px; margin:10px 0 8px;}
-.member-card .who .avatar{width:52px; height:52px; flex:0 0 52px; font-size:18px;}
+.member-card .who{display:flex; align-items:center; gap:12px; margin:10px 0 8px; position:relative; z-index:2;}
+.member-card .who .avatar{width:52px; height:52px; flex:0 0 52px; font-size:19px;}
 .member-card .who b{font-size:17px;}
 .member-card .who span{display:block; font-size:11.5px; color:var(--brown);}
-.stats{display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:6px;}
-.stats div{background:rgba(255,255,255,.75); border-radius:12px; text-align:center; padding:9px 2px;}
+.stats{display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:6px; position:relative; z-index:2;}
+.stats div{background:rgba(255,255,255,.78); border-radius:12px; text-align:center; padding:9px 2px;}
 .stats b{font-size:19px; color:var(--green); display:block; line-height:1.2;}
 .stats span{font-size:10px; color:var(--brown);}
+.stats b .cnt{font-size:inherit; color:inherit;}
 .history li{list-style:none; display:flex; gap:10px; padding:8px 0; border-bottom:1px dashed var(--line); font-size:12.5px; align-items:center;}
 .history li:last-child{border-bottom:none;}
 .history .d{flex:0 0 58px; font-size:10.5px; color:var(--muted); font-weight:700;}
-/* ---- タイムライン ---- */
+.reset-demo{
+  display:block; margin:4px auto 0; border:none; background:none; cursor:pointer;
+  font-size:11px; color:var(--muted); text-decoration:underline; font-family:inherit;
+}
+/* ---- 開催レポ（ポラロイド） ---- */
 .report{background:#fff; border:1px solid var(--line); border-radius:16px; overflow:hidden; margin-bottom:12px;}
-.report .art{height:120px; display:flex; align-items:center; justify-content:center; position:relative;}
+.report .art{padding:14px 0 6px; display:flex; align-items:center; justify-content:center; position:relative; background:linear-gradient(160deg,#FBF3EA,#FFF9F5);}
+.polaroid{
+  background:#fff; padding:8px 8px 20px; box-shadow:0 3px 10px rgba(107,81,64,.2);
+  transform:rotate(-2deg); position:relative;
+}
+.report:nth-child(even) .polaroid{transform:rotate(2deg);}
+.polaroid::before{
+  content:""; position:absolute; top:-7px; left:50%; transform:translateX(-50%) rotate(-3deg);
+  width:52px; height:15px; background:rgba(247,200,204,.8); border-radius:2px;
+}
 .report .art .dummy-tag{
-  position:absolute; right:8px; bottom:8px; background:rgba(107,81,64,.85);
+  position:absolute; right:10px; bottom:10px; background:rgba(107,81,64,.85);
   color:#fff; font-size:9.5px; font-weight:700; border-radius:999px; padding:2px 8px;
 }
 .report .inner{padding:11px 13px 12px;}
@@ -258,70 +372,125 @@ main{flex:1; padding:14px 14px 18px;}
   transition:opacity .25s; z-index:90; max-width:88%; text-align:center;
 }
 #toast.show{opacity:1;}
-/* ---- フッター＋下部タブバー ---- */
-footer.credit{text-align:center; font-size:10.5px; color:var(--muted); padding:10px 0 14px;}
+/* ---- フッター＋タブバー ---- */
+footer.credit{text-align:center; font-size:10.5px; color:var(--muted); padding:12px 0 14px;}
+.hand-parade{display:flex; justify-content:center; gap:12px; margin-bottom:6px;}
+.hand-parade svg{animation:handwave 2.6s ease-in-out infinite;}
+.hand-parade svg:nth-child(2n){transform:rotate(10deg);}
+.hand-parade svg:nth-child(2n+1){transform:rotate(-8deg);}
+.hand-parade svg:nth-child(2){animation-delay:.3s;}
+.hand-parade svg:nth-child(3){animation-delay:.6s;}
+.hand-parade svg:nth-child(4){animation-delay:.9s;}
+.hand-parade svg:nth-child(5){animation-delay:1.2s;}
+.hand-parade svg:nth-child(6){animation-delay:1.5s;}
+.hand-parade svg:nth-child(7){animation-delay:1.8s;}
+@keyframes handwave{50%{transform:translateY(-3px);}}
+.rinen{font-size:11px; color:var(--brown); font-weight:700; margin-bottom:4px; letter-spacing:.08em;}
 nav.tabbar{
   position:sticky; bottom:0; z-index:50; display:flex;
   background:#fff; border-top:1px solid var(--line);
   box-shadow:0 -4px 12px rgba(138,106,84,.08);
+  padding-bottom:env(safe-area-inset-bottom);
 }
 nav.tabbar button{
   flex:1; border:none; background:none; cursor:pointer; padding:9px 0 11px;
-  font-size:10.5px; font-weight:700; color:var(--muted); font-family:inherit;
+  font-size:10.5px; font-weight:700; color:var(--muted); font-family:inherit; position:relative;
 }
-nav.tabbar button .ic{display:block; font-size:19px; line-height:1.3;}
+nav.tabbar button .ic{display:inline-block; font-size:19px; line-height:1.3; padding:1px 12px; border-radius:999px; transition:background .2s ease;}
 nav.tabbar button.on{color:var(--green);}
-nav.tabbar button.on .ic{transform:scale(1.1);}
+nav.tabbar button.on .ic{background:var(--sakura); animation:pop .3s ease;}
+nav.tabbar .dot{
+  position:absolute; top:6px; right:24%; width:8px; height:8px; border-radius:50%;
+  background:var(--sakura-deep);
+}
 .sec-note{
   background:#FFF3E8; border:1px dashed var(--brown); border-radius:12px;
   font-size:11.5px; color:var(--brown-dark); padding:9px 11px; margin-bottom:12px;
 }
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important;}
+}
 </style>
 </head>
 <body>
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="tegata" viewBox="0 0 100 100">
+    <g>
+      <ellipse cx="50" cy="62" rx="17" ry="20"/>
+      <circle cx="30" cy="52" r="6"/><circle cx="38" cy="39" r="6.5"/>
+      <circle cx="50" cy="34" r="7"/><circle cx="62" cy="39" r="6.5"/><circle cx="70" cy="52" r="6"/>
+    </g>
+  </symbol>
+</svg>
 <div class="phone">
 
   <div class="demo-band">デモ版 ・ 掲載されている投稿 / 人物 / 数値はすべて架空（ダミー）です</div>
 
   <header class="app">
+    <span class="petal p1">🌸</span><span class="petal p2">🌸</span><span class="petal p3">🌸</span>
+    <div class="hand-arch">
+      <svg width="20" height="20"><use href="#tegata" fill="#F6A9B8"/></svg>
+      <svg width="26" height="26"><use href="#tegata" fill="#F7C08A"/></svg>
+      <svg width="30" height="30"><use href="#tegata" fill="#9FD6AE"/></svg>
+      <svg width="26" height="26"><use href="#tegata" fill="#9FC1E8"/></svg>
+      <svg width="20" height="20"><use href="#tegata" fill="#C7A8E0"/></svg>
+    </div>
     <h1>てとて広場 <span class="maru">〜petapeta-art<span style="font-size:9px;vertical-align:super;">®</span>認定講師のひろば〜</span></h1>
-    <p>全国47都道府県の先生の「て」と「て」がつながる場所（デモ）</p>
+    <p class="lead">全国47都道府県の先生の「て」と「て」がつながる場所（デモ）</p>
+    <div class="rainbow-rule"></div>
   </header>
+
+  <div class="ticker">
+    <span>今日の投稿 <b class="cnt" data-n="3">0</b>件</span>
+    <span>今週のレポ <b class="cnt" data-n="5">0</b>件</span>
+    <span>きょうのスタンプ <b class="cnt" data-n="42">0</b></span>
+    <span class="dm">※ダミー</span>
+  </div>
 
   <main>
 
   <!-- ================= ① ホーム ================= -->
   <section class="screen active" id="scr-home">
 
+    <div class="card" onclick="goTab('board');subTab('report')" style="cursor:pointer;">
+      <div class="hilite-head"><span class="hn">🌸 今日のハイライト</span>開催レポより（ダミー）</div>
+      <div id="home-hilite"></div>
+      <p class="note" style="margin-top:6px;">タップすると全国の開催レポが見られます →</p>
+    </div>
+
     <div class="notice">
       <div class="head"><span class="pin">固定</span>📢 本部からのお知らせ</div>
       <ul>
-        <li>秋の認定講師オンライン茶話会、日程が決まりました <span class="dummy">※ダミー</span></li>
-        <li>新しい素材テンプレ「ハロウィン告知セット」を素材室に追加しました <span class="dummy">※ダミー</span></li>
+        <li>夏の認定講師オンライン茶話会、日程が決まりました <span class="dummy">※ダミー</span></li>
+        <li>新しい素材テンプレ「敬老の日ギフト告知セット」を素材室に追加しました <span class="dummy">※ダミー</span></li>
       </ul>
     </div>
 
     <div class="card">
-      <h2>☀️ 今日のひとこと</h2>
-      <p style="font-size:13.5px;">「うちの教室にも、同じことで悩んでいる先生が全国にいる。<br>それが分かるだけで、今日もがんばれる。」</p>
+      <h2>☀️ 今日のひとこと <span class="tag" id="today-date"></span></h2>
+      <div class="kotoba">うちの教室にも、同じことで悩んでいる先生が全国にいる。<br>それが分かるだけで、今日もがんばれる。
+        <span class="khand"><svg width="22" height="22"><use href="#tegata" fill="#EBA8B2"/></svg></span>
+      </div>
       <p class="note">毎朝ひとこと更新のイメージです（デモ・文面は架空）</p>
     </div>
 
+    <div class="daihyo">
+      <h2>💌 代表からの今月のメッセージ</h2>
+      <p>この枠に、代表から全国の先生への言葉が毎月入ります（デモ・お預かり後に掲載します）</p>
+      <span class="wm"><svg width="76" height="76"><use href="#tegata" fill="#fff"/></svg></span>
+    </div>
+
     <div class="card">
-      <h2>🗓️ 季節の仕込みカレンダー <span class="tag">本部が伴走</span></h2>
-      <ul class="season">
-        <li><span class="when">今週</span><span>ハロウィン企画は今週から告知開始がおすすめ。素材室に告知テンプレあります <span class="dummy">※ダミー</span></span></li>
-        <li><span class="when">今月中</span><span>敬老の日「手形ギフト」体験会の会場予約はお早めに <span class="dummy">※ダミー</span></span></li>
-        <li><span class="when">来月</span><span>クリスマス作品の材料仕入れリスト公開予定 <span class="dummy">※ダミー</span></span></li>
-      </ul>
-      <p class="note">「次に何を仕込めばいいか」を本部が先回りでお知らせする枠のイメージです</p>
+      <h2>🗓️ 季節の仕込みカレンダー <span class="tag">本部が伴走</span><button class="month-flip" id="month-flip" onclick="flipMonth()">📅 来月をのぞく</button></h2>
+      <ul class="season" id="season-list"></ul>
+      <p class="note">「次に何を仕込めばいいか」を本部が先回りでお知らせする枠です。毎月、本部が中身を入れ替えるイメージ（内容はすべてダミー）。</p>
     </div>
 
     <div class="card">
       <h2>🧭 デモの歩き方</h2>
-      <p style="font-size:13px;">おすすめの順路：<b>ホーム → 素材室 → 掲示板 → マイページ</b><br>下のタブをタップしてご覧ください。</p>
+      <p style="font-size:13px;">おすすめの順路：<b>ホーム → 素材室 → 掲示板 → まなび → マイページ</b><br>下のタブをタップしてご覧ください。</p>
       <button class="btn" onclick="goTab('mat')">🎨 素材室を見てみる</button>
-      <button class="btn sub" onclick="goTab('board')">💬 掲示板をのぞいてみる</button>
+      <button class="btn sub" onclick="goTab('learn');setTimeout(function(){document.querySelector('.value-card').scrollIntoView({behavior:'smooth',block:'center'});},250)">📖 この広場の会費の考え方を見る</button>
     </div>
 
   </section>
@@ -329,15 +498,22 @@ nav.tabbar button.on .ic{transform:scale(1.1);}
   <!-- ================= ②③⑤ 掲示板 ================= -->
   <section class="screen" id="scr-board">
 
-    <div class="subtabs">
+    <div class="subtabs" id="subtabs">
       <button class="on" data-sub="qa" onclick="subTab('qa')">Q&A掲示板</button>
       <button data-sub="find" onclick="subTab('find')">仲間さがし</button>
       <button data-sub="report" onclick="subTab('report')">開催レポ</button>
     </div>
 
-    <!-- ---- ② Q&A掲示板 ---- -->
+    <!-- ---- Q&A掲示板 ---- -->
     <div id="sub-qa">
       <div class="sec-note">ニックネーム＋都道府県だけで参加できます（実名不要）。ここは比べる場所ではなく「お互いさま」の場所です。</div>
+
+      <div class="notice" style="background:#F4EEFA; border-color:#A98BCB;">
+        <div class="head"><span class="pin" style="background:#A98BCB;">ようこそ</span>👋 今週の新しい仲間：つくし先生（新潟）<span class="dummy">※ダミー</span></div>
+        <div class="stamps" style="margin-top:7px;">
+          <button class="stamp" data-pid="welcome-p2" data-key="w" onclick="tapStamp(this)">💐 ようこそ<span class="n">0</span></button>
+        </div>
+      </div>
 
       <button class="btn" id="btn-open-form" onclick="toggleForm()">✏️ 質問・報告を投稿してみる</button>
       <div class="form-wrap card" id="post-form">
@@ -360,17 +536,17 @@ nav.tabbar button.on .ic{transform:scale(1.1);}
 
       <div class="chips" id="cat-chips">
         <button class="on" data-cat="all">すべて</button>
-        <button data-cat="shukyaku">集客</button>
-        <button data-cat="unei">当日運営のコツ</button>
-        <button data-cat="okane">お金・確定申告</button>
-        <button data-cat="hajimete">はじめて質問</button>
+        <button data-cat="shukyaku" class="c-shukyaku">集客</button>
+        <button data-cat="unei" class="c-unei">当日運営のコツ</button>
+        <button data-cat="okane" class="c-okane">お金・確定申告</button>
+        <button data-cat="hajimete" class="c-hajimete">はじめて質問</button>
       </div>
 
       <div id="post-list"></div>
       <p class="note" style="text-align:center;">投稿・お名前・件数はすべて架空です（ダミー）</p>
     </div>
 
-    <!-- ---- ③ 都道府県で仲間を探す ---- -->
+    <!-- ---- 仲間さがし ---- -->
     <div id="sub-find" style="display:none;">
       <div class="sec-note">都道府県をタップすると、近くの先生が見つかります。「近くに仲間がいる」を体感してください。</div>
       <div class="chips green" id="pref-chips"></div>
@@ -387,12 +563,12 @@ nav.tabbar button.on .ic{transform:scale(1.1);}
       <p class="note" style="text-align:center;">講師名・地域・件数はすべて架空です（ダミー）</p>
     </div>
 
-    <!-- ---- ⑤ 開催レポートタイムライン ---- -->
+    <!-- ---- 開催レポ ---- -->
     <div id="sub-report" style="display:none;">
       <div class="sec-note">「写真1枚＋3行」の型だから続けられる。全国の先生の活動が流れるタイムラインです。投稿はそのまま「わたしの実績ノート」に積み上がります。</div>
       <div id="report-list"></div>
       <button class="fab-report" onclick="openReportModal()">📷 レポを書く</button>
-      <p class="note" style="text-align:center;">※デモ版：「レポを書く」は投稿画面のモック（見本）が開きます。実際の保存は行いません。<br>写真はすべてイメージ用のダミー画像です。</p>
+      <p class="note" style="text-align:center;">※デモ版：「レポを書く」は投稿画面のモック（見本）が開きます。実際の保存は行いません。<br>写真はすべてイメージ用のダミー画像（イラスト）で、タイムラインは一部のみ収録しています。</p>
     </div>
 
   </section>
@@ -400,11 +576,11 @@ nav.tabbar button.on .ic{transform:scale(1.1);}
   <!-- ================= ④ 素材室 ================= -->
   <section class="screen" id="scr-mat">
     <div class="card" style="background:#FFF9F5;">
-      <h2>🎨 素材室 <span class="tag">今月の新着 4点(ダミー)</span></h2>
+      <h2>🎨 素材室 <span class="tag">今月の新着 3点（ダミー）</span></h2>
       <p style="font-size:13px;">告知・教室運営にそのまま使えるテンプレート集。<b>月に1枚使えたら、月会費のもとが取れる</b>——そんな棚を目指しています。</p>
     </div>
     <div class="mat-grid" id="mat-grid"></div>
-    <p class="note">※デモ版：ダウンロードボタンは動きの見本です。実ファイルの配布は本番環境でのご提供となります。<br>※サムネイル・点数表記はすべて架空（ダミー）です。</p>
+    <p class="note">※デモ版：ダウンロードボタンは動きの見本です。実ファイルの配布は、本番環境でのご提供を予定しています。<br>※サムネイル・点数表記はすべて架空（ダミー）です。</p>
     <div class="card">
       <h2>🗳️ 素材リクエスト（予定地）</h2>
       <p style="font-size:13px;">「こんなテンプレが欲しい」に投票 → 翌月の新着に反映するコーナーの予定地です。詳しくは「まなび」タブの<b>ひろがる予定地</b>へ。</p>
@@ -420,6 +596,12 @@ nav.tabbar button.on .ic{transform:scale(1.1);}
         <input id="q-input" type="text" placeholder="例：集客 / 児童館 / 確定申告">
         <button onclick="doSearch()">検索</button>
       </div>
+      <div class="chips" id="q-chips" style="margin-bottom:8px;">
+        <button onclick="quickSearch('集客')">集客</button>
+        <button onclick="quickSearch('児童館')">児童館</button>
+        <button onclick="quickSearch('確定申告')">確定申告</button>
+        <button onclick="quickSearch('材料')">材料</button>
+      </div>
       <div id="q-result"></div>
       <p class="note">静かに積み上がった先輩の知恵が、あとから来る先生の資産になります（検索対象はデモ用の架空データ）</p>
     </div>
@@ -430,14 +612,14 @@ nav.tabbar button.on .ic{transform:scale(1.1);}
       <button class="btn sub" onclick="goTab('board');subTab('qa');filterCat('hajimete')">🌱 「はじめて質問」カテゴリはこちら</button>
     </div>
 
-    <!-- ⑧ 価値カード -->
+    <!-- 価値カード -->
     <div class="value-card">
-      <h3>月1,000円(ダミー)で、<br>先輩3,000人(ダミー)の知恵と仲間。</h3>
+      <h3>月1,000円（ダミー）で、<br>先輩3,000人（ダミー）の知恵と仲間。</h3>
       <p style="font-size:13px;">ひとりで教室を続ける毎日に、「同じ道を歩く仲間」と「先に歩いた先輩の知恵」を。</p>
       <table>
-        <tr><th>もしも…のシナリオ<br>（仮定の計算例）</th><th>参加者数<br>(ダミー)</th><th>月会費計<br>(ダミー)</th></tr>
-        <tr><td>認定講師の1割が参加したら</td><td>300名</td><td>月30万円</td></tr>
-        <tr><td>認定講師の3割が参加したら</td><td>900名</td><td>月90万円</td></tr>
+        <tr><th>もしも…のシナリオ<br>（仮定の計算例）</th><th>参加者数<br>（ダミー）</th><th>月会費計<br>（ダミー）</th></tr>
+        <tr><td>認定講師の1割が参加したら</td><td><span class="cnt" data-n="300">0</span>名</td><td>月<span class="cnt" data-n="30">0</span>万円</td></tr>
+        <tr><td>認定講師の3割が参加したら</td><td><span class="cnt" data-n="900">0</span>名</td><td>月<span class="cnt" data-n="90">0</span>万円</td></tr>
       </table>
       <p class="note">※これは予測や約束ではありません。「もしも」を並べた仮定のシナリオで、すべてダミーの数値です。実際の参加率は運営の中身次第です。</p>
       <p style="font-size:12.5px; margin-top:10px; background:#fff; border-radius:12px; padding:10px 12px; border:1px dashed var(--green);">
@@ -445,7 +627,7 @@ nav.tabbar button.on .ic{transform:scale(1.1);}
       </p>
     </div>
 
-    <!-- ひろがる予定地（オプション棚） -->
+    <!-- ひろがる予定地 -->
     <div class="card">
       <h2>🌱 ひろがる予定地 <span class="tag">面談で選べます</span></h2>
       <p style="font-size:12.5px; margin-bottom:6px;">この広場は、あとから少しずつ育てられます。気になるものをONにしてみてください（デモ：ONにしても機能はまだ追加されません）。</p>
@@ -461,24 +643,25 @@ nav.tabbar button.on .ic{transform:scale(1.1);}
     <div class="member-card">
       <div class="brand">petapeta-art&reg; 認定講師会員証（デモ）</div>
       <div class="who">
-        <div class="avatar" style="background:var(--green);">SY</div>
-        <div><b>さくら先生</b><span>広島県 ・ 認定No. TT-0000 <span class="dummy">※すべてダミー</span></span></div>
+        <div class="avatar" style="background:var(--green);">さ</div>
+        <div><b>さくら先生</b><span>広島県 ・ 認定No. TT-2026-0000 <span class="dummy">※すべてダミー</span></span></div>
       </div>
       <div class="stats">
-        <div><b>12回</b><span>開催回数(ダミー)</span></div>
-        <div><b>87組</b><span>参加親子(ダミー)</span></div>
-        <div><b>9件</b><span>レポート(ダミー)</span></div>
+        <div><b><span class="cnt" data-n="12">0</span>回</b><span>開催回数（ダミー）</span></div>
+        <div><b><span class="cnt" data-n="87">0</span>組</b><span>参加親子（ダミー）</span></div>
+        <div><b><span class="cnt" data-n="9">0</span>件</b><span>レポート（ダミー）</span></div>
       </div>
+      <span class="wm"><svg width="104" height="104"><use href="#tegata" fill="#fff"/></svg></span>
     </div>
 
     <div class="card">
       <h2>📒 わたしの実績ノート</h2>
       <p style="font-size:13px;">開催レポを投稿するだけで、開催回数・参加親子数がここに<b>自動で積み上がる</b>見た目のイメージです（数値は架空）。児童館・支援センターへの会場交渉のときの「わたしの実績資料」になります。</p>
       <ul class="history">
-        <li><span class="d">10/02(ダミー)</span><span>ハロウィン手形アート会 ／ 親子6組(ダミー)</span></li>
-        <li><span class="d">09/18(ダミー)</span><span>敬老の日ギフトの会 ／ 親子8組(ダミー)</span></li>
-        <li><span class="d">09/05(ダミー)</span><span>児童館みなみ 出張開催 ／ 親子11組(ダミー)</span></li>
-        <li><span class="d">08/22(ダミー)</span><span>夏の思い出うちわ会 ／ 親子7組(ダミー)</span></li>
+        <li><span class="d">07/26（ダミー）</span><span>夏の思い出うちわ会 ／ 親子7組（ダミー）</span></li>
+        <li><span class="d">07/12（ダミー）</span><span>七夕 手形短冊の会 ／ 親子9組（ダミー）</span></li>
+        <li><span class="d">06/28（ダミー）</span><span>児童館みなみ 出張開催 ／ 親子11組（ダミー）</span></li>
+        <li><span class="d">06/14（ダミー）</span><span>父の日ギフトの会 ／ 親子8組（ダミー）</span></li>
       </ul>
       <p class="note">バッジ・称号などの飾りは「ひろがる予定地」のオプションに載せています（比べるためではなく、認めるための飾りとして）。</p>
     </div>
@@ -486,20 +669,35 @@ nav.tabbar button.on .ic{transform:scale(1.1);}
     <div class="card">
       <h2>🤝 この広場について</h2>
       <p style="font-size:12.5px;">てとて広場（デモ）は、petapeta-art&reg;認定講師のための会員コミュニティの<b>見本</b>です。画面・投稿・数値はすべて架空で、実在の講師・実際のデータは一切含まれていません。</p>
+      <button class="btn sub" onclick="goTab('learn');setTimeout(function(){document.querySelector('.value-card').scrollIntoView({behavior:'smooth',block:'center'});},250)">📖 この広場の会費の考え方を見る</button>
     </div>
+
+    <button class="reset-demo" onclick="resetDemo()">🧹 デモを最初にもどす（お試しの投稿・スタンプを消去）</button>
 
   </section>
 
   </main>
 
-  <footer class="credit">produced by VERA Holdings × CreativePocket（デモ）</footer>
+  <footer class="credit">
+    <div class="hand-parade">
+      <svg width="16" height="16"><use href="#tegata" fill="#F6A9B8"/></svg>
+      <svg width="16" height="16"><use href="#tegata" fill="#F7C08A"/></svg>
+      <svg width="16" height="16"><use href="#tegata" fill="#F5D97E"/></svg>
+      <svg width="16" height="16"><use href="#tegata" fill="#9FD6AE"/></svg>
+      <svg width="16" height="16"><use href="#tegata" fill="#9FC1E8"/></svg>
+      <svg width="16" height="16"><use href="#tegata" fill="#C7A8E0"/></svg>
+      <svg width="16" height="16"><use href="#tegata" fill="#EBA8B2"/></svg>
+    </div>
+    <div class="rinen">たくさんの ちいさな「て」とともに。</div>
+    produced by VERA Holdings × CreativePocket（デモ）
+  </footer>
 
   <nav class="tabbar">
-    <button class="on" data-tab="home" onclick="goTab('home')"><span class="ic">🏠</span>ホーム</button>
-    <button data-tab="board" onclick="goTab('board')"><span class="ic">💬</span>掲示板</button>
-    <button data-tab="mat" onclick="goTab('mat')"><span class="ic">🎨</span>素材室</button>
-    <button data-tab="learn" onclick="goTab('learn')"><span class="ic">📖</span>まなび</button>
-    <button data-tab="my" onclick="goTab('my')"><span class="ic">👤</span>マイページ</button>
+    <button class="on" data-tab="home" onclick="goTab('home')"><span class="ic">🏠</span><br>ホーム</button>
+    <button data-tab="board" onclick="goTab('board')"><span class="ic">💬</span><br>掲示板<span class="dot" id="board-dot"></span></button>
+    <button data-tab="mat" onclick="goTab('mat')"><span class="ic">🎨</span><br>素材室</button>
+    <button data-tab="learn" onclick="goTab('learn')"><span class="ic">📖</span><br>まなび</button>
+    <button data-tab="my" onclick="goTab('my')"><span class="ic">👤</span><br>マイページ</button>
   </nav>
 
   <!-- ---- 開催レポ投稿モック ---- -->
@@ -508,9 +706,9 @@ nav.tabbar button.on .ic{transform:scale(1.1);}
       <h3>📷 開催レポを書く（投稿画面の見本）</h3>
       <div class="mock-photo">＋ 写真を1枚えらぶ（デモのため選択できません）</div>
       <div class="mock-line">1行目：どこで（例：児童館みなみ）</div>
-      <div class="mock-line">2行目：なにをした（例：ハロウィン手形の会、親子6組）</div>
+      <div class="mock-line">2行目：なにをした（例：足形うちわの会、親子6組）</div>
       <div class="mock-line">3行目：ひとこと（例：初参加のママが涙ぐんでくれました）</div>
-      <button class="btn" onclick="closeReportModal();toast('デモ版のため実際の投稿は行われません（本番では実績ノートに自動で積み上がります）')">この型で投稿する（デモ）</button>
+      <button class="btn" onclick="closeReportModal();toast('デモ版のため実際の投稿は行われません（本番では実績ノートに自動で積み上がる想定です）')">この型で投稿する（デモ）</button>
       <button class="btn sub" onclick="closeReportModal()">とじる</button>
       <p class="note">「写真1枚＋3行」だけ。入力がしんどいと続かない、を逆にした型です。</p>
     </div>
@@ -521,7 +719,7 @@ nav.tabbar button.on .ic{transform:scale(1.1);}
 
 <script>
 /* =====================================================
-   てとて広場 デモ用スクリプト（素のJS + localStorage）
+   てとて広場 デモ用スクリプト v2（素のJS + localStorage）
    すべてのデータは架空（ダミー）です
    ===================================================== */
 "use strict";
@@ -529,21 +727,42 @@ nav.tabbar button.on .ic{transform:scale(1.1);}
 /* ---------- 共通ヘルパー ---------- */
 var $ = function(s){ return document.querySelector(s); };
 var $$ = function(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); };
-var LS_POSTS = "tetote_demo_posts_v1";
-var LS_STAMP = "tetote_demo_stamps_v1";
-var LS_OPTS  = "tetote_demo_opts_v1";
+var LS_POSTS = "tetote_demo_posts_v2";
+var LS_STAMP = "tetote_demo_stamps_v2";
+var LS_OPTS  = "tetote_demo_opts_v2";
 function lsGet(k,f){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : f; }catch(e){ return f; } }
 function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
 function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+function hash(s){ var h=0; for(var i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))>>>0; } return h; }
 
-var AV_COLORS = ["#EBA8B2","#8A6A54","#3F6B57","#C98D6B","#7B8F6B","#B0836F","#5E7F93"];
-function avatar(initial, i, size){
-  var c = AV_COLORS[i % AV_COLORS.length];
-  return '<div class="avatar" style="background:'+c+';">'+esc(initial)+'</div>';
+/* アバター：名前ハッシュで色固定・頭文字1文字 */
+var AV_COLORS = ["#E9748F","#E8A24E","#C9A44C","#66B584","#5E93D8","#9A76C8","#E08A96"];
+function avatar(nick){
+  var c = AV_COLORS[hash(nick) % AV_COLORS.length];
+  var ini = String(nick).charAt(0) || "先";
+  return '<div class="avatar" style="background:'+c+';">'+esc(ini)+'</div>';
 }
 function toast(msg){
   var t = $("#toast"); t.textContent = msg; t.classList.add("show");
   clearTimeout(t._tm); t._tm = setTimeout(function(){ t.classList.remove("show"); }, 2600);
+}
+/* 数字カウントアップ（1回のみ） */
+function countUp(el){
+  if (el.dataset.done) return;
+  el.dataset.done = "1";
+  var target = parseInt(el.dataset.n, 10) || 0;
+  var t0 = null, ms = 800;
+  function step(ts){
+    if (!t0) t0 = ts;
+    var p = Math.min(1, (ts - t0) / ms);
+    var e = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(target * e).toLocaleString();
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+function countUpIn(rootSel){
+  $$(rootSel + " .cnt").forEach(countUp);
 }
 
 /* ---------- タブ切替 ---------- */
@@ -552,46 +771,50 @@ function goTab(name){
   $("#scr-"+name).classList.add("active");
   $$("nav.tabbar button").forEach(function(b){ b.classList.toggle("on", b.dataset.tab === name); });
   window.scrollTo(0,0);
+  if (name === "my"){ countUpIn("#scr-my"); }
+  if (name === "learn"){ countUpIn("#scr-learn"); }
+  if (name === "board"){ var d = $("#board-dot"); if (d) d.remove(); }
 }
 function subTab(name){
   ["qa","find","report"].forEach(function(k){ $("#sub-"+k).style.display = (k===name) ? "" : "none"; });
   $$(".subtabs button").forEach(function(b){ b.classList.toggle("on", b.dataset.sub === name); });
+  var st = $("#subtabs"); if (st && st.scrollIntoView) st.scrollIntoView({block:"start"});
 }
 
-/* ---------- カテゴリ定義 ---------- */
+/* ---------- カテゴリ定義（4色システム） ---------- */
 var CATS = { shukyaku:"集客", unei:"当日運営のコツ", okane:"お金・確定申告", hajimete:"はじめて質問" };
 
-/* ---------- ② Q&A掲示板：架空の投稿データ ---------- */
+/* ---------- Q&A掲示板：架空の投稿データ ---------- */
 var BASE_POSTS = [
- {id:"p1", nick:"さくらんぼ先生", ini:"SB", pref:"広島", cat:"shukyaku", time:"2時間前(ダミー)", reply:2, theme:"集客",
-  body:"体験会の集客、インスタだけだと申込3組(ダミー)で止まってしまいます…。みなさんインスタ以外に何を組み合わせていますか？",
+ {id:"p1", nick:"さくらんぼ先生", pref:"広島", cat:"shukyaku", time:"2時間前（ダミー）", reply:2, theme:"集客",
+  body:"体験会の集客、インスタだけだと申込3組（ダミー）で止まってしまいます…。みなさんインスタ以外に何を組み合わせていますか？",
   replies:[
-   {nick:"ゆず先生（愛媛）", ini:"YZ", body:"わかりますー！私も最初そうでした。児童館に置きチラシをお願いしたら少しずつ増えました。焦らなくて大丈夫ですよ🌸"},
-   {nick:"もも先生（岡山）", ini:"MM", body:"支援センターの掲示板に貼らせてもらうのもおすすめです。顔を覚えてもらえると次につながりました！"}
+   {nick:"ゆず先生（愛媛）", body:"わかりますー！私も最初そうでした。児童館に置きチラシをお願いしたら少しずつ増えました。焦らなくて大丈夫ですよ🌸"},
+   {nick:"もも先生（岡山）", body:"支援センターの掲示板に貼らせてもらうのもおすすめです。顔を覚えてもらえると次につながりました！"}
   ]},
- {id:"p2", nick:"つくし先生", ini:"TK", pref:"新潟", cat:"hajimete", time:"5時間前(ダミー)", reply:1, theme:"はじめて",
+ {id:"p2", nick:"つくし先生", pref:"新潟", cat:"hajimete", time:"5時間前（ダミー）", reply:1, theme:"はじめて",
   body:"はじめまして！先月認定をいただいたばかりの新人です。まだ1回も開催できていなくて不安ですが、よろしくお願いします🌱",
   replies:[
-   {nick:"ひなた先生（長野）", ini:"HN", body:"ようこそ〜！最初はみんな同じです。「はじめて質問」カテゴリなら何を聞いても大丈夫。応援しています！"}
+   {nick:"ひなた先生（長野）", body:"ようこそ〜！最初はみんな同じです。「はじめて質問」カテゴリなら何を聞いても大丈夫。応援しています！"}
   ]},
- {id:"p3", nick:"ひまわり先生", ini:"HM", pref:"福岡", cat:"unei", time:"昨日(ダミー)", reply:4, theme:"イベント",
+ {id:"p3", nick:"ひまわり先生", pref:"福岡", cat:"unei", time:"昨日（ダミー）", reply:4, theme:"イベント",
   body:"開催中に赤ちゃんがぐずったとき用に、待ち時間で遊べる布おもちゃコーナーを作ったらママの表情がゆるみました。小さな工夫の共有でした！"},
- {id:"p4", nick:"あんず先生", ini:"AZ", pref:"東京", cat:"shukyaku", time:"昨日(ダミー)", reply:3, theme:"集客",
+ {id:"p4", nick:"あんず先生", pref:"東京", cat:"shukyaku", time:"昨日（ダミー）", reply:3, theme:"集客",
   body:"ご報告：近所の児童館に思い切って声をかけたら、置きチラシの許可をいただけました！断られてもともと、の気持ちで行ってよかったです。"},
- {id:"p5", nick:"すみれ先生", ini:"SM", pref:"大阪", cat:"okane", time:"2日前(ダミー)", reply:5, theme:"はじめて",
+ {id:"p5", nick:"すみれ先生", pref:"大阪", cat:"okane", time:"2日前（ダミー）", reply:5, theme:"はじめて",
   body:"確定申告の準備、材料費の領収書ってみなさんどうまとめていますか？封筒に月別で入れているだけなのですが…",
   replies:[
-   {nick:"かえで先生（兵庫）", ini:"KD", body:"私も封筒派でした！最近は月末にスマホで撮ってフォルダ分けしています。それだけでも春がラクになりますよ〜"}
+   {nick:"かえで先生（兵庫）", body:"私も封筒派でした！最近は月末にスマホで撮ってフォルダ分けしています。それだけでも春がラクになりますよ〜"}
   ]},
- {id:"p6", nick:"くるみ先生", ini:"KR", pref:"北海道", cat:"unei", time:"3日前(ダミー)", reply:2, theme:"材料",
-  body:"冬の会場は換気するとスタンプ台のインクの乾きが変わる気がします。北国の先生方、冬の開催で気をつけていることはありますか？"},
- {id:"p7", nick:"れもん先生", ini:"RM", pref:"愛知", cat:"shukyaku", time:"3日前(ダミー)", reply:6, theme:"イベント",
-  body:"ご報告：園の夏祭りに手形アートコーナーで出店が決まりました！お声がけから決定までのやりとり、知恵袋にまとめてみます。"},
- {id:"p8", nick:"たんぽぽ先生", ini:"TP", pref:"広島", cat:"hajimete", time:"4日前(ダミー)", reply:7, theme:"材料",
+ {id:"p6", nick:"くるみ先生", pref:"北海道", cat:"unei", time:"3日前（ダミー）", reply:2, theme:"材料",
+  body:"夏の会場は冷房の風でスタンプ台のインクの乾きが変わる気がします。みなさん夏の開催で気をつけていることはありますか？"},
+ {id:"p7", nick:"れもん先生", pref:"愛知", cat:"shukyaku", time:"3日前（ダミー）", reply:6, theme:"イベント",
+  body:"ご報告：園の夏祭りに手形アートコーナーで出店してきました！お声がけから決定までのやりとり、知恵袋にまとめてみます。"},
+ {id:"p8", nick:"たんぽぽ先生", pref:"広島", cat:"hajimete", time:"4日前（ダミー）", reply:7, theme:"材料",
   body:"はじめて質問です。台紙や絵の具、みなさんどこで買っていますか？100均と画材店の使い分けが知りたいです！"},
- {id:"p9", nick:"しらす先生", ini:"SR", pref:"神奈川", cat:"unei", time:"5日前(ダミー)", reply:2, theme:"イベント",
-  body:"開催報告：親子8組(ダミー)にご参加いただきました。人見知りだった子が最後に手を広げてくれた瞬間、この仕事をしていてよかったと思いました。"},
- {id:"p10", nick:"かりん先生", ini:"KA", pref:"宮城", cat:"okane", time:"6日前(ダミー)", reply:4, theme:"集客",
+ {id:"p9", nick:"しらす先生", pref:"神奈川", cat:"unei", time:"5日前（ダミー）", reply:2, theme:"イベント",
+  body:"開催報告：親子8組（ダミー）にご参加いただきました。人見知りだった子が最後に手を広げてくれた瞬間、この仕事をしていてよかったと思いました。"},
+ {id:"p10", nick:"かりん先生", pref:"宮城", cat:"okane", time:"6日前（ダミー）", reply:4, theme:"集客",
   body:"参加費の決め方に悩んでいます。材料費が上がったとき、常連のママさんたちへの値上げの伝え方…先輩方はどうされましたか？"}
 ];
 var STAMP_DEFS = [ {key:"w", label:"💗 わかる", base:12}, {key:"s", label:"✨ すてき", base:8}, {key:"g", label:"📣 がんばって", base:5} ];
@@ -601,42 +824,63 @@ function allPosts(){
   var mine = lsGet(LS_POSTS, []);
   return mine.concat(BASE_POSTS);
 }
-function stampCount(pid, key, base){
-  var st = lsGet(LS_STAMP, {});
-  var add = (st[pid] && st[pid][key]) || 0;
-  return base + add;
+/* スタンプ：投稿IDハッシュでダミー初期値を固定・1人1回トグル式 */
+function stampBase(pid, key, mine){
+  if (mine) return 0;
+  var defs = {w:12, s:8, g:5};
+  return defs[key] + (hash(pid + key) % 9);
 }
-function postCard(p, i){
-  var stamps = STAMP_DEFS.map(function(d, j){
-    var base = p.mine ? 0 : (d.base + ((i*3+j*5) % 9)); /* ダミーの初期件数をばらす */
-    var n = stampCount(p.id, d.key, base);
-    return '<button class="stamp" onclick="addStamp(this,\''+p.id+'\',\''+d.key+'\')">'+d.label+'<span class="n">'+n+'</span></button>';
+function stampState(pid, key){
+  var st = lsGet(LS_STAMP, {});
+  return (st[pid] && st[pid][key]) ? 1 : 0;
+}
+function stampBtns(pid, mine){
+  return STAMP_DEFS.map(function(d){
+    var n = stampBase(pid, d.key, mine) + stampState(pid, d.key);
+    var pressed = stampState(pid, d.key) ? " pressed" : "";
+    return '<button class="stamp'+pressed+'" data-pid="'+pid+'" data-key="'+d.key+'" onclick="tapStamp(this)">'+d.label+'<span class="n">'+n+'</span></button>';
   }).join("");
+}
+function postCard(p, simple){
+  if (simple){
+    /* 仲間さがし用の簡易カード（ID重複と操作の食い違いを避けるため、返信・スタンプはQ&A側のみ） */
+    return '<div class="post b-'+p.cat+'" id="fp-'+p.id+'">'
+      + '<div class="who">'+avatar(p.nick)
+      + '<div class="meta"><b>'+esc(p.nick)+'</b>（'+esc(p.pref)+'）<br>'+esc(p.time)+'</div></div>'
+      + '<p class="body">'+esc(p.body)+'</p>'
+      + '<span class="badge-cat c-'+p.cat+'">'+CATS[p.cat]+'</span> '
+      + '<span class="dummy">※架空の投稿です</span>'
+      + '<button class="replies-toggle" onclick="jumpPost(\''+p.cat+'\',\''+p.id+'\')">💬 この投稿をQ&A掲示板で見る →</button>'
+      + '</div>';
+  }
   var replyBtn = "";
   if (p.replies && p.replies.length){
-    replyBtn = '<button class="replies-toggle" onclick="toggleReplies(\''+p.id+'\')">💬 返信を見る（'+p.reply+'件・ダミー）</button>'
+    var cntLabel = (p.reply === p.replies.length)
+      ? "（"+p.reply+"件・ダミー）"
+      : "（"+p.reply+"件中"+p.replies.length+"件を収録・ダミー）";
+    replyBtn = '<button class="replies-toggle" id="rt-'+p.id+'" onclick="toggleReplies(\''+p.id+'\')">▸ 💬 返信を見る'+cntLabel+'</button>'
       + '<div id="rep-'+p.id+'" style="display:none;">'
-      + p.replies.map(function(r, k){
-          return '<div class="reply">'+avatar(r.ini, i+k+2)+'<p><b>'+esc(r.nick)+'</b>'+esc(r.body)+'</p></div>';
+      + p.replies.map(function(r){
+          return '<div class="reply">'+avatar(r.nick)+'<p><b>'+esc(r.nick)+'</b>'+esc(r.body)+'</p></div>';
         }).join("")
       + '</div>';
   } else if (p.reply){
-    replyBtn = '<button class="replies-toggle" onclick="toast(\'デモ版のため返信スレッドは一部のみ収録しています\')">💬 返信 '+p.reply+'件（ダミー）</button>';
+    replyBtn = '<button class="replies-toggle" onclick="toast(\'デモ版のため返信スレッドは一部のみ収録しています\')">💬 返信 '+p.reply+'件（ダミー・一部のみ収録）</button>';
   }
-  return '<div class="post">'
-    + '<div class="who">'+avatar(p.ini, i)
+  return '<div class="post b-'+p.cat+'" id="post-'+p.id+'">'
+    + '<div class="who">'+avatar(p.nick)
     + '<div class="meta"><b>'+esc(p.nick)+'</b>（'+esc(p.pref)+'）<br>'+esc(p.time)+'</div></div>'
     + '<p class="body">'+esc(p.body)+'</p>'
-    + '<span class="badge-cat">'+CATS[p.cat]+'</span> '
+    + '<span class="badge-cat c-'+p.cat+'">'+CATS[p.cat]+'</span> '
     + (p.mine ? '<span class="badge-mine">あなたの投稿（デモ）</span>' : '<span class="dummy">※架空の投稿です</span>')
-    + '<div class="stamps">'+stamps+'</div>'
+    + '<div class="stamps">'+stampBtns(p.id, p.mine)+'</div>'
     + replyBtn
     + '</div>';
 }
 function renderPosts(){
   var list = allPosts().filter(function(p){ return currentCat==="all" || p.cat===currentCat; });
   $("#post-list").innerHTML = list.length
-    ? list.map(postCard).join("")
+    ? list.map(function(p,i){ return postCard(p).replace('class="post', 'style="animation-delay:'+(i*0.05)+'s" class="post'); }).join("")
     : '<p class="note" style="text-align:center;">このカテゴリの投稿はまだありません</p>';
 }
 function filterCat(cat){
@@ -648,22 +892,38 @@ $$("#cat-chips button").forEach(function(b){
   b.addEventListener("click", function(){ filterCat(b.dataset.cat); });
 });
 function toggleReplies(pid){
-  var el = $("#rep-"+pid);
-  if (el) el.style.display = (el.style.display==="none") ? "" : "none";
+  var el = $("#rep-"+pid), bt = $("#rt-"+pid);
+  if (!el) return;
+  var opening = (el.style.display === "none");
+  el.style.display = opening ? "" : "none";
+  if (bt) bt.textContent = bt.textContent.replace(opening ? "▸" : "▾", opening ? "▾" : "▸");
 }
-/* ---- 共感スタンプ：タップでふわっと＋1 ---- */
-function addStamp(btn, pid, key){
+/* ---- 共感スタンプ：トグル式＋花びらバースト ---- */
+function tapStamp(btn){
+  var pid = btn.dataset.pid, key = btn.dataset.key;
   var st = lsGet(LS_STAMP, {});
   st[pid] = st[pid] || {};
-  st[pid][key] = (st[pid][key] || 0) + 1;
+  var on = !st[pid][key];
+  st[pid][key] = on ? 1 : 0;
   lsSet(LS_STAMP, st);
   var n = btn.querySelector(".n");
-  n.textContent = parseInt(n.textContent,10) + 1;
+  n.textContent = parseInt(n.textContent,10) + (on ? 1 : -1);
+  btn.classList.toggle("pressed", on);
   btn.classList.remove("pop"); void btn.offsetWidth; btn.classList.add("pop");
-  var fly = document.createElement("span");
-  fly.className = "fly"; fly.textContent = "+1";
-  btn.appendChild(fly);
-  setTimeout(function(){ fly.remove(); }, 800);
+  if (on){
+    var fly = document.createElement("span");
+    fly.className = "fly"; fly.textContent = "+1";
+    btn.appendChild(fly);
+    setTimeout(function(){ fly.remove(); }, 800);
+    for (var i=0;i<3;i++){
+      var pt = document.createElement("span");
+      pt.className = "pburst"; pt.textContent = "🌸";
+      pt.style.setProperty("--dx", (Math.random()*44-22)+"px");
+      pt.style.animationDelay = (i*0.08)+"s";
+      btn.appendChild(pt);
+      (function(el){ setTimeout(function(){ el.remove(); }, 900); })(pt);
+    }
+  }
 }
 /* ---- 新規投稿フォーム ---- */
 var PREFS_ALL = ["北海道","青森","岩手","宮城","秋田","山形","福島","茨城","栃木","群馬","埼玉","千葉","東京","神奈川","新潟","富山","石川","福井","山梨","長野","岐阜","静岡","愛知","三重","滋賀","京都","大阪","兵庫","奈良","和歌山","鳥取","島根","岡山","広島","山口","徳島","香川","愛媛","高知","福岡","佐賀","長崎","熊本","大分","宮崎","鹿児島","沖縄"];
@@ -674,34 +934,38 @@ function submitPost(){
   var cat  = $("#f-cat").value;
   var body = $("#f-body").value.trim();
   if (!body){ toast("本文を入力してください"); return; }
+  var d = new Date();
+  var stamp = (d.getMonth()+1)+"/"+d.getDate()+" "+d.getHours()+":"+("0"+d.getMinutes()).slice(-2)+" 投稿";
   var mine = lsGet(LS_POSTS, []);
-  mine.unshift({
-    id:"mine-"+Date.now(), nick:nick, ini:(nick.charAt(0)||"先"), pref:pref, cat:cat,
-    time:"たった今", reply:0, body:body, mine:true, theme:"はじめて"
-  });
+  var id = "mine-"+Date.now();
+  mine.unshift({ id:id, nick:nick, pref:pref, cat:cat, time:stamp, reply:0, body:body, mine:true, theme:"はじめて" });
   lsSet(LS_POSTS, mine);
   $("#f-body").value = "";
   $("#post-form").classList.remove("open");
   filterCat("all");
   toast("投稿しました（この端末内のみに保存・デモ）");
+  setTimeout(function(){
+    var el = document.getElementById("post-"+id);
+    if (el){ el.scrollIntoView({behavior:"smooth", block:"center"}); el.classList.add("flash"); }
+  }, 250);
 }
 
-/* ---------- ③ 都道府県で仲間を探す ---------- */
+/* ---------- 仲間さがし ---------- */
 var TEACHERS = [
- {name:"さくらんぼ先生", ini:"SB", pref:"広島", area:"広島市西区(ダミー)", theme:"集客"},
- {name:"たんぽぽ先生",   ini:"TP", pref:"広島", area:"福山市(ダミー)",     theme:"材料"},
- {name:"みかん先生",     ini:"MK", pref:"広島", area:"呉市(ダミー)",       theme:"イベント"},
- {name:"わかば先生",     ini:"WK", pref:"広島", area:"東広島市(ダミー)",   theme:"はじめて"},
- {name:"あんず先生",     ini:"AZ", pref:"東京", area:"世田谷区(ダミー)",   theme:"集客"},
- {name:"こだま先生",     ini:"KD", pref:"東京", area:"八王子市(ダミー)",   theme:"イベント"},
- {name:"しらす先生",     ini:"SR", pref:"神奈川", area:"横浜市(ダミー)",   theme:"イベント"},
- {name:"れもん先生",     ini:"RM", pref:"愛知", area:"名古屋市(ダミー)",   theme:"イベント"},
- {name:"すみれ先生",     ini:"SM", pref:"大阪", area:"堺市(ダミー)",       theme:"はじめて"},
- {name:"くるみ先生",     ini:"KR", pref:"北海道", area:"札幌市(ダミー)",   theme:"材料"},
- {name:"ひまわり先生",   ini:"HM", pref:"福岡", area:"北九州市(ダミー)",   theme:"イベント"},
- {name:"かりん先生",     ini:"KA", pref:"宮城", area:"仙台市(ダミー)",     theme:"集客"},
- {name:"ゆうな先生",     ini:"YN", pref:"沖縄", area:"那覇市(ダミー)",     theme:"はじめて"},
- {name:"もみじ先生",     ini:"MJ", pref:"京都", area:"京都市(ダミー)",     theme:"集客"}
+ {name:"さくらんぼ先生", pref:"広島", area:"広島市西区（ダミー）", theme:"集客"},
+ {name:"たんぽぽ先生",   pref:"広島", area:"福山市（ダミー）",     theme:"材料"},
+ {name:"みかん先生",     pref:"広島", area:"呉市（ダミー）",       theme:"イベント"},
+ {name:"わかば先生",     pref:"広島", area:"東広島市（ダミー）",   theme:"はじめて"},
+ {name:"あんず先生",     pref:"東京", area:"世田谷区（ダミー）",   theme:"集客"},
+ {name:"こだま先生",     pref:"東京", area:"八王子市（ダミー）",   theme:"イベント"},
+ {name:"しらす先生",     pref:"神奈川", area:"横浜市（ダミー）",   theme:"イベント"},
+ {name:"れもん先生",     pref:"愛知", area:"名古屋市（ダミー）",   theme:"イベント"},
+ {name:"すみれ先生",     pref:"大阪", area:"堺市（ダミー）",       theme:"はじめて"},
+ {name:"くるみ先生",     pref:"北海道", area:"札幌市（ダミー）",   theme:"材料"},
+ {name:"ひまわり先生",   pref:"福岡", area:"北九州市（ダミー）",   theme:"イベント"},
+ {name:"かりん先生",     pref:"宮城", area:"仙台市（ダミー）",     theme:"集客"},
+ {name:"ゆうな先生",     pref:"沖縄", area:"那覇市（ダミー）",     theme:"はじめて"},
+ {name:"もみじ先生",     pref:"京都", area:"京都市（ダミー）",     theme:"集客"}
 ];
 var FIND_PREFS = ["全国","北海道","宮城","東京","神奈川","愛知","京都","大阪","広島","福岡","沖縄"];
 var curPref = "全国", curTheme = "all";
@@ -724,89 +988,191 @@ function renderFind(){
   });
   $("#find-count").textContent = (curPref==="全国" ? "全国" : curPref) + "の仲間：" + ts.length + "名がヒット（ダミー）";
   $("#teacher-list").innerHTML = ts.length
-    ? ts.map(function(t,i){
-        return '<div class="teacher">'+avatar(t.ini,i)
+    ? ts.map(function(t){
+        return '<div class="teacher">'+avatar(t.name)
           + '<div class="info"><b>'+esc(t.name)+'</b><span>'+esc(t.pref)+'・'+esc(t.area)+' ／ 関心：'+esc(t.theme)+'</span></div></div>';
       }).join("")
     : '<p class="note">この条件の先生はまだ登録されていません（デモ）</p>';
-  /* 同じ県の最近の投稿も出す＝「近くに仲間がいる」の可視化 */
   var ps = BASE_POSTS.filter(function(p){
     return (curPref==="全国" ? false : p.pref===curPref) && (curTheme==="all" || p.theme===curTheme);
   });
   $("#find-posts").innerHTML = ps.length
-    ? '<h2 style="font-size:14px;color:var(--brown-dark);margin:14px 0 8px;">📮 '+esc(curPref)+'の先生の最近の投稿（ダミー）</h2>' + ps.map(postCard).join("")
+    ? '<h2 style="font-size:14px;color:var(--brown-dark);margin:14px 0 8px;">📮 '+esc(curPref)+'の先生の最近の投稿（ダミー）</h2>' + ps.map(function(p){ return postCard(p, true); }).join("")
     : "";
 }
 
-/* ---------- 手形アートのダミーSVG（自己完結・外部画像なし） ---------- */
-function handSVG(color, bg1, bg2, size){
-  return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
-   + '<defs><linearGradient id="g'+color.replace("#","")+'" x1="0" y1="0" x2="1" y2="1">'
+/* ---------- 手形アートのダミーSVG v2（ID重複バグ根治・作品バリエーション） ---------- */
+var GID = 0;
+function artSVG(variant, c1, c2, bg1, bg2, size){
+  GID++;
+  var id = "hg" + GID;
+  var head = '<svg width="'+size+'" height="'+size+'" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+   + '<defs><linearGradient id="'+id+'" x1="0" y1="0" x2="1" y2="1">'
    + '<stop offset="0" stop-color="'+bg1+'"/><stop offset="1" stop-color="'+bg2+'"/></linearGradient></defs>'
-   + '<rect width="100" height="100" rx="14" fill="url(#g'+color.replace("#","")+')"/>'
-   + '<g fill="'+color+'" opacity="0.9">'
+   + '<rect width="100" height="100" rx="14" fill="url(#'+id+')"/>'
+   + '<circle cx="16" cy="18" r="4" fill="#fff" opacity=".3"/><circle cx="86" cy="30" r="3" fill="#fff" opacity=".3"/>'
+   + '<circle cx="22" cy="84" r="3" fill="#fff" opacity=".3"/><circle cx="84" cy="78" r="4" fill="#fff" opacity=".3"/>';
+  var hand = function(color, tx, ty, sc, rot){
+    return '<g transform="translate('+tx+','+ty+') scale('+sc+') rotate('+rot+' 50 55)" fill="'+color+'" stroke="#fff" stroke-width="3" opacity=".95">'
+     + '<ellipse cx="50" cy="62" rx="16" ry="19"/>'
+     + '<circle cx="31" cy="52" r="5.5"/><circle cx="39" cy="40" r="6"/>'
+     + '<circle cx="50" cy="35" r="6.5"/><circle cx="61" cy="40" r="6"/><circle cx="69" cy="52" r="5.5"/>'
+     + '</g>';
+  };
+  var body = "";
+  if (variant === "te2"){
+    body = hand(c1, -8, -4, 0.85, -10) + hand(c2, 22, 18, 0.6, 14);
+  } else if (variant === "ashi"){
+    body = '<g fill="'+c1+'" stroke="#fff" stroke-width="3" opacity=".95">'
+     + '<ellipse cx="46" cy="60" rx="14" ry="22"/>'
+     + '<circle cx="34" cy="34" r="4"/><circle cx="42" cy="30" r="4.5"/><circle cx="50" cy="29" r="4.5"/><circle cx="58" cy="31" r="4"/><circle cx="64" cy="36" r="3.5"/>'
+     + '</g>'
+     + '<path d="M74 62 c-3-4 -9-3 -9 2 c0 4 9 9 9 9 c0 0 9-5 9-9 c0-5 -6-6 -9-2z" fill="'+c2+'" stroke="#fff" stroke-width="2.5"/>';
+  } else if (variant === "hana"){
+    body = hand(c1, 0, 4, 0.82, 0)
+     + '<circle cx="34" cy="35" r="5" fill="'+c2+'" stroke="#fff" stroke-width="2"/>'
+     + '<circle cx="41" cy="25" r="5" fill="'+c2+'" stroke="#fff" stroke-width="2"/>'
+     + '<circle cx="50" cy="21" r="5.5" fill="'+c2+'" stroke="#fff" stroke-width="2"/>'
+     + '<circle cx="59" cy="25" r="5" fill="'+c2+'" stroke="#fff" stroke-width="2"/>'
+     + '<circle cx="66" cy="35" r="5" fill="'+c2+'" stroke="#fff" stroke-width="2"/>';
+  } else { /* wreath */
+    var w = "";
+    for (var i=0;i<6;i++){
+      var ang = i*60;
+      w += '<g transform="rotate('+ang+' 50 50) translate(0,-26) scale(.28)" fill="'+(i%2? c2 : c1)+'" stroke="#fff" stroke-width="4" opacity=".95">'
+       + '<ellipse cx="50" cy="62" rx="16" ry="19"/>'
+       + '<circle cx="31" cy="52" r="5.5"/><circle cx="39" cy="40" r="6"/>'
+       + '<circle cx="50" cy="35" r="6.5"/><circle cx="61" cy="40" r="6"/><circle cx="69" cy="52" r="5.5"/>'
+       + '</g>';
+    }
+    body = '<g transform="translate(0,6)">'+w+'</g>';
+  }
+  return head + body + '</svg>';
+}
+/* 素材テンプレ風サムネ（枠つき） */
+function matSVG(type, c1, c2, bg1, bg2){
+  GID++;
+  var id = "mg" + GID;
+  var head = '<svg width="92" height="92" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+   + '<defs><linearGradient id="'+id+'" x1="0" y1="0" x2="1" y2="1">'
+   + '<stop offset="0" stop-color="'+bg1+'"/><stop offset="1" stop-color="'+bg2+'"/></linearGradient></defs>'
+   + '<rect width="100" height="100" rx="14" fill="url(#'+id+')"/>';
+  var mini = '<g transform="translate(58,52) scale(.34)" fill="'+c1+'" stroke="#fff" stroke-width="4" opacity=".95">'
    + '<ellipse cx="50" cy="62" rx="16" ry="19"/>'
    + '<circle cx="31" cy="52" r="5.5"/><circle cx="39" cy="40" r="6"/>'
    + '<circle cx="50" cy="35" r="6.5"/><circle cx="61" cy="40" r="6"/><circle cx="69" cy="52" r="5.5"/>'
-   + '</g></svg>';
+   + '</g>';
+  var body = "";
+  if (type === "insta"){
+    body = '<rect x="16" y="12" width="68" height="76" rx="8" fill="#fff" opacity=".92"/>'
+     + '<rect x="16" y="12" width="68" height="14" rx="8" fill="'+c2+'" opacity=".85"/>'
+     + '<rect x="22" y="34" width="42" height="5" rx="2.5" fill="'+c2+'" opacity=".6"/>'
+     + '<rect x="22" y="45" width="52" height="4" rx="2" fill="#D8CBBB"/>'
+     + '<rect x="22" y="54" width="46" height="4" rx="2" fill="#D8CBBB"/>' + mini;
+  } else if (type === "pop"){
+    body = '<path d="M20 22 h60 a8 8 0 0 1 8 8 v34 a8 8 0 0 1 -8 8 h-30 l-10 12 v-12 h-20 a8 8 0 0 1 -8-8 v-34 a8 8 0 0 1 8-8z" fill="#fff" opacity=".92"/>'
+     + '<rect x="26" y="34" width="40" height="6" rx="3" fill="'+c2+'" opacity=".7"/>'
+     + '<rect x="26" y="46" width="30" height="5" rx="2.5" fill="#D8CBBB"/>'
+     + '<path d="M76 16 l3 6 6 1 -4.5 4.5 1 6.5 -5.5-3 -5.5 3 1-6.5 -4.5-4.5 6-1z" fill="'+c1+'"/>' + mini;
+  } else { /* price */
+    body = '<rect x="16" y="14" width="68" height="72" rx="8" fill="#fff" opacity=".92"/>'
+     + '<rect x="16" y="14" width="68" height="15" rx="8" fill="'+c2+'" opacity=".85"/>'
+     + '<line x1="22" y1="42" x2="78" y2="42" stroke="#D8CBBB" stroke-width="3"/>'
+     + '<line x1="22" y1="55" x2="78" y2="55" stroke="#D8CBBB" stroke-width="3"/>'
+     + '<line x1="22" y1="68" x2="60" y2="68" stroke="#D8CBBB" stroke-width="3"/>'
+     + '<circle cx="50" cy="21" r="3.5" fill="#fff"/>' + mini;
+  }
+  return head + body + '</svg>';
 }
 
-/* ---------- ④ 素材室 ---------- */
+/* ---------- 素材室（7月末基準の棚） ---------- */
 var MATERIALS = [
- {name:"ハロウィン告知 画像テンプレ（Instagram用）", isNew:true,  c:"#8A6A54", b1:"#F7C8CC", b2:"#FBF6EE"},
- {name:"教室POP「はじめてさん歓迎」",               isNew:true,  c:"#3F6B57", b1:"#FBF6EE", b2:"#F7C8CC"},
- {name:"参加費のご案内 ひな形（価格表）",           isNew:false, c:"#EBA8B2", b1:"#FFF9F5", b2:"#F7C8CC"},
- {name:"公式LINE配信 文例セット（月4本）",          isNew:true,  c:"#8A6A54", b1:"#FBF6EE", b2:"#EFE0D4"},
- {name:"敬老の日ギフト 告知テンプレ",               isNew:false, c:"#3F6B57", b1:"#F7C8CC", b2:"#FBF6EE"},
- {name:"体験会アンケート ひな形",                   isNew:true,  c:"#EBA8B2", b1:"#FBF6EE", b2:"#FFF3E8"}
+ {name:"夏の思い出 足形うちわ 告知テンプレ（Instagram用）", isNew:true,  type:"insta", c1:"#F6A9B8", c2:"#EBA8B2", b1:"#FDEFF2", b2:"#FBF6EE"},
+ {name:"敬老の日ギフト 告知テンプレ",                       isNew:true,  type:"insta", c1:"#E8A24E", c2:"#D9B45A", b1:"#FBF4DF", b2:"#FFF9F5"},
+ {name:"教室POP「はじめてさん歓迎」",                       isNew:false, type:"pop",   c1:"#9FD6AE", c2:"#66B584", b1:"#EDF7F0", b2:"#FBF6EE"},
+ {name:"参加費のご案内 ひな形（価格表）",                   isNew:false, type:"price", c1:"#9FC1E8", c2:"#5E93D8", b1:"#EEF4FB", b2:"#FBF6EE"},
+ {name:"公式LINE配信 文例セット（月4本）",                  isNew:true,  type:"pop",   c1:"#C7A8E0", c2:"#9A76C8", b1:"#F4EEFA", b2:"#FBF6EE"},
+ {name:"体験会アンケート ひな形",                           isNew:false, type:"price", c1:"#F7C08A", c2:"#E8A24E", b1:"#FDF2E4", b2:"#FBF6EE"}
 ];
 function renderMaterials(){
-  $("#mat-grid").innerHTML = MATERIALS.map(function(m){
-    return '<div class="mat">'
+  $("#mat-grid").innerHTML = MATERIALS.map(function(m,i){
+    return '<div class="mat" style="animation-delay:'+(i*0.06)+'s">'
       + (m.isNew ? '<span class="new">今月の新着</span>' : "")
-      + '<div class="thumb">'+handSVG(m.c, m.b1, m.b2, 86)+'</div>'
+      + '<div class="thumb">'+matSVG(m.type, m.c1, m.c2, m.b1, m.b2)+'</div>'
       + '<div class="name">'+esc(m.name)+' <span class="dummy">※ダミー</span></div>'
       + '<button class="dl" onclick="toast(\'デモ版のため実ファイルはありません（本番でご提供）\')">⬇ ダウンロード</button>'
       + '</div>';
   }).join("");
 }
 
-/* ---------- ⑤ 開催レポートタイムライン ---------- */
+/* ---------- 開催レポ（夏ネタ・ポラロイド） ---------- */
 var REPORTS = [
- {nick:"みかん先生", ini:"MK", pref:"広島", time:"今日(ダミー)", c:"#3F6B57", b1:"#F7C8CC", b2:"#FBF6EE",
-  lines:"呉市の子育てひろばで開催\nハロウィンかぼちゃの手形、親子5組(ダミー)\n2歳さんの「できた！」の顔が最高でした"},
- {nick:"れもん先生", ini:"RM", pref:"愛知", time:"昨日(ダミー)", c:"#EBA8B2", b1:"#FBF6EE", b2:"#EFE0D4",
-  lines:"園の夏祭りに出店しました\n手形うちわ作り、33組(ダミー)が来てくれました\n来年もぜひと言っていただけて涙…"},
- {nick:"ゆうな先生", ini:"YN", pref:"沖縄", time:"2日前(ダミー)", c:"#8A6A54", b1:"#FFF9F5", b2:"#F7C8CC",
-  lines:"自宅教室ではじめての開催\n足形のシーサーアート、親子3組(ダミー)\n緊張したけど、やってよかった！"}
+ {nick:"みかん先生", pref:"広島", time:"今日（ダミー）", variant:"ashi", c1:"#5E93D8", c2:"#E9748F", b1:"#EEF4FB", b2:"#FDEFF2",
+  lines:"呉市の子育てひろばで開催\n夏の思い出・足形うちわの会、親子5組（ダミー）\n2歳さんの「できた！」の顔が最高でした"},
+ {nick:"れもん先生", pref:"愛知", time:"昨日（ダミー）", variant:"te2", c1:"#E8A24E", c2:"#F6A9B8", b1:"#FDF2E4", b2:"#FBF6EE",
+  lines:"園の夏祭りに出店しました\n手形うちわ作り、33組（ダミー）が来てくれました\n来年もぜひと言っていただけて涙…"},
+ {nick:"ゆうな先生", pref:"沖縄", time:"2日前（ダミー）", variant:"wreath", c1:"#66B584", c2:"#F5D97E", b1:"#EDF7F0", b2:"#FBF4DF",
+  lines:"自宅教室ではじめての開催\n足形のシーサーアート、親子3組（ダミー）\n緊張したけど、やってよかった！"}
 ];
-function renderReports(){
-  $("#report-list").innerHTML = REPORTS.map(function(r,i){
-    return '<div class="report">'
-      + '<div class="art">'+handSVG(r.c, r.b1, r.b2, 110)+'<span class="dummy-tag">写真はダミー画像です</span></div>'
-      + '<div class="inner">'
-      + '<div class="who" style="display:flex;gap:9px;align-items:center;">'+avatar(r.ini,i)
-      + '<div class="meta" style="font-size:12px;color:var(--muted);"><b style="color:var(--brown-dark);font-size:13.5px;">'+esc(r.nick)+'</b>（'+esc(r.pref)+'）・'+esc(r.time)+'</div></div>'
-      + '<p class="lines">'+esc(r.lines)+'</p>'
-      + '<div class="stamps">'
-      + STAMP_DEFS.map(function(d,j){
-          var pid = "rep"+i;
-          var n = stampCount(pid, d.key, 4 + ((i*2+j*3)%7));
-          return '<button class="stamp" onclick="addStamp(this,\''+pid+'\',\''+d.key+'\')">'+d.label+'<span class="n">'+n+'</span></button>';
-        }).join("")
-      + '</div></div></div>';
-  }).join("");
+function reportCard(r, i){
+  var pid = "rep-" + hash(r.nick);
+  return '<div class="report" style="animation-delay:'+(i*0.07)+'s">'
+    + '<div class="art"><div class="polaroid">'+artSVG(r.variant, r.c1, r.c2, r.b1, r.b2, 108)+'</div><span class="dummy-tag">写真はダミー画像です</span></div>'
+    + '<div class="inner">'
+    + '<div class="who" style="display:flex;gap:9px;align-items:center;">'+avatar(r.nick)
+    + '<div class="meta" style="font-size:12px;color:var(--muted);"><b style="color:var(--brown-dark);font-size:13.5px;">'+esc(r.nick)+'</b>（'+esc(r.pref)+'）・'+esc(r.time)+'</div></div>'
+    + '<p class="lines">'+esc(r.lines)+'</p>'
+    + '<div class="stamps">'+stampBtns(pid, false)+'</div>'
+    + '</div></div>';
 }
-function openReportModal(){ $("#report-modal").classList.add("open"); }
-function closeReportModal(){ $("#report-modal").classList.remove("open"); }
+function renderReports(){
+  $("#report-list").innerHTML = REPORTS.map(reportCard).join("");
+}
+function renderHomeHilite(){
+  var r = REPORTS[0];
+  $("#home-hilite").innerHTML =
+    '<div style="display:flex;gap:12px;align-items:center;">'
+    + '<div class="polaroid" style="transform:rotate(-3deg);">'+artSVG(r.variant, r.c1, r.c2, r.b1, r.b2, 72)+'</div>'
+    + '<div><div style="font-size:12px;color:var(--muted);"><b style="color:var(--brown-dark);font-size:13px;">'+esc(r.nick)+'</b>（'+esc(r.pref)+'）・'+esc(r.time)+'</div>'
+    + '<p style="font-size:12.5px;white-space:pre-line;margin-top:4px;">'+esc(r.lines)+'</p></div></div>';
+}
+function openReportModal(){ $("#report-modal").classList.add("open"); document.body.style.overflow = "hidden"; }
+function closeReportModal(){ $("#report-modal").classList.remove("open"); document.body.style.overflow = ""; }
 
-/* ---------- ⑦ 知恵袋（読み物）＋検索 ---------- */
+/* ---------- 季節の仕込みカレンダー（月めくり付き） ---------- */
+var SEASON_NOW = [
+ {when:"今週",   text:"夏休み体験会ウィーク後半。足形うちわの告知テンプレ、素材室にあります"},
+ {when:"今月中", text:"敬老の日（9/21）手形ギフト体験会の会場予約はお早めに"},
+ {when:"来月",   text:"ハロウィン企画の素材と告知ひな形を公開予定（先行告知は9月上旬から）"}
+];
+var SEASON_NEXT = [
+ {when:"8月上旬", text:"敬老の日ギフトの告知スタート。テンプレは配布済みです"},
+ {when:"お盆明け", text:"「夏の思い出アート」で夏の教室を締めくくり。作品展示のコツも配信予定"},
+ {when:"月末",   text:"ハロウィン先行告知の準備。クリスマス材料の仕入れリストも公開予定"}
+];
+var showingNext = false;
+function renderSeason(){
+  var list = showingNext ? SEASON_NEXT : SEASON_NOW;
+  $("#season-list").innerHTML = list.map(function(s,i){
+    return '<li style="animation:fadein .3s ease both;animation-delay:'+(i*0.08)+'s"><span class="when">'+esc(s.when)+'</span><span>'+esc(s.text)+' <span class="dummy">※ダミー</span></span></li>';
+  }).join("");
+  var b = $("#month-flip");
+  b.textContent = showingNext ? "📕 今月にもどる" : "📅 来月をのぞく";
+  b.classList.toggle("on", showingNext);
+}
+function flipMonth(){
+  showingNext = !showingNext;
+  renderSeason();
+  if (showingNext) toast("来月号のイメージです。毎月、本部が中身を入れ替えます（デモ）");
+}
+
+/* ---------- 知恵袋＋検索 ---------- */
 var ARTICLES = [
  {title:"体験会の集客、私はこう変えました", by:"もみじ先生（京都）", tags:"集客 インスタ 児童館 チラシ",
-  body:"最初の半年は、告知はインスタだけ。申込は毎回2組(ダミー)ほどでした。\n\n変えたことは2つです。①児童館と支援センターに置きチラシをお願いした ②参加してくれたママに「お友だちと一緒割」を案内した。\n\n3か月後、平均7組(ダミー)に。数字はダミーですが、「オンラインだけで完結させない」が私の学びでした。焦らず、地域に顔を覚えてもらうところから。"},
+  body:"最初の半年は、告知はインスタだけ。申込は毎回2組（ダミー）ほどでした。\n\n変えたことは2つです。①児童館と支援センターに置きチラシをお願いした ②参加してくれたママに「お友だちと一緒割」を案内した。\n\n3か月後、平均7組（ダミー）に。数字はダミーですが、「オンラインだけで完結させない」が私の学びでした。焦らず、地域に顔を覚えてもらうところから。"},
  {title:"児童館デビューまでの道のり", by:"うみ先生（千葉）", tags:"会場 児童館 支援センター 交渉",
-  body:"「個人の教室に貸してもらえるのかな」とずっと不安でした。\n\n実際にやったこと：①開催実績をA4一枚にまとめた（実績ノートが役立ちました） ②まず「見学」からお願いした ③職員さんに作品サンプルを見てもらった。\n\n最初のお返事まで3週間(ダミー)。断られた館もありますが、1つOKが出ると次が続きます。同じ挑戦をする先生の参考になればうれしいです。"},
- {title:"はじめての確定申告、こわくなかった話", by:"かえで先生（兵庫）", tags:"確定申告 お金 領収書 経費",
+  body:"「個人の教室に貸してもらえるのかな」とずっと不安でした。\n\n実際にやったこと：①開催実績をA4一枚にまとめた（実績ノートが役立ちました） ②まず「見学」からお願いした ③職員さんに作品サンプルを見てもらった。\n\n最初のお返事まで3週間（ダミー）。断られた館もありますが、1つOKが出ると次が続きます。同じ挑戦をする先生の参考になればうれしいです。"},
+ {title:"はじめての確定申告、こわくなかった話", by:"かえで先生（兵庫）", tags:"確定申告 お金 領収書 経費 材料",
   body:"開業1年目、「確定申告」の4文字が怖くて後回しにしていました。\n\nやってよかったのは、月末に領収書をスマホで撮ってフォルダ分けするだけの習慣。それと、この広場の「お金・確定申告」カテゴリで先輩に質問したこと。\n\n※税金の細かい判断は税務署や専門家への確認が安心です。ここでは「先輩はこうしていた」の共有まで。"}
 ];
 function renderArticles(){
@@ -817,7 +1183,7 @@ function renderArticles(){
       + '<div class="body">'+esc(a.body)+'</div></div>';
   }).join("");
 }
-/* 静的JSインデックス検索（過去Q&A＋知恵袋） */
+function quickSearch(q){ $("#q-input").value = q; doSearch(); }
 function doSearch(){
   var q = $("#q-input").value.trim();
   var box = $("#q-result");
@@ -827,7 +1193,7 @@ function doSearch(){
     if ((a.title+a.body+a.tags).indexOf(q) >= 0) hits.push({type:"📖 知恵袋", label:a.title, act:"openArticle("+i+")"});
   });
   BASE_POSTS.forEach(function(p){
-    if ((p.body+CATS[p.cat]+p.pref+p.nick).indexOf(q) >= 0) hits.push({type:"💬 過去Q&A", label:p.body.slice(0,34)+"…", act:"jumpPost('"+p.cat+"')"});
+    if ((p.body+CATS[p.cat]+p.pref+p.nick).indexOf(q) >= 0) hits.push({type:"💬 過去Q&A", label:p.body.slice(0,34)+"…", act:"jumpPost('"+p.cat+"','"+p.id+"')"});
   });
   box.innerHTML = hits.length
     ? '<p class="hit-count">「'+esc(q)+'」で '+hits.length+'件ヒット（デモ用データ）</p>'
@@ -842,9 +1208,15 @@ function openArticle(i){
   el.classList.add("open");
   el.scrollIntoView({behavior:"smooth", block:"center"});
 }
-function jumpPost(cat){ goTab("board"); subTab("qa"); filterCat(cat); }
+function jumpPost(cat, pid){
+  goTab("board"); subTab("qa"); filterCat(cat);
+  setTimeout(function(){
+    var el = document.getElementById("post-"+pid);
+    if (el){ el.scrollIntoView({behavior:"smooth", block:"center"}); el.classList.add("flash"); }
+  }, 250);
+}
 
-/* ---------- ひろがる予定地（オプション棚・見せるだけトグル） ---------- */
+/* ---------- ひろがる予定地 ---------- */
 var OPTIONS = [
  {t:"盛り上がりスコア（AI採点）", d:"投稿の熱量をVERA側で自動採点し月間ハイライトを選出（御社側にAIツールは一切入れません）"},
  {t:"先輩講師バッジ・会員証グレード", d:"開催回数に応じた称号表示。比べるためではなく、続けてきたことを認める飾りとして"},
@@ -881,11 +1253,26 @@ function updateOptCount(){
   $("#opt-count").textContent = n;
 }
 
+/* ---------- デモリセット ---------- */
+function resetDemo(){
+  if (!confirm("お試しの投稿・スタンプ・ONにした項目を消して、デモを最初の状態にもどします。よろしいですか？")) return;
+  try{
+    localStorage.removeItem(LS_POSTS);
+    localStorage.removeItem(LS_STAMP);
+    localStorage.removeItem(LS_OPTS);
+  }catch(e){}
+  location.reload();
+}
+
 /* ---------- 初期化 ---------- */
 (function init(){
   $("#f-pref").innerHTML = PREFS_ALL.map(function(p){
     return '<option value="'+p+'"'+(p==="広島"?" selected":"")+'>'+p+'</option>';
   }).join("");
+  var d = new Date();
+  $("#today-date").textContent = (d.getMonth()+1)+"月"+d.getDate()+"日（"+"日月火水木金土".charAt(d.getDay())+"）";
+  renderHomeHilite();
+  renderSeason();
   renderPosts();
   renderFindChips();
   renderFind();
@@ -893,6 +1280,16 @@ function updateOptCount(){
   renderReports();
   renderArticles();
   renderOptions();
+  var wbtn = document.querySelector('[data-pid="welcome-p2"]');
+  if (wbtn && stampState("welcome-p2","w")){
+    wbtn.classList.add("pressed");
+    wbtn.querySelector(".n").textContent = "1";
+  }
+  $$(".ticker .cnt").forEach(countUp);
+  $("#q-input").addEventListener("keydown", function(e){
+    if (e.isComposing || e.keyCode === 229) return;
+    if (e.key === "Enter"){ e.preventDefault(); doSearch(); }
+  });
 })();
 </script>
 </body>
