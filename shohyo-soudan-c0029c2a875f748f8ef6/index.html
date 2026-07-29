@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>商標のご相談一覧｜株式会社VERA Holdings</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Yu Gothic Medium", "Yu Gothic", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+    color: #222222;
+    background: #F2F4F8;
+    line-height: 1.75;
+    font-size: 15px;
+  }
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    padding: 40px 48px 56px;
+  }
+  /* ===== ヘッダ ===== */
+  .doc-head {
+    border-bottom: 4px solid #1D447C;
+    padding-bottom: 18px;
+    margin-bottom: 8px;
+  }
+  .doc-head .to {
+    font-size: 14px;
+    color: #444444;
+    margin-bottom: 10px;
+  }
+  .doc-head .to strong { font-size: 16px; color: #1D447C; }
+  .doc-head h1 {
+    font-size: 26px;
+    color: #1D447C;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .doc-head .sub {
+    font-size: 13.5px;
+    color: #555555;
+  }
+  .doc-meta {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 13px;
+    color: #555555;
+    padding: 10px 0 26px;
+  }
+  /* ===== セクション ===== */
+  section { margin-bottom: 36px; }
+  h2 {
+    font-size: 18px;
+    color: #FFFFFF;
+    background: #1D447C;
+    padding: 7px 14px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+  }
+  h2 .no {
+    display: inline-block;
+    background: #FFFFFF;
+    color: #1D447C;
+    border-radius: 3px;
+    font-size: 13px;
+    padding: 0 7px;
+    margin-right: 9px;
+    font-weight: 700;
+  }
+  h3 {
+    font-size: 15.5px;
+    color: #1D447C;
+    border-left: 4px solid #C5201D;
+    padding-left: 9px;
+    margin: 18px 0 8px;
+  }
+  p.lead { margin-bottom: 10px; }
+  /* ===== 表 ===== */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin: 8px 0 6px;
+  }
+  th, td {
+    border: 1px solid #C9D2E0;
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: #E8EDF5;
+    color: #1D447C;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  td.center { text-align: center; }
+  .tm-name { font-size: 15px; font-weight: 700; color: #222222; }
+  .badge {
+    display: inline-block;
+    font-size: 11.5px;
+    font-weight: 700;
+    border-radius: 3px;
+    padding: 1px 8px;
+    margin-left: 6px;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+  .badge-main { background: #C5201D; color: #FFFFFF; }
+  .badge-temp { background: #FFFFFF; color: #C5201D; border: 1.5px dashed #C5201D; }
+  .badge-risk { background: #8A6D1D; color: #FFFFFF; }
+  .kubun {
+    display: inline-block;
+    background: #1D447C;
+    color: #FFFFFF;
+    border-radius: 3px;
+    font-size: 12.5px;
+    padding: 1px 8px;
+    margin: 1px 2px 1px 0;
+    white-space: nowrap;
+  }
+  .note {
+    font-size: 12.5px;
+    color: #666666;
+    margin: 4px 0 0;
+  }
+  .caution {
+    background: #FBF3F3;
+    border: 1px solid #E3B7B6;
+    border-radius: 5px;
+    padding: 12px 15px;
+    font-size: 13.5px;
+    margin: 10px 0;
+  }
+  .caution .tag { color: #C5201D; font-weight: 700; }
+  .box {
+    background: #F4F7FB;
+    border: 1px solid #C9D2E0;
+    border-radius: 5px;
+    padding: 12px 15px;
+    font-size: 13.5px;
+    margin: 10px 0;
+  }
+  ol.qs { margin: 6px 0 0 22px; }
+  ol.qs li { margin-bottom: 9px; }
+  ol.qs li .q-head { font-weight: 700; color: #1D447C; }
+  ul.plain { margin: 4px 0 0 20px; }
+  ul.plain li { margin-bottom: 4px; }
+  /* ===== 実物見本 ===== */
+  .specimen-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 10px 0 4px;
+  }
+  .specimen {
+    flex: 1 1 220px;
+    border: 1px solid #C9D2E0;
+    border-radius: 6px;
+    padding: 14px;
+    text-align: center;
+    background: #FFFFFF;
+  }
+  .specimen .cap {
+    font-size: 12.5px;
+    color: #555555;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+  .specimen img { max-height: 96px; max-width: 100%; }
+  /* ===== フッタ ===== */
+  .foot {
+    border-top: 2px solid #1D447C;
+    margin-top: 40px;
+    padding-top: 14px;
+    font-size: 12px;
+    color: #666666;
+    line-height: 1.7;
+  }
+  /* ===== 印刷 ===== */
+  @media print {
+    body { background: #FFFFFF; }
+    .page { max-width: none; padding: 8mm 10mm; }
+    section { break-inside: avoid-page; }
+    h2 { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    th, .kubun, .badge-main, .badge-risk { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+  @media (max-width: 640px) {
+    .page { padding: 22px 16px 40px; }
+    table { font-size: 12.5px; }
+    th, td { padding: 6px 7px; }
+  }
+  .tablewrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+<script>(function(){try{if(localStorage.getItem('tm_gate')==='1')return;}catch(e){return;}
+var PW="shohyo2026";
+var o=document.createElement('div');
+o.setAttribute('style','position:fixed;inset:0;z-index:2147483647;background:#1D447C;display:flex;align-items:center;justify-content:center;font-family:"Yu Gothic Medium","Yu Gothic","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;');
+o.innerHTML='<div style="background:#fff;border-radius:14px;padding:34px 30px;max-width:380px;width:88%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.3)">'
++'<div style="font-size:13px;font-weight:700;letter-spacing:.18em;color:#C5201D">VERA</div>'
++'<h2 style="font-size:18px;color:#1D447C;background:none;margin:10px 0 6px;border:none;padding:0;letter-spacing:1px">合言葉を入力してください</h2>'
++'<p style="font-size:12.5px;color:#555555;line-height:1.7;margin-bottom:16px">このページは関係者限定です。<br>お渡しした合言葉をご入力ください。</p>'
++'<input id="tmi" type="password" autocomplete="off" placeholder="合言葉" style="width:100%;padding:11px 14px;font-size:15px;border:1px solid #C9D2E0;border-radius:8px;outline:none;box-sizing:border-box">'
++'<button id="tmb" style="width:100%;margin-top:12px;padding:11px;font-size:15px;font-weight:700;color:#FFFFFF;background:#C5201D;border:none;border-radius:8px;cursor:pointer">ひらく</button>'
++'<div id="tme" style="color:#C5201D;font-size:12.5px;margin-top:10px;min-height:18px"></div></div>';
+var run=function(){document.body.appendChild(o);
+var i=document.getElementById('tmi'),b=document.getElementById('tmb'),e=document.getElementById('tme');
+var ok=function(){if(i.value===PW){try{localStorage.setItem('tm_gate','1')}catch(x){}location.reload()}else{e.textContent='合言葉が違います';i.value='';i.focus()}};
+b.addEventListener('click',ok);i.addEventListener('keydown',function(ev){if(ev.key==='Enter')ok()});i.focus();};
+if(document.body){run()}else{document.addEventListener('DOMContentLoaded',run)}
+})();</script>
+<div class="page">
+
+  <!-- ヘッダ -->
+  <div class="doc-head">
+    <p class="to">すずたか総合法律事務所<br><strong>山﨑 由紀子 先生</strong></p>
+    <h1>商標のご相談一覧</h1>
+    <p class="sub">自社ブランド・サービス名称の商標出願について、ご相談したい内容の整理</p>
+  </div>
+  <div class="doc-meta">
+    <span>株式会社VERA Holdings　代表取締役社長　森岡 浩一</span>
+    <span>2026年7月29日</span>
+  </div>
+
+  <!-- 1. 背景 -->
+  <section>
+    <h2><span class="no">1</span>ご相談の背景</h2>
+    <p class="lead">当社は2026年7月9日に設立した会社です（本店：東京都千代田区内幸町）。事業は、アライアンスハブSaaSによる企業連携の後方支援／住まいの支援・防災事業／AI・DX／自社ブランドの販売の4本です。</p>
+    <p class="lead">自社ブランドの名称・ロゴを商標で守りたく、J-PlatPat（特許庁の無料検索）で一次確認まで自社で行いました。<strong>専門家による先行調査と、出願方針のご助言をお願いしたい</strong>というのが本日のご相談です。</p>
+    <p class="note">※本資料の件数・調査結果はすべて当社の一次確認（各時点）によるもので、登録可否を断定するものではありません。</p>
+  </section>
+
+  <!-- 2. 全体図 -->
+  <section>
+    <h2><span class="no">2</span>全体図 ── 何を出願したいか（1枚マップ）</h2>
+    <svg viewBox="0 0 800 430" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; border:1px solid #C9D2E0; border-radius:6px; background:#FFFFFF;">
+      <!-- タイトル -->
+      <text x="400" y="34" text-anchor="middle" font-size="17" font-weight="bold" fill="#1D447C">㈱VERA Holdings 商標ポートフォリオ（2026年7月時点の考え）</text>
+      <!-- 本命エリア -->
+      <rect x="30" y="58" width="460" height="210" rx="8" fill="#F4F7FB" stroke="#1D447C" stroke-width="2"/>
+      <text x="50" y="86" font-size="14" font-weight="bold" fill="#C5201D">◆ 出願したい（本命2本）</text>
+      <!-- 本命1 -->
+      <rect x="50" y="100" width="200" height="148" rx="6" fill="#FFFFFF" stroke="#1D447C" stroke-width="1.5"/>
+      <text x="150" y="126" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#222222">① 四つ葉エンブレム</text>
+      <text x="150" y="144" text-anchor="middle" font-size="12" fill="#555555">（図形商標・単体）</text>
+      <rect x="76" y="156" width="64" height="24" rx="3" fill="#1D447C"/>
+      <text x="108" y="173" text-anchor="middle" font-size="12" fill="#FFFFFF">第42類</text>
+      <rect x="148" y="156" width="64" height="24" rx="3" fill="#1D447C"/>
+      <text x="180" y="173" text-anchor="middle" font-size="12" fill="#FFFFFF">第9類</text>
+      <text x="150" y="204" text-anchor="middle" font-size="11.5" fill="#555555">本業（AI・SaaS）の中核。</text>
+      <text x="150" y="221" text-anchor="middle" font-size="11.5" fill="#555555">先行登録「ヴェラ」の壁を</text>
+      <text x="150" y="238" text-anchor="middle" font-size="11.5" fill="#555555">図形で越える狙い</text>
+      <!-- 本命2 -->
+      <rect x="270" y="100" width="200" height="148" rx="6" fill="#FFFFFF" stroke="#1D447C" stroke-width="1.5"/>
+      <text x="370" y="126" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#222222">② VERA（文字）</text>
+      <text x="370" y="144" text-anchor="middle" font-size="12" fill="#555555">（標準文字を想定）</text>
+      <rect x="296" y="156" width="64" height="24" rx="3" fill="#1D447C"/>
+      <text x="328" y="173" text-anchor="middle" font-size="12" fill="#FFFFFF">第35類</text>
+      <rect x="368" y="156" width="64" height="24" rx="3" fill="#1D447C"/>
+      <text x="400" y="173" text-anchor="middle" font-size="12" fill="#FFFFFF">第41類</text>
+      <text x="370" y="204" text-anchor="middle" font-size="11.5" fill="#555555">本体ブランド名を</text>
+      <text x="370" y="221" text-anchor="middle" font-size="11.5" fill="#555555">先行登録の壁の外の区分で</text>
+      <text x="370" y="238" text-anchor="middle" font-size="11.5" fill="#555555">確保する</text>
+      <!-- 仮称エリア -->
+      <rect x="510" y="58" width="260" height="210" rx="8" fill="#FFFFFF" stroke="#C5201D" stroke-width="2" stroke-dasharray="7 5"/>
+      <text x="530" y="86" font-size="14" font-weight="bold" fill="#C5201D">◇ 仮称段階（本日は話題として）</text>
+      <rect x="530" y="100" width="220" height="148" rx="6" fill="#FBF3F3" stroke="#E3B7B6" stroke-width="1.5"/>
+      <text x="640" y="126" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#222222">③ VERA House（仮称）</text>
+      <text x="640" y="144" text-anchor="middle" font-size="12" fill="#555555">（文字・防災/住まい事業の旗艦）</text>
+      <rect x="566" y="156" width="64" height="24" rx="3" fill="#8A93A6"/>
+      <text x="598" y="173" text-anchor="middle" font-size="12" fill="#FFFFFF">第37類</text>
+      <rect x="638" y="156" width="64" height="24" rx="3" fill="#8A93A6"/>
+      <text x="670" y="173" text-anchor="middle" font-size="12" fill="#FFFFFF">第36類</text>
+      <text x="640" y="204" text-anchor="middle" font-size="11.5" fill="#8A2B29">名称が変わる可能性あり。</text>
+      <text x="640" y="221" text-anchor="middle" font-size="11.5" fill="#8A2B29">名称確定後に出願したい。</text>
+      <text x="640" y="238" text-anchor="middle" font-size="11.5" fill="#8A2B29">進め方だけ先にご相談</text>
+      <!-- 下段：別件と見送り -->
+      <rect x="30" y="288" width="460" height="118" rx="8" fill="#FBF8EF" stroke="#8A6D1D" stroke-width="1.5"/>
+      <text x="50" y="316" font-size="14" font-weight="bold" fill="#8A6D1D">▲ 別件のリスク相談 ── 新サービス名「広告カルテ」（仮）</text>
+      <text x="50" y="342" font-size="12.5" fill="#555555">広告×LTVの月次レポート。㈱プレイド（KARTE）が</text>
+      <text x="50" y="362" font-size="12.5" fill="#555555">「カルテ」称呼の商標を第35類で11件保有（当社07-23確認）。</text>
+      <text x="50" y="382" font-size="12.5" fill="#8A2B29">→ 名称を変えるべきか伺いたい（判断まで対外配布は停止中）</text>
+      <rect x="510" y="288" width="260" height="118" rx="8" fill="#F5F5F5" stroke="#AAAAAA" stroke-width="1"/>
+      <text x="530" y="316" font-size="14" font-weight="bold" fill="#666666">─ 今回は見送り</text>
+      <text x="530" y="342" font-size="12.5" fill="#666666">自社アプリ名（匠360・Diamond Note・</text>
+      <text x="530" y="362" font-size="12.5" fill="#666666">Pulcher Note）＝利用者基盤が育ってから。</text>
+      <text x="530" y="382" font-size="12.5" fill="#666666">他社ブランド名は出願しない。</text>
+    </svg>
+  </section>
+
+  <!-- 3. 本命2本 -->
+  <section>
+    <h2><span class="no">3</span>出願したい商標（本命2本）</h2>
+    <div class="specimen-row">
+      <div class="specimen">
+        <img src="vera_emblem_2color.svg" alt="四つ葉エンブレム（実物）">
+        <p class="cap">① 四つ葉エンブレム（実物）<br>V・E・R・Aを四つ葉のクローバー状に編み込んだ意匠</p>
+      </div>
+      <div class="specimen">
+        <img src="vera_wordmark_navy.svg" alt="VERAワードマーク（実物）" style="height:50px; margin:23px 0;">
+        <p class="cap">② VERA ワードマーク（実物のロゴ書体）<br>※標準文字での出願か本書体での出願かはご相談による</p>
+      </div>
+    </div>
+    <div class="tablewrap">
+    <table>
+      <tr>
+        <th style="width:26%">商標</th>
+        <th style="width:14%">種別</th>
+        <th style="width:20%">想定区分</th>
+        <th>位置づけ・狙い</th>
+      </tr>
+      <tr>
+        <td><span class="tm-name">① 四つ葉エンブレム（単体）</span><span class="badge badge-main">本命</span></td>
+        <td>図形</td>
+        <td class="center"><span class="kubun">第42類</span><span class="kubun">第9類</span></td>
+        <td>本業（AI・SaaS開発）の中核区分。第42類には先行登録「ヴェラ」（下記4参照）があり文字では厳しいと考え、<strong>図形で識別力を出して押さえる</strong>作戦です。</td>
+      </tr>
+      <tr>
+        <td><span class="tm-name">② VERA</span><span class="badge badge-main">本命</span></td>
+        <td>文字</td>
+        <td class="center"><span class="kubun">第35類</span><span class="kubun">第41類</span></td>
+        <td>本体ブランド名。先行登録「ヴェラ」の指定は第9・42類のため、<strong>壁の外側の区分（広告・事業支援＝35類、教育・セミナー＝41類）で文字を確保</strong>する考えです。</td>
+      </tr>
+    </table>
+    </div>
+    <div class="caution">
+      <span class="tag">気になっている点：</span>①のエンブレムはV・E・R・Aの文字を編み込んだ意匠のため、<strong>完全な無文字ではありません</strong>。図形から称呼「ベラ」が認定されると先行登録を引用される余地があるのでは──と懸念しており、ここが専門家のご判断を伺いたい急所です。
+    </div>
+  </section>
+
+  <!-- 4. 先行登録の壁 -->
+  <section>
+    <h2><span class="no">4</span>把握している先行登録 ──「ヴェラ」の壁</h2>
+    <div class="tablewrap">
+    <table>
+      <tr>
+        <th style="width:22%">項目</th>
+        <th>内容（当社のJ-PlatPat一次確認による）</th>
+      </tr>
+      <tr><td>登録番号</td><td>登録第6377221号「ヴェラ」（出願番号：商願2020-32518）</td></tr>
+      <tr><td>権利者</td><td>エヌエスイープロダクツ（NSE Products／米Nu Skin系）</td></tr>
+      <tr><td>区分</td><td><span class="kubun">第9類</span><span class="kubun">第42類</span>（出願2020-03-25／登録2021-04-14・登録中）</td></tr>
+      <tr><td>当社が確認した中身</td><td>第42類の指定役務に「電子計算機のプログラムの設計・作成・保守」「オンラインによるアプリケーションソフトウェアの提供（SaaS）」「クラウドコンピューティング」等が明記されており、<strong>当社の本業（AI・SaaS）と役務が実際に重なる</strong>ことを確認済みです（2026-06-28確認）。</td></tr>
+      <tr><td>当社の受け止め</td><td>「VERA」文字×第42類の出願は拒絶リスクが現実的に高い → だから <strong>42類は図形（エンブレム）で・文字は35/41類で</strong>、という上記の組み立てにしています。<strong>この組み立て自体が妥当かどうか</strong>をご相談したいです。</td></tr>
+    </table>
+    </div>
+  </section>
+
+  <!-- 5. 仮称 VERA House -->
+  <section>
+    <h2><span class="no">5</span>VERA House（仮称）── 本日は「話題」としてお持ちしました</h2>
+    <p class="lead">防災・住まい事業の旗艦ブランド候補です。ただし<strong>名称はまだ仮称で、変わる可能性があります</strong>（名刺からも一旦名称を外しています）。本日は出願のご依頼ではなく、<strong>名称確定後にすぐ動けるよう、進め方と論点だけ</strong>伺えればと考えています。</p>
+    <div class="tablewrap">
+    <table>
+      <tr>
+        <th style="width:26%">商標（案）</th>
+        <th style="width:14%">種別</th>
+        <th style="width:20%">想定区分</th>
+        <th>当社の一次確認</th>
+      </tr>
+      <tr>
+        <td><span class="tm-name">③ VERA House</span><span class="badge badge-temp">仮称</span></td>
+        <td>文字</td>
+        <td class="center"><span class="kubun">第37類</span><span class="kubun">第36類</span></td>
+        <td>建設（37類）・不動産（36類）を想定。J-PlatPatで「vera-house／verahouse／ヴェラハウス」いずれも0件（2026-07-15当社確認）。称呼類似「ベラハウス」は32件ヒットしましたが完全一致はありませんでした。</td>
+      </tr>
+    </table>
+    </div>
+    <div class="box">
+      <strong>伺いたい点：</strong>（a）「House」部分は識別力が弱いのでは、という論点にどう備えるか（b）仮称段階でできる準備（区分設計・先行調査の先回り）はあるか（c）称呼「ベラ」の先行が37類・36類には表面上見当たらない、という当社の見立ての妥当性。
+    </div>
+  </section>
+
+  <!-- 6. 広告カルテ -->
+  <section>
+    <h2><span class="no">6</span>別件のリスク相談 ── 新サービス名「広告カルテ」（仮）</h2>
+    <p class="lead">広告の成果とLTV（顧客生涯価値）を毎月見える化する月次レポートサービスを準備中で、名称を「広告カルテ」としたいと考えていました。ところが自社調査で次のことが分かりました。</p>
+    <div class="tablewrap">
+    <table>
+      <tr><th style="width:22%">項目</th><th>内容（2026-07-23 当社確認）</th></tr>
+      <tr><td>他社の先行商標</td><td>株式会社プレイド（「KARTE」・東証上場）が、<strong>「カルテ」称呼の商標を第35類（広告・事業支援）で11件保有</strong>。ほかに第38類9件・第42類9件。</td></tr>
+      <tr><td>当社との重なり</td><td>当社サービスの本命区分がまさに第35類。さらに同社の「KARTE Signals」は広告レポート自動取込＋LTV観点の広告評価を掲げており、<strong>サービスのコンセプトも近接</strong>しています。</td></tr>
+      <tr><td>現在の対応</td><td>ご判断を伺うまで「広告カルテ」名での対外配布は<strong>停止中</strong>です。代替名の候補（「広告健診」等）も社内にあります。</td></tr>
+    </table>
+    </div>
+    <div class="caution">
+      <span class="tag">伺いたい点：</span>この名称を使うリスクの度合い（商標権侵害・不正競争の観点）と、<strong>名称を変えるべきか、このまま使える余地があるか</strong>のご意見。
+    </div>
+  </section>
+
+  <!-- 7. お聞きしたいこと -->
+  <section>
+    <h2><span class="no">7</span>本日お聞きしたいこと（まとめ）</h2>
+    <ol class="qs">
+      <li><span class="q-head">本命2本の先行調査：</span>①エンブレム（図形）×42・9類、②VERA（文字）×35・41類について、専門家による先行調査をお願いできるか。</li>
+      <li><span class="q-head">エンブレムの称呼問題：</span>V・E・R・Aを編み込んだ図形から称呼「ベラ」が認定され、先行登録「ヴェラ」（第6377221号）を引用されるリスクの見立て。</li>
+      <li><span class="q-head">組み立ての妥当性：</span>「42類は図形で・文字は壁の外（35/41類）で」という当社の作戦への評価と、より良い組み立てがあれば。</li>
+      <li><span class="q-head">VERA House（仮称）：</span>名称確定前にできる準備と、「House」の識別力論点への備え。</li>
+      <li><span class="q-head">広告カルテ：</span>プレイド「カルテ」商標群（35類11件）との関係で、名称変更すべきかのご意見。</li>
+      <li><span class="q-head">進め方と費用：</span>先生の事務所でのご対応範囲（出願まで／弁理士との連携）、出願の順序、早期審査の要否、概算のお見積り。</li>
+    </ol>
+  </section>
+
+  <!-- 8. 費用の自社把握 -->
+  <section>
+    <h2><span class="no">8</span>費用について当社が把握している目安（参考）</h2>
+    <p class="lead">特許庁公表の料金（当社確認時点）をもとにした<strong>印紙代のみ</strong>の概算です。専門家報酬は含みません。お見積りをお願いしたいです。</p>
+    <div class="tablewrap">
+    <table>
+      <tr>
+        <th>ケース</th>
+        <th>出願料</th>
+        <th>登録料（10年一括）</th>
+        <th>印紙代合計（概算）</th>
+      </tr>
+      <tr>
+        <td>本命2本のみ（①＋②＝4区分）</td>
+        <td>約4.1万円</td>
+        <td>約13.2万円</td>
+        <td><strong>約17.3万円</strong></td>
+      </tr>
+      <tr>
+        <td>3本すべて（①＋②＋③＝6区分）</td>
+        <td>約6.2万円</td>
+        <td>約19.7万円</td>
+        <td><strong>約25.9万円</strong></td>
+      </tr>
+    </table>
+    </div>
+    <p class="note">※出願料＝3,400円＋8,600円×区分数／登録料＝32,900円×区分数（10年一括）で当社が試算。5年分納を使うと初期負担は圧縮できると理解しています（例：6区分で初期 約16.5万円）。料金改定の可能性があるため最新の確認をお願いします。</p>
+  </section>
+
+  <!-- 9. 参考：見送り -->
+  <section>
+    <h2><span class="no">9</span>参考 ── 今回出願を見送るもの</h2>
+    <ul class="plain">
+      <li><strong>自社アプリ名（匠360・Diamond Note・Pulcher Note）</strong>：利用者基盤がまだ小さいため、軌道に乗ってから出願を検討します（「タクミ360」はJ-PlatPat 0件を2026-07-15に自社確認済み）。</li>
+      <li><strong>ロゴ全体（結合商標）・カタカナ表記（ヴェラ等）の防御出願</strong>：初期費用を絞るため今回は見送り。必要性のご意見があれば伺いたいです。</li>
+      <li><strong>他社ブランド名</strong>：当社が代理店・パートナーとして扱う他社サービスの名称は、当社からは出願しません。</li>
+    </ul>
+  </section>
+
+  <div class="foot">
+    <p><strong>おことわり：</strong>本資料は当社によるJ-PlatPat等の一次確認（各記載時点）に基づく暫定的な整理です。件数・登録状況は確認時点のものであり、公開データベースへの反映遅れ（3〜4週間程度）があり得ると理解しています。登録の可否・侵害リスクの有無を当社が断定するものではなく、専門家のご判断を仰ぐための材料としてお持ちしました。</p>
+    <p style="margin-top:8px;">株式会社VERA Holdings（2026年7月9日設立）　代表取締役社長 森岡 浩一　／　〒100-0011 東京都千代田区内幸町1-3-1 幸ビルディング9階</p>
+  </div>
+
+</div>
+</body>
+</html>
