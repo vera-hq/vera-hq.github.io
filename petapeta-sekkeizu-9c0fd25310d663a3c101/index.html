@@ -1,0 +1,1301 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <!-- 完成時に content を FILLED に変える。TEMPLATE のままだと preflight が FAIL になる -->
+  <meta name="diagram-status" content="FILLED">
+  <!-- 骨格系統の身分証。preflight が検査系統を判別する。編集禁止 -->
+  <meta name="diagram-skeleton" content="structure-v1">
+  <title>ペタペタ再クロージング設計図</title>
+  <style>
+    /* ================================================================
+       OD-TOKENS v1 START
+       ここから END までは「デザイントークン正本」。1文字も編集しない。
+       色を増やしたい場合はトークンを触らず、CASE-SPECIFIC 側に追加する。
+       ================================================================ */
+    :root {
+      --ink: #17202c;
+      --sub: #607084;
+      --line: #d8e1ec;
+      --paper: #ffffff;
+      --bg: #fbfcfe;
+      --blue: #2469a8;
+      --blue-soft: #e8f2fc;
+      --green: #24765b;
+      --green-soft: #e8f7f0;
+      --orange: #b96a25;
+      --orange-soft: #fff1df;
+      --red: #b54141;
+      --red-soft: #fff0f0;
+      --purple: #6658c7;
+      --purple-soft: #f1efff;
+      --yellow: #f6d66b;
+      --dark: #111a27;
+      --shadow: 0 16px 34px rgba(23, 32, 44, .09);
+      --shadow-soft: 0 10px 22px rgba(23, 32, 44, .055);
+    }
+    /* OD-TOKENS v1 END */
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 4%, rgba(36,105,168,.10), transparent 25%),
+        radial-gradient(circle at 86% 2%, rgba(185,106,37,.12), transparent 24%),
+        linear-gradient(90deg, rgba(36,105,168,.05) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(36,105,168,.04) 1px, transparent 1px),
+        #fff;
+      background-size: auto, auto, 34px 34px, 34px 34px;
+      font-family: "Yu Gothic", YuGothic, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, system-ui, sans-serif;
+      line-height: 1.68;
+      letter-spacing: 0;
+    }
+
+    .page {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 28px 20px 56px;
+    }
+
+    /* ---------- ヒーロー ---------- */
+    header.hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 24px;
+      align-items: center;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      box-shadow: var(--shadow);
+      padding: 32px;
+    }
+
+    .badge {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #bfd7ef;
+      border-radius: 999px;
+      padding: 5px 12px;
+      color: var(--blue);
+      background: var(--blue-soft);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    h1 {
+      max-width: 920px;
+      margin: 16px 0 12px;
+      font-size: clamp(31px, 5vw, 58px);
+      line-height: 1.12;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 940px;
+      color: var(--sub);
+      font-size: 18px;
+    }
+
+    .meta-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .meta-chips span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--sub);
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 4px 12px;
+    }
+
+    .hero-visual {
+      display: grid;
+      place-items: center;
+      min-height: 280px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, #f0f7ff, #fff 52%, #fff4e7);
+      border: 1px solid var(--line);
+    }
+
+    /* ---------- 見出し・基本 ---------- */
+    section { margin-top: 30px; }
+
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 16px;
+      font-size: 27px;
+      line-height: 1.32;
+    }
+
+    h2 .num {
+      display: inline-grid;
+      place-items: center;
+      flex: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 18px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    h3 { margin: 0 0 8px; font-size: 18px; line-height: 1.4; }
+    p { margin: 0 0 12px; }
+    .muted { color: var(--sub); }
+    ul, ol { margin: 0; padding-left: 21px; }
+    li { margin: 4px 0; }
+
+    code {
+      border-radius: 5px;
+      padding: 2px 5px;
+      background: #edf2f7;
+      color: #233044;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .92em;
+    }
+
+    .grid { display: grid; gap: 16px; }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+      padding: 18px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .card.blue { background: var(--blue-soft); border-color: #bdd8f0; }
+    .card.green { background: var(--green-soft); border-color: #bde3d2; }
+    .card.orange { background: var(--orange-soft); border-color: #efcca9; }
+    .card.red { background: var(--red-soft); border-color: #efcaca; }
+    .card.purple { background: var(--purple-soft); border-color: #d8d1ff; }
+
+    .label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      padding: 3px 10px;
+      background: rgba(255,255,255,.74);
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .label.blue { color: var(--blue); }
+    .label.green { color: var(--green); }
+    .label.orange { color: var(--orange); }
+    .label.red { color: var(--red); }
+    .label.purple { color: var(--purple); }
+
+    /* ---------- アイコン（インラインSVG用の器） ---------- */
+    .icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      margin-bottom: 12px;
+    }
+
+    .icon svg { width: 38px; height: 38px; }
+    .stroke { fill: none; stroke: currentColor; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ---------- 読み方ガイド ---------- */
+    .read-guide {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      counter-reset: guide;
+    }
+
+    .guide-step {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      padding: 15px;
+      min-height: 120px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .guide-step:before {
+      counter-increment: guide;
+      content: counter(guide);
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 900;
+      margin-bottom: 9px;
+    }
+
+    /* ---------- 要点カード ---------- */
+    .point-card { border-top: 4px solid var(--blue); }
+    .point-card .no {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .point-card b { display: block; margin-bottom: 4px; }
+    .point-card p { font-size: 13.5px; color: var(--sub); margin: 0; }
+
+    /* ---------- 左右比較（現状/改善後の世界） ---------- */
+    .map-board {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 100px minmax(0, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .world {
+      border: 2px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .world.current { border-color: #efc4b7; }
+    .world.future { border-color: #a9dbc7; }
+
+    .world-head {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 18px;
+      color: #fff;
+    }
+
+    .world-head svg { width: 100%; height: auto; }
+    .current .world-head { background: #9f4d34; }
+    .future .world-head { background: #20715a; }
+    .world-head h3 { color: #fff; }
+    .world-head p { margin: 0; font-size: 13.5px; opacity: .92; }
+    .world-body { padding: 18px; }
+
+    .mid-arrow {
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 12px;
+      color: var(--blue);
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .big-arrow {
+      display: grid;
+      place-items: center;
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      font-size: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    /* ---------- 階層ツリー ---------- */
+    pre.tree {
+      margin: 0;
+      border: 1px solid #263241;
+      border-radius: 14px;
+      background: var(--dark);
+      color: #f2f7ff;
+      padding: 16px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.62;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+    }
+
+    pre.tree .dim { color: #aab7c9; }
+    pre.tree .hot { color: #ffd1bd; }
+    pre.tree .ok { color: #bff1d9; }
+    pre.tree .new { color: #d9d2ff; }
+    pre.tree .warn { color: #ffe18d; }
+
+    /* ---------- 縦フロー（誰がやるか付き） ---------- */
+    .vflow { display: flex; flex-direction: column; }
+    .vstep { display: flex; gap: 14px; }
+    .vstep .rail { display: flex; flex-direction: column; align-items: center; flex: none; width: 44px; }
+    .vstep .dot {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      flex: none;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #fff;
+      background: var(--blue);
+      font-size: 15px;
+      box-shadow: var(--shadow-soft);
+    }
+    .vstep .stick { width: 3px; flex: 1; background: var(--line); min-height: 18px; }
+    .vstep:last-child .stick { display: none; }
+    .vstep .body { padding-bottom: 22px; flex: 1; }
+    .vstep .who {
+      display: inline-block;
+      font-size: 11.5px;
+      font-weight: 900;
+      letter-spacing: .04em;
+      border-radius: 999px;
+      padding: 1px 10px;
+      margin-bottom: 4px;
+    }
+    .vstep.script .dot { background: var(--green); }
+    .vstep.script .who { background: var(--green-soft); color: var(--green); }
+    .vstep.ai .dot { background: var(--blue); }
+    .vstep.ai .who { background: var(--blue-soft); color: var(--blue); }
+    .vstep.human .dot { background: var(--orange); }
+    .vstep.human .who { background: var(--orange-soft); color: var(--orange); }
+    .vstep .desc { font-size: 13.5px; color: var(--sub); margin: 0; }
+
+    /* ---------- 実働タイムライン（AI社員の中身を見せる型） ---------- */
+    .timeline { display: grid; }
+
+    .tl-phase {
+      border-radius: 14px;
+      background: var(--blue-soft);
+      border: 1px solid #c8ddf2;
+      padding: 14px 20px;
+      margin: 12px 0 16px;
+    }
+
+    .tl-phase h3 { color: var(--blue); margin: 0 0 2px; letter-spacing: .02em; }
+    .tl-phase p { margin: 0; color: var(--sub); font-size: 13.5px; }
+
+    .tl-item {
+      display: grid;
+      grid-template-columns: 92px 44px minmax(0, 1fr);
+      gap: 0 12px;
+    }
+
+    .tl-when {
+      text-align: right;
+      padding-top: 16px;
+      font-size: 13px;
+      color: var(--sub);
+      line-height: 1.4;
+    }
+
+    .tl-when b { display: block; color: var(--ink); font-size: 15px; }
+
+    .tl-rail { position: relative; }
+
+    .tl-rail:before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      transform: translateX(-50%);
+      background: var(--line);
+    }
+
+    .tl-item:last-child .tl-rail:before { bottom: auto; height: 24px; }
+
+    .tl-dot {
+      position: absolute;
+      left: 50%;
+      top: 18px;
+      width: 20px;
+      height: 20px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: #fff;
+      border: 5px solid var(--blue);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .tl-card {
+      border: 2px solid var(--blue);
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+      padding: 16px 18px;
+      margin: 6px 0 20px;
+    }
+
+    .tl-card h3 { margin: 0 0 6px; }
+    .tl-card p { margin: 0; font-size: 13.5px; }
+
+    .tl-actor {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 8px;
+      padding: 2px 12px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .tl-item.human .tl-dot { border-color: var(--orange); }
+    .tl-item.human .tl-card { border-color: var(--orange); background: linear-gradient(135deg, #fffaf3, #fff 60%); }
+    .tl-item.human .tl-actor { background: var(--orange); }
+    .tl-item.script .tl-dot { border-color: var(--green); }
+    .tl-item.script .tl-card { border-color: var(--green); background: linear-gradient(135deg, #f4fbf8, #fff 60%); }
+    .tl-item.script .tl-actor { background: var(--green); }
+    .tl-item.dele .tl-dot { border-color: var(--purple); }
+    .tl-item.dele .tl-card { border-color: var(--purple); background: linear-gradient(135deg, #f8f6ff, #fff 60%); }
+    .tl-item.dele .tl-actor { background: var(--purple); }
+
+    .tl-quote {
+      border: 2px dashed #e2b27e;
+      border-radius: 12px;
+      padding: 10px 14px;
+      background: #fffdf8;
+      font-weight: 700;
+      margin: 8px 0;
+    }
+
+    .tl-note { color: var(--sub); font-size: 13px; }
+
+    /* 🚪ゲートバンド: 人間が止めて返事する関所（タイムライン全幅） */
+    .tl-gate {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 14px;
+      align-items: center;
+      border: 2px solid var(--orange);
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--orange-soft), #fff 70%);
+      box-shadow: var(--shadow);
+      padding: 16px 20px;
+      margin: 4px 0 20px;
+    }
+
+    .tl-gate-mark {
+      display: grid;
+      place-items: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: #fff;
+      font-size: 26px;
+    }
+
+    .tl-gate b { color: var(--orange); font-size: 16px; display: block; margin-bottom: 2px; }
+    .tl-gate p { margin: 0; font-size: 13.5px; }
+    .tl-gate .see em { font-style: normal; font-weight: 900; }
+
+    /* ↺ 還流ループ: 学びが次回に蓄積されることを示す締め */
+    .tl-loop {
+      border: 2px dashed var(--green);
+      border-radius: 16px;
+      background: var(--green-soft);
+      padding: 14px 20px;
+      font-size: 14px;
+      margin: 4px 0 8px;
+    }
+
+    .tl-loop b { color: var(--green); }
+
+    /* 接点カウンタ: 「人間にボールが来るのは実質◯回」 */
+    .touch-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .touch-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+      padding: 16px;
+      text-align: center;
+    }
+    .touch-card .big { display: block; font-size: 34px; font-weight: 900; line-height: 1.2; color: var(--blue); }
+    .touch-card.o .big { color: var(--orange); }
+    .touch-card.g .big { color: var(--green); }
+    .touch-card p { margin: 4px 0 0; font-size: 12.5px; color: var(--sub); }
+
+    /* ---------- スイムレーン ---------- */
+    .swimlane {
+      display: grid;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      padding: 14px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .lane {
+      display: grid;
+      grid-template-columns: 130px repeat(4, 1fr);
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .lane-title {
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 900;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .lane.human .lane-title { background: var(--orange); }
+    .lane.ai .lane-title { background: var(--blue); }
+    .lane.script .lane-title { background: var(--green); }
+
+    .lane-cell {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fbfdff;
+      padding: 12px;
+      min-height: 92px;
+      font-size: 13px;
+    }
+
+    .lane-cell.empty { background: transparent; border-style: dashed; }
+
+    /* ---------- 円環（循環図） ---------- */
+    .circle-system {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .orbit {
+      width: 320px;
+      height: 320px;
+      max-width: 100%;
+      margin: 0 auto;
+      border: 3px dashed #b8c9dc;
+      border-radius: 50%;
+      position: relative;
+      background: radial-gradient(circle, #fff 0 34%, var(--blue-soft) 35% 100%);
+    }
+
+    .orbit-center {
+      position: absolute;
+      inset: 36%;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 900;
+      text-align: center;
+      font-size: 14px;
+      padding: 10px;
+    }
+
+    .orb {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: 86px;
+      height: 86px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+      text-align: center;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--blue);
+      padding: 8px;
+    }
+
+    .orb.one { left: 50%; top: -10px; transform: translateX(-50%); }
+    .orb.two { right: -12px; top: 104px; }
+    .orb.three { right: 50px; bottom: -6px; }
+    .orb.four { left: 50px; bottom: -6px; }
+    .orb.five { left: -12px; top: 104px; }
+
+    /* ---------- 判断マトリクス ---------- */
+    .compare-matrix {
+      display: grid;
+      grid-template-columns: 150px repeat(3, 1fr);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .compare-matrix > div {
+      padding: 12px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      font-size: 13.5px;
+    }
+
+    .compare-matrix > div:nth-child(4n) { border-right: 0; }
+    .compare-matrix > div:nth-last-child(-n+4) { border-bottom: 0; }
+    .compare-matrix .head { background: var(--bg); font-weight: 900; }
+    .compare-matrix .rowhead { background: #fbfdff; color: var(--blue); font-weight: 900; }
+
+    /* ---------- メーター ---------- */
+    .meter-row { display: grid; gap: 10px; }
+    .meter-item { display: grid; grid-template-columns: 170px 1fr 56px; gap: 12px; align-items: center; font-size: 13.5px; }
+    .meter-bar { height: 12px; border-radius: 999px; background: #e6edf5; overflow: hidden; }
+    .meter-bar span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--blue), #5a93cf); }
+    .meter-item.green .meter-bar span { background: linear-gradient(90deg, var(--green), #4aa886); }
+    .meter-item.orange .meter-bar span { background: linear-gradient(90deg, var(--orange), #d9954f); }
+    .meter-item b.val { text-align: right; }
+
+    /* ---------- 注意カード ---------- */
+    .caution-card {
+      border: 1px solid #efcaca;
+      border-left: 6px solid var(--red);
+      border-radius: 14px;
+      background: var(--red-soft);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-soft);
+    }
+    .caution-card b { display: block; margin-bottom: 4px; color: var(--red); }
+    .caution-card p { margin: 0; font-size: 13.5px; }
+
+    /* ---------- FAQ ---------- */
+    .faq-card .q {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+    .faq-card .q:before {
+      content: "Q";
+      flex: none;
+      display: inline-grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--purple);
+      color: #fff;
+      font-size: 13px;
+    }
+    .faq-card .a { display: flex; gap: 10px; align-items: baseline; font-size: 13.5px; color: var(--sub); margin: 0; }
+    .faq-card .a:before {
+      content: "A";
+      flex: none;
+      display: inline-grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--purple-soft);
+      color: var(--purple);
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    /* ---------- 今日の一歩 ---------- */
+    .today {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 18px;
+      align-items: center;
+      border: 2px solid var(--green);
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--green-soft), #fff);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .today-mark {
+      display: grid;
+      place-items: center;
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      background: var(--green);
+      color: #fff;
+      font-size: 38px;
+      font-weight: 900;
+    }
+
+    /* ---------- 編集メモ・更新履歴 ---------- */
+    .edit-notes ul { display: grid; gap: 6px; }
+    .changelog table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .changelog th, .changelog td {
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .changelog th { background: var(--bg); }
+
+    .footer-note {
+      margin-top: 26px;
+      color: var(--sub);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* ---------- レスポンシブ ---------- */
+    @media (max-width: 1100px) {
+      header.hero,
+      .map-board,
+      .circle-system,
+      .grid.two,
+      .grid.three,
+      .grid.four,
+      .read-guide,
+      .today {
+        grid-template-columns: 1fr;
+      }
+
+      .lane { grid-template-columns: 1fr; }
+      .tl-item { grid-template-columns: 1fr; gap: 0; }
+      .tl-rail { display: none; }
+      .tl-when { text-align: left; padding-top: 0; display: flex; gap: 8px; align-items: baseline; }
+      .tl-gate { grid-template-columns: 1fr; }
+      .touch-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .mid-arrow { order: 2; }
+      .world.future { order: 3; }
+      .compare-matrix { grid-template-columns: 1fr; }
+      .compare-matrix > div,
+      .compare-matrix > div:nth-child(4n),
+      .compare-matrix > div:nth-last-child(-n+4) {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .compare-matrix > div:last-child { border-bottom: 0; }
+      .meter-item { grid-template-columns: 1fr; gap: 4px; }
+      .meter-item b.val { text-align: left; }
+    }
+
+    /* ---------- 印刷 ---------- */
+    @media print {
+      body { background: #fff; }
+      .page { max-width: none; padding: 0; }
+      header.hero, .card, .world, .swimlane, .guide-step, .today, .caution-card, .compare-matrix, .tl-card, .tl-phase, .tl-gate, .tl-loop, .touch-card {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+      section { break-inside: avoid; margin-top: 18px; }
+      pre.tree { white-space: pre-wrap; }
+    }
+
+    /* ================================================================
+       CASE-SPECIFIC CSS
+       案件固有の追加スタイルは必ずこの下に書く。上の共通CSSは編集しない。
+       ================================================================ */
+
+    /* 社内限りの帯（鍵なし限定URLで配るため、誤転送を止める張り紙） */
+    .inside-band {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: #8B2E3C;
+      color: #ffffff;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .06em;
+      padding: 9px 14px;
+      line-height: 1.6;
+    }
+    .inside-band small { display: block; font-weight: 700; font-size: 11.5px; opacity: .92; letter-spacing: 0; }
+    @media print { .inside-band { position: static; } }
+  </style>
+</head>
+<body>
+  <div class="inside-band">
+    🔒 VERA社内限り ─ この設計図はお客様には送らないでください
+    <small>先方に出す順番（CP・ピラミッドは後）など、社内の作戦が書かれています。お客様へは、この設計図から作る「稟議1枚」をお渡しします。</small>
+  </div>
+  <main class="page">
+
+    <!-- ✏️ hero: バッジ・タイトル・リード・メタチップ・右のSVGイラストを案件内容に差し替える。SVGイラストは必須（削除禁止） -->
+    <header class="hero" data-block="hero">
+      <div>
+        <span class="badge">設計図パッケージ / 実装前の承認用</span>
+        <h1>運営はパートナーへ、<br>拡散は先生へ。</h1>
+        <p class="lead">7/29の商談で分かった壁は「値段」ではなく、<b>手間・運営者の不在・本部決裁</b>の3つでした。この設計図は、日々の運営を国内パートナーに任せ、先生には「売る」でなく「広めて還元」の役をお願いする——ペタペタ再クロージングの新しい座組です。まだ実装しません。</p>
+        <div class="meta-chips">
+          <span>作成日: 2026-07-30</span>
+          <span>対象: ペタペタ再提案の座組</span>
+          <span>状態: morio承認待ち（実装前）</span>
+        </div>
+      </div>
+      <div class="hero-visual" aria-label="チャンピオンを頂点に、運営パートナーと先生3000人が支え、全接点にVERAがつながるピラミッドの図">
+        <svg viewBox="0 0 520 300" width="100%" height="260" role="img" aria-label="山崎社長を頂点、運営パートナーが中段、先生3000人が土台のピラミッド。右のVERAが各層と点線でつながり、A社B社が土台に合流する">
+          <polygon points="215,34 285,34 320,110 180,110" fill="#f6d66b" stroke="#b96a25" stroke-width="3"/>
+          <text x="250" y="66" fill="#7a4a12" font-size="15" font-weight="900" text-anchor="middle">👑 山崎社長</text>
+          <text x="250" y="88" fill="#7a4a12" font-size="11" font-weight="800" text-anchor="middle">チャンピオン（旗）</text>
+          <polygon points="180,118 320,118 350,182 150,182" fill="#e8f2fc" stroke="#2469a8" stroke-width="3"/>
+          <text x="250" y="146" fill="#2469a8" font-size="14" font-weight="900" text-anchor="middle">🛠 運営パートナー</text>
+          <text x="250" y="168" fill="#2469a8" font-size="11" font-weight="800" text-anchor="middle">日々の管理・見守り（新しい座席）</text>
+          <polygon points="150,190 350,190 385,258 115,258" fill="#e8f7f0" stroke="#24765b" stroke-width="3"/>
+          <text x="250" y="220" fill="#20715a" font-size="14" font-weight="900" text-anchor="middle">🌸 先生 3,000人＋α</text>
+          <text x="250" y="242" fill="#20715a" font-size="11" font-weight="800" text-anchor="middle">使う ＋ 広める → インセンティブ</text>
+          <rect x="20" y="196" width="58" height="26" rx="8" fill="#fff" stroke="#6658c7" stroke-width="2.5"/>
+          <text x="49" y="214" fill="#6658c7" font-size="12" font-weight="900" text-anchor="middle">A社</text>
+          <rect x="20" y="230" width="58" height="26" rx="8" fill="#fff" stroke="#6658c7" stroke-width="2.5"/>
+          <text x="49" y="248" fill="#6658c7" font-size="12" font-weight="900" text-anchor="middle">B社</text>
+          <path d="M82 209 C100 212, 104 218, 113 224" stroke="#6658c7" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="6 6"/>
+          <path d="M82 243 C98 244, 104 242, 113 240" stroke="#6658c7" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="6 6"/>
+          <text x="49" y="188" fill="#6658c7" font-size="10.5" font-weight="800" text-anchor="middle">あとで合流</text>
+          <rect x="408" y="96" width="92" height="60" rx="14" fill="#1a2f5e"/>
+          <text x="454" y="122" fill="#ffffff" font-size="16" font-weight="900" text-anchor="middle">VERA</text>
+          <text x="454" y="142" fill="#c9a44c" font-size="10.5" font-weight="800" text-anchor="middle">設計・窓口・編集</text>
+          <path d="M408 108 C376 88, 344 76, 300 66" stroke="#c9a44c" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="7 6"/>
+          <path d="M408 130 C384 136, 368 142, 352 148" stroke="#c9a44c" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="7 6"/>
+          <path d="M408 150 C392 176, 380 196, 368 214" stroke="#c9a44c" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="7 6"/>
+          <circle cx="466" cy="196" r="13" fill="#f6d66b" stroke="#b96a25" stroke-width="2.5"/>
+          <circle cx="452" cy="216" r="13" fill="#f6d66b" stroke="#b96a25" stroke-width="2.5"/>
+          <circle cx="472" cy="232" r="13" fill="#f6d66b" stroke="#b96a25" stroke-width="2.5"/>
+          <text x="462" y="266" fill="#7a4a12" font-size="12" font-weight="900" text-anchor="middle">MRR（毎月）</text>
+        </svg>
+      </div>
+    </header>
+
+    <!-- ✏️ read-guide: この図解の読み方を5ステップで。図解の構成に合わせて書き換える -->
+    <section data-block="read-guide" data-pattern="guide">
+      <h2><span class="num">0</span>この図の読み方</h2>
+      <div class="read-guide">
+        <div class="guide-step"><h3>壁を知る</h3><p class="muted">左の赤い箱＝7/29に商談が止まった本当の理由。</p></div>
+        <div class="guide-step"><h3>要点5つ</h3><p class="muted">先に結論。この設計図の芯だけ5枚で。</p></div>
+        <div class="guide-step"><h3>座席表を見る</h3><p class="muted">誰がどの席に座るか（運営者の席が新設）。</p></div>
+        <div class="guide-step"><h3>時間割を見る</h3><p class="muted">morioが今日から2週間で何をするか。</p></div>
+        <div class="guide-step"><h3>3つ決める</h3><p class="muted">最後の承認ポイントに◯を付ければ動き出す。</p></div>
+      </div>
+    </section>
+
+    <!-- ✏️ key-points: 要点3〜7個。1カード= ラベル→主張→具体、の3行以内 -->
+    <section data-block="key-points" data-pattern="point-cards">
+      <h2><span class="num">1</span>先に結論: 要点は5つ</h2>
+      <div class="grid three">
+        <div class="card point-card">
+          <span class="no">1</span>
+          <b>壁は値段ではなかった</b>
+          <p>止まった理由は「手間をかけたくない」「運営者がいない」「本部決裁が要る」の3つ。デモの出来は勝負所ではなかった＝作り直しは不要。</p>
+        </div>
+        <div class="card point-card">
+          <span class="no">2</span>
+          <b>「運営者」の席を新設する</b>
+          <p>VERAは設計・窓口・月次号の編集に絞り、日々の見守りや一次対応は国内の運営パートナーに任せる。候補は別紙（実在検証済み）。</p>
+        </div>
+        <div class="card point-card">
+          <span class="no">3</span>
+          <b>先生は「売らない、広める」</b>
+          <p>商材を仕入れて売る型は先生（主婦層）に不向き。SNSで広めて、成果に応じて還元される「アンバサダー型」に切り替える。</p>
+        </div>
+        <div class="card point-card">
+          <span class="no">4</span>
+          <b>本部会議で通る形にする</b>
+          <p>社長個人の即決は当てにしない。費用・体制・リスク・やめる自由を1枚にした「稟議に載る資料」を次回までに用意する。</p>
+        </div>
+        <div class="card point-card">
+          <span class="no">5</span>
+          <b>ピラミッドは入口の後</b>
+          <p>A社B社を組み込む構想（チャンピオン・ピラミッド）は第1号が回ってから。今出すと話が大きくなり、決裁がさらに重くなる。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✏️ before-after: 現状/改善後の左右比較。world-head のSVGアイコンと本文、中のツリーを差し替える -->
+    <section data-block="before-after" data-pattern="compare">
+      <h2><span class="num">2</span>7/29の壁と、再提案の形（地図）</h2>
+      <div class="map-board">
+        <div class="world current">
+          <div class="world-head">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <rect x="16" y="30" width="68" height="48" rx="10" fill="#fff" opacity=".95"/>
+              <path d="M28 42h44M28 54h32M28 66h24" stroke="#9f4d34" stroke-width="7" stroke-linecap="round"/>
+            </svg>
+            <div>
+              <h3>7/29の商談: 止まった本当の理由</h3>
+              <p>デモの評価は良く、値段の話にもならなかった。止めたのは「誰が運営するの？」への答えが座組に無かったこと。</p>
+            </div>
+          </div>
+          <div class="world-body">
+            <pre class="tree">7/29の壁/
+├── デモの出来は良い（そこは勝負所でなかった）<span class="dim">評価済み</span>
+├── 社長は手間をかけたくない <span class="hot">運営の顔が見えない</span>
+├── 管理・運営を担う人が座組にいない <span class="hot">最大の穴</span>
+├── 本部（社長＋管理職）の決裁が必要 <span class="warn">即決できない構造</span>
+└── 収穫: 掲示板を自ら提案していた先生がいた <span class="ok">ニーズは実在</span></pre>
+          </div>
+        </div>
+
+        <div class="mid-arrow">
+          <div class="big-arrow">→</div>
+          <div>運営者の席を<br>新設して再提案</div>
+        </div>
+
+        <div class="world future">
+          <div class="world-head">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <circle cx="50" cy="50" r="35" fill="#fff" opacity=".96"/>
+              <path d="M34 52l11 11 23-27" fill="none" stroke="#20715a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <h3>再提案: 三層体制＋広めて還元</h3>
+              <p>「私が全部やります」ではなく「運営者を立てました」で出し直す。先生には売らせず、広めてもらう。</p>
+            </div>
+          </div>
+          <div class="world-body">
+            <pre class="tree">再提案の形/
+├── VERA＝設計・改修・月次号の編集・窓口 <span class="ok">手離れ良い</span>
+├── 運営パートナー＝日々の見守り・一次対応 <span class="new">新設の席</span>
+├── 先生＝使う＋広める→還元（アンバサダー型）<span class="ok">売らない</span>
+└── 本部稟議1枚＝費用・体制・やめる自由 <span class="new">決裁が通る形</span></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✏️ output-tree: 指示→アウトプット階層。フォルダや成果物を扱う図解では必須 -->
+    <section data-block="output-tree" data-pattern="tree">
+      <h2><span class="num">3</span>座席表（誰がどの席に座るか）</h2>
+      <div class="grid two">
+        <div class="card red">
+          <span class="label red">旧提案の座席</span>
+          <h3>VERAが全席＝手離れが悪い</h3>
+          <pre class="tree">旧提案/
+├── 山崎社長＝管理の手間を心配する側 <span class="hot">気持ちよくない</span>
+├── VERA＝設計も運営も窓口も全部 <span class="hot">morioの構造に反する</span>
+├── 先生＝使うだけ <span class="dim">広がる力が眠る</span>
+└── 運営者の席 <span class="warn">存在しない</span></pre>
+        </div>
+        <div class="card green">
+          <span class="label green">新しい座席表</span>
+          <h3>全員が気持ちいい席に座る</h3>
+          <pre class="tree">新体制/
+├── 山崎社長＝旗（チャンピオン）と最終決裁だけ <span class="ok">手間ゼロ</span>
+├── 本部＝稟議で承認・お知らせの発信元 <span class="ok">決裁構造に沿う</span>
+├── VERA＝設計・改修・月次号の編集・窓口 <span class="ok">型化＝横展開可</span>
+├── 運営パートナー＝見守り・一次対応・素材更新 <span class="new">新設の席</span>
+└── 先生＝使う＋広める→インセンティブ <span class="ok">誇りと還元</span></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✏️ flow: 縦フロー。dot の中はステップ記号、who は script/ai/human の3種 -->
+    <section data-block="flow" data-pattern="flow">
+      <h2><span class="num">4</span>再クロージングまでの手順（5歩）</h2>
+      <div class="card">
+        <div class="vflow">
+          <div class="vstep ai">
+            <div class="rail"><div class="dot">P0</div><div class="stick"></div></div>
+            <div class="body">
+              <span class="who">私（VERA）</span>
+              <h3>調査＝運営代行とインセンティブ型の国内候補</h3>
+              <p class="desc">運営を任せられる会社のカテゴリと候補、「広めて還元」型の正式名称と国内プラットフォームを、実在検証付きで洗い出す。→ 本報告の別紙（済）。</p>
+            </div>
+          </div>
+          <div class="vstep human">
+            <div class="rail"><div class="dot">P1</div><div class="stick"></div></div>
+            <div class="body">
+              <span class="who">morio</span>
+              <h3>この設計図の承認3つに◯を付ける</h3>
+              <p class="desc">①インセンティブの型 ②運営パートナーの打診順 ③稟議に載せる費用の見せ方。決まれば以降が動く（所要5分）。</p>
+            </div>
+          </div>
+          <div class="vstep ai">
+            <div class="rail"><div class="dot">P2</div><div class="stick"></div></div>
+            <div class="body">
+              <span class="who">私（VERA）</span>
+              <h3>打診文面＋面談質問票を作る</h3>
+              <p class="desc">運営パートナー候補への打診メール文面と、面談で聞く質問票（費用感・体制・AI活用・最小契約）。承認後、目安1日。</p>
+            </div>
+          </div>
+          <div class="vstep human">
+            <div class="rail"><div class="dot">P3</div><div class="stick"></div></div>
+            <div class="body">
+              <span class="who">morio</span>
+              <h3>候補2〜3社と面談して運営費の相場を取る</h3>
+              <p class="desc">「運営者の顔」と「月いくらで回るか」を実測。目安1〜2週間（先方都合次第・要確認）。</p>
+            </div>
+          </div>
+          <div class="vstep ai">
+            <div class="rail"><div class="dot">P4</div><div class="stick"></div></div>
+            <div class="body">
+              <span class="who">私（VERA）→ morio</span>
+              <h3>本部稟議パッケージを作り、再提案へ</h3>
+              <p class="desc">費用3案・体制図・リスクと退出自由を1枚に。morioが山崎社長へ渡し、本部会議に載せてもらう。制作は目安2日。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✏️ timeline: 実働タイムライン。AI社員・スキルの中身を説明する図解では必須。
+         上から下へ時間が流れ、「誰が（依頼者=オレンジ / AI=青 / 自動=緑）・いつ・何を」が1枚で分かる型。
+         tl-phase = 工程の見出し帯 / tl-quote = 実際のセリフ・指示の例 -->
+    <section data-block="timeline" data-pattern="timeline">
+      <h2><span class="num">5</span>morio行動指示書（今日〜2週間の時間割）</h2>
+      <p class="muted" style="margin-bottom: 16px;">上から下へ時間が流れる。オレンジ=morioがやること、青=私（VERA）が用意すること。morioの持ち時間は最小に設計。</p>
+      <div class="timeline">
+
+        <div class="tl-phase">
+          <h3>PHASE A — 今日・明日（関係を温かいまま保つ）</h3>
+          <p>担当: morio ／ 所要: LINE1本（3分）</p>
+        </div>
+
+        <div class="tl-item human">
+          <div class="tl-when"><b>今日</b><span>3分</span></div>
+          <div class="tl-rail"><span class="tl-dot"></span></div>
+          <div class="tl-card">
+            <span class="tl-actor">👨 morio</span>
+            <h3>お礼LINEを1本（売り込みゼロ・宿題も求めない）</h3>
+            <div class="tl-quote">昨日はありがとうございました。「運営をきちんとやってくれる人がいるか」——ここが一番大事だと私も思いました。いま、その"運営者"を立てる形を設計しています。形になったら、まず山崎社長にお見せしますね。</div>
+            <p class="tl-note">「値段の話」に戻さない。先方の言葉（運営者）をそのまま返すのが芯。</p>
+          </div>
+        </div>
+
+        <div class="tl-item ai">
+          <div class="tl-when"><b>済</b></div>
+          <div class="tl-rail"><span class="tl-dot"></span></div>
+          <div class="tl-card">
+            <span class="tl-actor">🤖 私</span>
+            <h3>調査と設計図（このページ＋候補別紙）</h3>
+            <p class="tl-note">運営代行のカテゴリ・国内候補・「広めて還元」型の名前と国内プラットフォームを実在検証付きで納品済み。</p>
+          </div>
+        </div>
+
+        <div class="tl-phase">
+          <h3>PHASE B — 今週（3つ決めて、打診を出す）</h3>
+          <p>担当: morio → 私 ／ 所要: morioは5分＋α</p>
+        </div>
+
+        <div class="tl-item human">
+          <div class="tl-when"><b>今週</b><span>5分</span></div>
+          <div class="tl-rail"><span class="tl-dot"></span></div>
+          <div class="tl-card">
+            <span class="tl-actor">👨 morio</span>
+            <h3>承認3つに◯を付けて返す</h3>
+            <p class="tl-note">①型（アンバサダー推奨）②パートナー打診順 ③稟議の費用の見せ方。この設計図の最後にまとめてある。</p>
+          </div>
+        </div>
+
+        <div class="tl-item ai">
+          <div class="tl-when"><b>承認後</b><span>1日</span></div>
+          <div class="tl-rail"><span class="tl-dot"></span></div>
+          <div class="tl-card">
+            <span class="tl-actor">🤖 私</span>
+            <h3>打診文面＋面談質問票を納品</h3>
+            <p class="tl-note">候補ごとの打診メールと、面談で聞く質問票（月額費用・体制・AI活用度・最小契約・撤退条件）。</p>
+          </div>
+        </div>
+
+        <div class="tl-phase">
+          <h3>PHASE C — 来週〜（運営者の顔をつくり、稟議で出し直す）</h3>
+          <p>担当: morio面談 → 私が稟議1枚 ／ 所要目安: 1〜2週間（先方都合次第・要確認）</p>
+        </div>
+
+        <div class="tl-item human">
+          <div class="tl-when"><b>来週〜</b><span>2〜3件</span></div>
+          <div class="tl-rail"><span class="tl-dot"></span></div>
+          <div class="tl-card">
+            <span class="tl-actor">👨 morio</span>
+            <h3>運営パートナー候補と面談（オンライン可）</h3>
+            <p class="tl-note">見るのは3点だけ：①人の温かさ（ママコミュニティが分かるか）②月額の相場 ③最小で始めて増やせるか。</p>
+          </div>
+        </div>
+
+        <div class="tl-gate">
+          <div class="tl-gate-mark">🚪</div>
+          <div>
+            <b>山崎社長ゲート — 次に会うときはこれを持って行く</b>
+            <p class="see">見せられるもの: <em>運営者の顔が見える体制図＋本部稟議1枚（費用3案・やめる自由つき）</em> ／ 先方のやること: <em>本部会議に載せるだけ</em></p>
+          </div>
+        </div>
+
+        <div class="tl-loop"><b>↺ 積み上げのループ:</b> 第1号（ペタペタ）が回れば、同じ座組（設計=VERA×運営=パートナー×拡散=会員）が<b>チャンピオン・ピラミッドの型</b>になり、A社B社にもそのまま使える。</div>
+
+      </div>
+
+      <div class="touch-row" style="margin-top: 16px;">
+        <div class="touch-card o"><span class="big">1本</span><p>今日のお礼LINE<br>（型は上のセリフ）</p></div>
+        <div class="touch-card o"><span class="big">3つ</span><p>今週の承認<br>（◯を付けるだけ）</p></div>
+        <div class="touch-card o"><span class="big">2〜3件</span><p>来週の面談<br>（見るのは3点だけ）</p></div>
+        <div class="touch-card g"><span class="big">1枚</span><p>稟議パッケージ<br>（制作は私）</p></div>
+      </div>
+    </section>
+
+    <!-- ✏️ swimlane: 人間/AI/スクリプトの分担。列数は4列基準、足りなければ empty セル -->
+    <section data-block="swimlane" data-pattern="swimlane">
+      <h2><span class="num">6</span>誰が何をするか（分担レーン）</h2>
+      <div class="swimlane">
+        <div class="lane human">
+          <div class="lane-title">morio<br>（社長）</div>
+          <div class="lane-cell">お礼LINE1本（今日）</div>
+          <div class="lane-cell">承認3つに◯（今週）</div>
+          <div class="lane-cell">パートナー候補と面談（来週〜）</div>
+          <div class="lane-cell">山崎社長へ再提案→本部会議へ</div>
+        </div>
+        <div class="lane ai">
+          <div class="lane-title">私<br>（VERA）</div>
+          <div class="lane-cell">調査＋この設計図（済）</div>
+          <div class="lane-cell">打診文面・面談質問票の制作</div>
+          <div class="lane-cell">面談結果→費用3案の組み直し</div>
+          <div class="lane-cell">本部稟議パッケージ1枚の制作</div>
+        </div>
+        <div class="lane script">
+          <div class="lane-title">運営<br>パートナー</div>
+          <div class="lane-cell empty"></div>
+          <div class="lane-cell empty"></div>
+          <div class="lane-cell">面談で費用感・体制を提示</div>
+          <div class="lane-cell">（契約後）日々の見守り・一次対応・素材更新</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✏️ cycle: 円環図。中心と5つの orb を差し替え。左右のカードで補足 -->
+    <section data-block="cycle" data-pattern="cycle">
+      <h2><span class="num">7</span>回り出すとこうなる（広める→喜ぶ→増える の循環）</h2>
+      <div class="circle-system">
+        <div class="card blue">
+          <span class="label blue">入口</span>
+          <h3>第1号＝ペタペタの広場</h3>
+          <p class="muted">先生が喜ぶ場を運営パートナーが守り、先生は好きな気持ちのままSNSで広める。売り込みはどこにも無い。</p>
+        </div>
+        <div class="orbit">
+          <div class="orbit-center">てとて広場<br>（第1号）</div>
+          <div class="orb one">先生が<br>広める</div>
+          <div class="orb two">親子・仲間が<br>集まる</div>
+          <div class="orb three">先生に<br>還元</div>
+          <div class="orb four">A社B社が<br>合流</div>
+          <div class="orb five">接点ぜんぶ<br>にMRR</div>
+        </div>
+        <div class="card green">
+          <span class="label green">出口</span>
+          <h3>チャンピオン・ピラミッドの型</h3>
+          <p class="muted">3,000人が5,000人・1万人に育つほど、全接点に毎月の収益が乗る。ただしこの話を先方に出すのは第1号が回ってから。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✏️ matrix: 判断マトリクス。行列は自由に増減 -->
+    <section data-block="matrix" data-pattern="matrix">
+      <h2><span class="num">8</span>「広めて還元」3つの型くらべ（先生に合うのはどれか）</h2>
+      <div class="compare-matrix">
+        <div class="head">型の名前</div>
+        <div class="head">仕組み（ひとことで）</div>
+        <div class="head">先生（主婦・SNS得意）との相性</div>
+        <div class="head">注意すること</div>
+        <div class="rowhead">アンバサダー型<br>（推奨）</div>
+        <div>「好き」の発信に、商品・体験・特別な地位で還元する</div>
+        <div>◎ 売らなくていい。公認の肩書きが誇りになり、発信が自然</div>
+        <div>投稿に「PR」等の表記が必須（2023年〜のステマ規制）</div>
+        <div class="rowhead">成果報酬型<br>（アフィリエイト）</div>
+        <div>紹介リンク経由の申込・購入に応じて金銭報酬</div>
+        <div>○ 数字が明快。ただし「営業している感」が出やすい</div>
+        <div>成果を数える仕組み（リンク計測）の用意が必要</div>
+        <div class="rowhead">紹介型<br>（リファラル）</div>
+        <div>知り合いを紹介してくれたら双方に特典</div>
+        <div>○ 入会の導線に直結。単発で終わりやすい</div>
+        <div>特典の出し方は景品表示法の範囲内で設計</div>
+      </div>
+    </section>
+
+    <!-- ✏️ caution: よくある事故・誤解を必ず3つ -->
+    <section data-block="caution" data-pattern="caution-cards">
+      <h2><span class="num">9</span>踏んではいけない地雷 3つ</h2>
+      <div class="grid three">
+        <div class="caution-card">
+          <b>「連鎖販売」に見える形を作らない</b>
+          <p>報酬は「広めた成果」への対価だけに限定する。先生が先生を勧誘して階層的に報酬が乗る形（MLM型）は法的にも印象的にも絶対に作らない。</p>
+        </div>
+        <div class="caution-card">
+          <b>名簿は受け取らない</b>
+          <p>講師3,000名の連絡先を預かるのは個人情報の第三者提供。案内は必ず本部発信→先生本人が自分の意思で登録（opt-in）の一方通行にする。</p>
+        </div>
+        <div class="caution-card">
+          <b>「全部おまかせで楽になります」と断言しない</b>
+          <p>運営パートナーは未選定・未実測。品質の約束は試験運用の実測後にだけ言う。それまでは「運営者を立てる設計にしました」まで。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✏️ faq: 迷いやすい点を3つ（任意ブロック） -->
+    <section data-block="faq" data-pattern="faq">
+      <h2><span class="num">10</span>先に答えておく質問</h2>
+      <div class="grid three">
+        <div class="card faq-card">
+          <p class="q">運営パートナーの費用は誰が払う？</p>
+          <p class="a">決め打ちしない。稟議には3案（本部負担／講師会費に内包／折半）を並記して先方に選んでもらう。相場は面談で実測してから数字を入れる。</p>
+        </div>
+        <div class="card faq-card">
+          <p class="q">CreativePocketはどの席？</p>
+          <p class="a">方針どおり山崎社長が固まるまで動かさない。固まったら「素材・コンテンツ制作の席」が有力候補。運営パートナーとは別の席として検討する。</p>
+        </div>
+        <div class="card faq-card">
+          <p class="q">A社B社の話はいつ出す？</p>
+          <p class="a">第1号が回ってから。いま出すと提案が大きくなりすぎて、本部決裁がさらに重くなる。今日の主役はあくまで「運営者を立てました」。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✏️ today: 今日の一歩は必ず1つだけ、最後に大きく -->
+    <section data-block="today">
+      <h2><span class="num">11</span>今日からできる一歩</h2>
+      <div class="today">
+        <div class="today-mark">1</div>
+        <div>
+          <h3>お礼LINEを1本だけ送る（型は上の時間割にそのまま書いてある）</h3>
+          <p class="muted" style="margin: 0;">売り込みゼロ・宿題も求めない。「運営者を立てる形を設計しています」の一言が、次に会う理由になる。あとは承認3つに◯を付ければ、残りは私が作ります。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✏️ edit-notes: この図解のどこを書き換えれば流用できるか -->
+    <section data-block="edit-notes" class="edit-notes">
+      <h2><span class="num">12</span>この設計図の直しやすいポイント</h2>
+      <div class="card">
+        <ul>
+          <li>承認3つの答えが変われば: 型くらべ表（8番）と時間割（5番）を差し替える</li>
+          <li>面談で相場が取れたら: 稟議の費用3案を実測値で組み直す（数値は実測のみ・推測は「目安」明記）</li>
+          <li>運営パートナーが決まったら: 座席表（3番）の「新設の席」に社名を入れる</li>
+          <li>本部決裁が通ったら: この設計図は「実装フェーズの地図」に役目を引き継ぐ</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ✏️ changelog: 更新履歴。作成時は1行でよい -->
+    <section data-block="changelog" class="changelog">
+      <h2><span class="num">13</span>更新履歴</h2>
+      <div class="card">
+        <table>
+          <tr><th>日付</th><th>変更内容</th><th>理由</th></tr>
+          <tr><td>2026-07-30</td><td>初版作成（実装前の設計図）</td><td>7/29の1on1で判明した壁（手間・運営者不在・本部決裁）に合わせ、座組を三層体制＋拡散インセンティブ型へ組み替えるため</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <p class="footer-note">この図解は1ファイル完結のHTML+CSSです。外部ライブラリ・外部画像・Webフォントは使っていません。</p>
+  </main>
+</body>
+</html>
