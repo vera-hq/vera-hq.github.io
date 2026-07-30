@@ -1,0 +1,1318 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <!-- 完成時に content を FILLED に変える。TEMPLATE のままだと preflight が FAIL になる -->
+  <meta name="diagram-status" content="FILLED">
+  <!-- 骨格系統の身分証。preflight が検査系統を判別する。編集禁止 -->
+  <meta name="diagram-skeleton" content="structure-v1">
+  <title>ドメイン戦略 設計図＆実行キット【最新版】｜2026-07-31 清水社長面談版</title>
+  <style>
+    /* ================================================================
+       OD-TOKENS v1 START
+       ここから END までは「デザイントークン正本」。1文字も編集しない。
+       色を増やしたい場合はトークンを触らず、CASE-SPECIFIC 側に追加する。
+       ================================================================ */
+    :root {
+      --ink: #17202c;
+      --sub: #607084;
+      --line: #d8e1ec;
+      --paper: #ffffff;
+      --bg: #fbfcfe;
+      --blue: #2469a8;
+      --blue-soft: #e8f2fc;
+      --green: #24765b;
+      --green-soft: #e8f7f0;
+      --orange: #b96a25;
+      --orange-soft: #fff1df;
+      --red: #b54141;
+      --red-soft: #fff0f0;
+      --purple: #6658c7;
+      --purple-soft: #f1efff;
+      --yellow: #f6d66b;
+      --dark: #111a27;
+      --shadow: 0 16px 34px rgba(23, 32, 44, .09);
+      --shadow-soft: 0 10px 22px rgba(23, 32, 44, .055);
+    }
+    /* OD-TOKENS v1 END */
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 4%, rgba(36,105,168,.10), transparent 25%),
+        radial-gradient(circle at 86% 2%, rgba(185,106,37,.12), transparent 24%),
+        linear-gradient(90deg, rgba(36,105,168,.05) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(36,105,168,.04) 1px, transparent 1px),
+        #fff;
+      background-size: auto, auto, 34px 34px, 34px 34px;
+      font-family: "Yu Gothic", YuGothic, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, system-ui, sans-serif;
+      line-height: 1.68;
+      letter-spacing: 0;
+    }
+
+    .page {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 28px 20px 56px;
+    }
+
+    /* ---------- ヒーロー ---------- */
+    header.hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 24px;
+      align-items: center;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+      box-shadow: var(--shadow);
+      padding: 32px;
+    }
+
+    .badge {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #bfd7ef;
+      border-radius: 999px;
+      padding: 5px 12px;
+      color: var(--blue);
+      background: var(--blue-soft);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    h1 {
+      max-width: 920px;
+      margin: 16px 0 12px;
+      font-size: clamp(31px, 5vw, 58px);
+      line-height: 1.12;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 940px;
+      color: var(--sub);
+      font-size: 18px;
+    }
+
+    .meta-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .meta-chips span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--sub);
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 4px 12px;
+    }
+
+    .hero-visual {
+      display: grid;
+      place-items: center;
+      min-height: 280px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, #f0f7ff, #fff 52%, #fff4e7);
+      border: 1px solid var(--line);
+    }
+
+    /* ---------- 見出し・基本 ---------- */
+    section { margin-top: 30px; }
+
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 16px;
+      font-size: 27px;
+      line-height: 1.32;
+    }
+
+    h2 .num {
+      display: inline-grid;
+      place-items: center;
+      flex: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 18px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    h3 { margin: 0 0 8px; font-size: 18px; line-height: 1.4; }
+    p { margin: 0 0 12px; }
+    .muted { color: var(--sub); }
+    ul, ol { margin: 0; padding-left: 21px; }
+    li { margin: 4px 0; }
+
+    code {
+      border-radius: 5px;
+      padding: 2px 5px;
+      background: #edf2f7;
+      color: #233044;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .92em;
+    }
+
+    .grid { display: grid; gap: 16px; }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+      padding: 18px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .card.blue { background: var(--blue-soft); border-color: #bdd8f0; }
+    .card.green { background: var(--green-soft); border-color: #bde3d2; }
+    .card.orange { background: var(--orange-soft); border-color: #efcca9; }
+    .card.red { background: var(--red-soft); border-color: #efcaca; }
+    .card.purple { background: var(--purple-soft); border-color: #d8d1ff; }
+
+    .label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      padding: 3px 10px;
+      background: rgba(255,255,255,.74);
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .label.blue { color: var(--blue); }
+    .label.green { color: var(--green); }
+    .label.orange { color: var(--orange); }
+    .label.red { color: var(--red); }
+    .label.purple { color: var(--purple); }
+
+    /* ---------- アイコン（インラインSVG用の器） ---------- */
+    .icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      margin-bottom: 12px;
+    }
+
+    .icon svg { width: 38px; height: 38px; }
+    .stroke { fill: none; stroke: currentColor; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ---------- 読み方ガイド ---------- */
+    .read-guide {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      counter-reset: guide;
+    }
+
+    .guide-step {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      padding: 15px;
+      min-height: 120px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .guide-step:before {
+      counter-increment: guide;
+      content: counter(guide);
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 900;
+      margin-bottom: 9px;
+    }
+
+    /* ---------- 要点カード ---------- */
+    .point-card { border-top: 4px solid var(--blue); }
+    .point-card .no {
+      display: inline-grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .point-card b { display: block; margin-bottom: 4px; }
+    .point-card p { font-size: 13.5px; color: var(--sub); margin: 0; }
+
+    /* ---------- 左右比較（現状/改善後の世界） ---------- */
+    .map-board {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 100px minmax(0, 1fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .world {
+      border: 2px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .world.current { border-color: #efc4b7; }
+    .world.future { border-color: #a9dbc7; }
+
+    .world-head {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 18px;
+      color: #fff;
+    }
+
+    .world-head svg { width: 100%; height: auto; }
+    .current .world-head { background: #9f4d34; }
+    .future .world-head { background: #20715a; }
+    .world-head h3 { color: #fff; }
+    .world-head p { margin: 0; font-size: 13.5px; opacity: .92; }
+    .world-body { padding: 18px; }
+
+    .mid-arrow {
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 12px;
+      color: var(--blue);
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .big-arrow {
+      display: grid;
+      place-items: center;
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      font-size: 34px;
+      box-shadow: var(--shadow);
+    }
+
+    /* ---------- 階層ツリー ---------- */
+    pre.tree {
+      margin: 0;
+      border: 1px solid #263241;
+      border-radius: 14px;
+      background: var(--dark);
+      color: #f2f7ff;
+      padding: 16px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.62;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+    }
+
+    pre.tree .dim { color: #aab7c9; }
+    pre.tree .hot { color: #ffd1bd; }
+    pre.tree .ok { color: #bff1d9; }
+    pre.tree .new { color: #d9d2ff; }
+    pre.tree .warn { color: #ffe18d; }
+
+    /* ---------- 縦フロー（誰がやるか付き） ---------- */
+    .vflow { display: flex; flex-direction: column; }
+    .vstep { display: flex; gap: 14px; }
+    .vstep .rail { display: flex; flex-direction: column; align-items: center; flex: none; width: 44px; }
+    .vstep .dot {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      flex: none;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: #fff;
+      background: var(--blue);
+      font-size: 15px;
+      box-shadow: var(--shadow-soft);
+    }
+    .vstep .stick { width: 3px; flex: 1; background: var(--line); min-height: 18px; }
+    .vstep:last-child .stick { display: none; }
+    .vstep .body { padding-bottom: 22px; flex: 1; }
+    .vstep .who {
+      display: inline-block;
+      font-size: 11.5px;
+      font-weight: 900;
+      letter-spacing: .04em;
+      border-radius: 999px;
+      padding: 1px 10px;
+      margin-bottom: 4px;
+    }
+    .vstep.script .dot { background: var(--green); }
+    .vstep.script .who { background: var(--green-soft); color: var(--green); }
+    .vstep.ai .dot { background: var(--blue); }
+    .vstep.ai .who { background: var(--blue-soft); color: var(--blue); }
+    .vstep.human .dot { background: var(--orange); }
+    .vstep.human .who { background: var(--orange-soft); color: var(--orange); }
+    .vstep .desc { font-size: 13.5px; color: var(--sub); margin: 0; }
+
+    /* ---------- 実働タイムライン（AI社員の中身を見せる型） ---------- */
+    .timeline { display: grid; }
+
+    .tl-phase {
+      border-radius: 14px;
+      background: var(--blue-soft);
+      border: 1px solid #c8ddf2;
+      padding: 14px 20px;
+      margin: 12px 0 16px;
+    }
+
+    .tl-phase h3 { color: var(--blue); margin: 0 0 2px; letter-spacing: .02em; }
+    .tl-phase p { margin: 0; color: var(--sub); font-size: 13.5px; }
+
+    .tl-item {
+      display: grid;
+      grid-template-columns: 92px 44px minmax(0, 1fr);
+      gap: 0 12px;
+    }
+
+    .tl-when {
+      text-align: right;
+      padding-top: 16px;
+      font-size: 13px;
+      color: var(--sub);
+      line-height: 1.4;
+    }
+
+    .tl-when b { display: block; color: var(--ink); font-size: 15px; }
+
+    .tl-rail { position: relative; }
+
+    .tl-rail:before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      transform: translateX(-50%);
+      background: var(--line);
+    }
+
+    .tl-item:last-child .tl-rail:before { bottom: auto; height: 24px; }
+
+    .tl-dot {
+      position: absolute;
+      left: 50%;
+      top: 18px;
+      width: 20px;
+      height: 20px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: #fff;
+      border: 5px solid var(--blue);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .tl-card {
+      border: 2px solid var(--blue);
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+      padding: 16px 18px;
+      margin: 6px 0 20px;
+    }
+
+    .tl-card h3 { margin: 0 0 6px; }
+    .tl-card p { margin: 0; font-size: 13.5px; }
+
+    .tl-actor {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 8px;
+      padding: 2px 12px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .tl-item.human .tl-dot { border-color: var(--orange); }
+    .tl-item.human .tl-card { border-color: var(--orange); background: linear-gradient(135deg, #fffaf3, #fff 60%); }
+    .tl-item.human .tl-actor { background: var(--orange); }
+    .tl-item.script .tl-dot { border-color: var(--green); }
+    .tl-item.script .tl-card { border-color: var(--green); background: linear-gradient(135deg, #f4fbf8, #fff 60%); }
+    .tl-item.script .tl-actor { background: var(--green); }
+    .tl-item.dele .tl-dot { border-color: var(--purple); }
+    .tl-item.dele .tl-card { border-color: var(--purple); background: linear-gradient(135deg, #f8f6ff, #fff 60%); }
+    .tl-item.dele .tl-actor { background: var(--purple); }
+
+    .tl-quote {
+      border: 2px dashed #e2b27e;
+      border-radius: 12px;
+      padding: 10px 14px;
+      background: #fffdf8;
+      font-weight: 700;
+      margin: 8px 0;
+    }
+
+    .tl-note { color: var(--sub); font-size: 13px; }
+
+    /* 🚪ゲートバンド: 人間が止めて返事する関所（タイムライン全幅） */
+    .tl-gate {
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 14px;
+      align-items: center;
+      border: 2px solid var(--orange);
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--orange-soft), #fff 70%);
+      box-shadow: var(--shadow);
+      padding: 16px 20px;
+      margin: 4px 0 20px;
+    }
+
+    .tl-gate-mark {
+      display: grid;
+      place-items: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: #fff;
+      font-size: 26px;
+    }
+
+    .tl-gate b { color: var(--orange); font-size: 16px; display: block; margin-bottom: 2px; }
+    .tl-gate p { margin: 0; font-size: 13.5px; }
+    .tl-gate .see em { font-style: normal; font-weight: 900; }
+
+    /* ↺ 還流ループ: 学びが次回に蓄積されることを示す締め */
+    .tl-loop {
+      border: 2px dashed var(--green);
+      border-radius: 16px;
+      background: var(--green-soft);
+      padding: 14px 20px;
+      font-size: 14px;
+      margin: 4px 0 8px;
+    }
+
+    .tl-loop b { color: var(--green); }
+
+    /* 接点カウンタ: 「人間にボールが来るのは実質◯回」 */
+    .touch-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .touch-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+      padding: 16px;
+      text-align: center;
+    }
+    .touch-card .big { display: block; font-size: 34px; font-weight: 900; line-height: 1.2; color: var(--blue); }
+    .touch-card.o .big { color: var(--orange); }
+    .touch-card.g .big { color: var(--green); }
+    .touch-card p { margin: 4px 0 0; font-size: 12.5px; color: var(--sub); }
+
+    /* ---------- スイムレーン ---------- */
+    .swimlane {
+      display: grid;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      padding: 14px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .lane {
+      display: grid;
+      grid-template-columns: 130px repeat(4, 1fr);
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .lane-title {
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 900;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .lane.human .lane-title { background: var(--orange); }
+    .lane.ai .lane-title { background: var(--blue); }
+    .lane.script .lane-title { background: var(--green); }
+
+    .lane-cell {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fbfdff;
+      padding: 12px;
+      min-height: 92px;
+      font-size: 13px;
+    }
+
+    .lane-cell.empty { background: transparent; border-style: dashed; }
+
+    /* ---------- 円環（循環図） ---------- */
+    .circle-system {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .orbit {
+      width: 320px;
+      height: 320px;
+      max-width: 100%;
+      margin: 0 auto;
+      border: 3px dashed #b8c9dc;
+      border-radius: 50%;
+      position: relative;
+      background: radial-gradient(circle, #fff 0 34%, var(--blue-soft) 35% 100%);
+    }
+
+    .orbit-center {
+      position: absolute;
+      inset: 36%;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 900;
+      text-align: center;
+      font-size: 14px;
+      padding: 10px;
+    }
+
+    .orb {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: 86px;
+      height: 86px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: var(--shadow-soft);
+      text-align: center;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--blue);
+      padding: 8px;
+    }
+
+    .orb.one { left: 50%; top: -10px; transform: translateX(-50%); }
+    .orb.two { right: -12px; top: 104px; }
+    .orb.three { right: 50px; bottom: -6px; }
+    .orb.four { left: 50px; bottom: -6px; }
+    .orb.five { left: -12px; top: 104px; }
+
+    /* ---------- 判断マトリクス ---------- */
+    .compare-matrix {
+      display: grid;
+      grid-template-columns: 150px repeat(3, 1fr);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .compare-matrix > div {
+      padding: 12px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      font-size: 13.5px;
+    }
+
+    .compare-matrix > div:nth-child(4n) { border-right: 0; }
+    .compare-matrix > div:nth-last-child(-n+4) { border-bottom: 0; }
+    .compare-matrix .head { background: var(--bg); font-weight: 900; }
+    .compare-matrix .rowhead { background: #fbfdff; color: var(--blue); font-weight: 900; }
+
+    /* ---------- メーター ---------- */
+    .meter-row { display: grid; gap: 10px; }
+    .meter-item { display: grid; grid-template-columns: 170px 1fr 56px; gap: 12px; align-items: center; font-size: 13.5px; }
+    .meter-bar { height: 12px; border-radius: 999px; background: #e6edf5; overflow: hidden; }
+    .meter-bar span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--blue), #5a93cf); }
+    .meter-item.green .meter-bar span { background: linear-gradient(90deg, var(--green), #4aa886); }
+    .meter-item.orange .meter-bar span { background: linear-gradient(90deg, var(--orange), #d9954f); }
+    .meter-item b.val { text-align: right; }
+
+    /* ---------- 注意カード ---------- */
+    .caution-card {
+      border: 1px solid #efcaca;
+      border-left: 6px solid var(--red);
+      border-radius: 14px;
+      background: var(--red-soft);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-soft);
+    }
+    .caution-card b { display: block; margin-bottom: 4px; color: var(--red); }
+    .caution-card p { margin: 0; font-size: 13.5px; }
+
+    /* ---------- FAQ ---------- */
+    .faq-card .q {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+    .faq-card .q:before {
+      content: "Q";
+      flex: none;
+      display: inline-grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--purple);
+      color: #fff;
+      font-size: 13px;
+    }
+    .faq-card .a { display: flex; gap: 10px; align-items: baseline; font-size: 13.5px; color: var(--sub); margin: 0; }
+    .faq-card .a:before {
+      content: "A";
+      flex: none;
+      display: inline-grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--purple-soft);
+      color: var(--purple);
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    /* ---------- 今日の一歩 ---------- */
+    .today {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 18px;
+      align-items: center;
+      border: 2px solid var(--green);
+      border-radius: 18px;
+      background: linear-gradient(135deg, var(--green-soft), #fff);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .today-mark {
+      display: grid;
+      place-items: center;
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      background: var(--green);
+      color: #fff;
+      font-size: 38px;
+      font-weight: 900;
+    }
+
+    /* ---------- 編集メモ・更新履歴 ---------- */
+    .edit-notes ul { display: grid; gap: 6px; }
+    .changelog table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .changelog th, .changelog td {
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .changelog th { background: var(--bg); }
+
+    .footer-note {
+      margin-top: 26px;
+      color: var(--sub);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* ---------- レスポンシブ ---------- */
+    @media (max-width: 1100px) {
+      header.hero,
+      .map-board,
+      .circle-system,
+      .grid.two,
+      .grid.three,
+      .grid.four,
+      .read-guide,
+      .today {
+        grid-template-columns: 1fr;
+      }
+
+      .lane { grid-template-columns: 1fr; }
+      .tl-item { grid-template-columns: 1fr; gap: 0; }
+      .tl-rail { display: none; }
+      .tl-when { text-align: left; padding-top: 0; display: flex; gap: 8px; align-items: baseline; }
+      .tl-gate { grid-template-columns: 1fr; }
+      .touch-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .mid-arrow { order: 2; }
+      .world.future { order: 3; }
+      .compare-matrix { grid-template-columns: 1fr; }
+      .compare-matrix > div,
+      .compare-matrix > div:nth-child(4n),
+      .compare-matrix > div:nth-last-child(-n+4) {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .compare-matrix > div:last-child { border-bottom: 0; }
+      .meter-item { grid-template-columns: 1fr; gap: 4px; }
+      .meter-item b.val { text-align: left; }
+    }
+
+    /* ---------- 印刷 ---------- */
+    @media print {
+      body { background: #fff; }
+      .page { max-width: none; padding: 0; }
+      header.hero, .card, .world, .swimlane, .guide-step, .today, .caution-card, .compare-matrix, .tl-card, .tl-phase, .tl-gate, .tl-loop, .touch-card {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+      section { break-inside: avoid; margin-top: 18px; }
+      pre.tree { white-space: pre-wrap; }
+    }
+
+    /* ================================================================
+       CASE-SPECIFIC CSS
+       案件固有の追加スタイルは必ずこの下に書く。上の共通CSSは編集しない。
+       ================================================================ */
+    /* --- 案件固有（domain-strategy-0801）: 骨格トークンは触らず追記のみ --- */
+    .lane.partner .lane-title { background: var(--purple); }
+    .approve-card { border-top: 4px solid var(--orange); }
+    .approve-card .no { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--orange-soft); color: var(--orange); font-weight: 900; margin-bottom: 8px; }
+    .approve-card b { display: block; margin-bottom: 4px; }
+    .approve-card p { font-size: 13.5px; color: var(--sub); margin: 0; }
+    .ledger table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .ledger th, .ledger td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+    .ledger th { background: var(--bg); }
+    .slug { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 700; color: var(--blue); background: var(--blue-soft); border: 1px solid #bdd8f0; border-radius: 6px; padding: 1px 8px; white-space: nowrap; display: inline-block; font-size: 12.5px; }
+    .opinion { border: 1px dashed #b8c9dc; border-radius: 12px; background: #fbfdff; padding: 12px 16px; font-size: 13.5px; margin-top: 14px; }
+    .opinion b { color: var(--blue); }
+  </style>
+</head>
+<body>
+  <main class="page">
+
+    <header class="hero" data-block="hero">
+      <div>
+        <span class="badge">設計図パッケージ（5点セット）｜全面改訂・最新版</span>
+        <h1>ドメイン戦略 設計図＆実行キット</h1>
+        <p class="lead">旧「ドメイン集約」計画を、今日の3つの決めごと——①新ドメイン新設（会社の顔を汚さない）②キャリアメールは廃止しない前提 ③Macで作業開始——に合わせて作り直した実行版です。会社の顔（vera-holdings.co.jp）には指一本触れない設計に変えたため、旧計画で一番怖かった「メールが道連れで止まる罠」は、co.jpを触らない限り引き金を引く場面がありません。</p>
+        <div class="meta-chips">
+          <span>全面改訂: 2026-07-31 00:51（DNS・URL・ファイルを再実測）</span>
+          <span>面談: 7/31(金) 10:00〜（カレンダー実測）</span>
+          <span>旧版: 7/18版はデスクトップに保管（消していない）</span>
+          <span>読了目安: 5分</span>
+        </div>
+      </div>
+      <div class="hero-visual" aria-label="表の家（co.jpは触らない）と工房（新ドメイン）を分けて建てる図">
+        <svg viewBox="0 0 520 300" width="100%" height="260" role="img" aria-label="左が会社の顔の家＝触らない、右が新ドメインの工房＝自社で増改築">
+          <polygon points="40,128 130,64 220,128" fill="#2469a8"/>
+          <rect x="52" y="128" width="156" height="104" rx="6" fill="#e8f2fc" stroke="#2469a8" stroke-width="3"/>
+          <text x="130" y="158" text-anchor="middle" font-size="17" font-weight="900" fill="#17202c">表の家</text>
+          <text x="130" y="180" text-anchor="middle" font-size="12" font-weight="700" fill="#2469a8">vera-holdings.co.jp</text>
+          <text x="130" y="200" text-anchor="middle" font-size="11.5" fill="#607084">トップもメールも今のまま</text>
+          <text x="130" y="224" text-anchor="middle" font-size="14" font-weight="900" fill="#2469a8">🔒 触らない</text>
+          <line x1="260" y1="56" x2="260" y2="240" stroke="#607084" stroke-width="4" stroke-dasharray="10 8"/>
+          <text x="260" y="262" text-anchor="middle" font-size="13" font-weight="900" fill="#607084">家を分ける</text>
+          <polygon points="300,128 390,64 480,128" fill="#24765b"/>
+          <rect x="312" y="128" width="156" height="104" rx="6" fill="#e8f7f0" stroke="#24765b" stroke-width="3"/>
+          <text x="390" y="158" text-anchor="middle" font-size="17" font-weight="900" fill="#17202c">工房</text>
+          <text x="390" y="180" text-anchor="middle" font-size="12" font-weight="700" fill="#24765b">新ドメイン（今日その場で取得）</text>
+          <text x="390" y="200" text-anchor="middle" font-size="11.5" fill="#607084">アプリ・LP・配布物の家</text>
+          <text x="390" y="224" text-anchor="middle" font-size="14" font-weight="900" fill="#24765b">🔧 自社で増改築</text>
+          <text x="130" y="290" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2469a8">メールに影響しない構造</text>
+          <text x="390" y="290" text-anchor="middle" font-size="12.5" font-weight="800" fill="#20715a">配布済みリンクは切らない</text>
+        </svg>
+      </div>
+    </header>
+
+    <section data-block="read-guide" data-pattern="guide">
+      <h2><span class="num">0</span>この図の読み方</h2>
+      <div class="read-guide">
+        <div class="guide-step"><h3>結論を見る</h3><p class="muted">まず「1」の5枚。今日の方針転換はここに全部ある。</p></div>
+        <div class="guide-step"><h3>地図を見る</h3><p class="muted">「2」で旧計画と何が変わったか（罠が消える理由）。</p></div>
+        <div class="guide-step"><h3>荷物を見る</h3><p class="muted">「3」でどの資産がどの家に住むか。</p></div>
+        <div class="guide-step"><h3>名前を選ぶ</h3><p class="muted">「4」の候補表から新ドメインに○を付ける。</p></div>
+        <div class="guide-step"><h3>動線を見る</h3><p class="muted">「5」で今日の動き（10:00面談→夜Mac）。</p></div>
+      </div>
+    </section>
+
+    <section data-block="key-points" data-pattern="point-cards">
+      <h2><span class="num">1</span>先に結論: 今日の決めごとは5枚に収まる</h2>
+      <div class="grid three">
+        <div class="card point-card">
+          <span class="no">1</span>
+          <b>会社の顔は触らない</b>
+          <p>vera-holdings.co.jp のDNS（住所の案内板）・メール・トップページは現状のまま（清水社長の管理を継続）。旧計画の「メール道連れの罠」は、そもそも触らないので引き金を引く場面が無くなる。</p>
+        </div>
+        <div class="card point-card">
+          <span class="no">2</span>
+          <b>器（新ドメイン）を1個新設</b>
+          <p>アプリ・LP・配布物は全部、新しい住所の下へ。候補4本がDNS未登録であることを今朝実測済み（最終確認は取得画面）。名義はVERA。</p>
+        </div>
+        <div class="card point-card">
+          <span class="no">3</span>
+          <b>キャリアメールは「廃止しない」前提へ</b>
+          <p>多方面で使用中のため方針転換。Claude（私）の家の鍵として存続させる（解約すると入れなくなることは公式ヘルプ照合済み）。今後は「新しい用途に使わない」凍結運用＋利用先台帳づくり（「8」）。</p>
+        </div>
+        <div class="card point-card">
+          <span class="no">4</span>
+          <b>配布済みリンクは1本も切らない</b>
+          <p>原則は従来どおり「コピーして増やす・旧URLは消さない」。紐づけ後は旧 vera-hq.github.io の各ページが新住所へ自動転送（301＝郵便の転送届）される仕様。切替後に全数点検する。</p>
+        </div>
+        <div class="card point-card">
+          <span class="no">5</span>
+          <b>Macは今日から</b>
+          <p>移行キット（7/14作成）の実在を今朝確認済み（MacBook Proは7/7購入済み）。キットはGoogleドライブ（VERA/03_資料/Mac移行キット_v1）にも複製済み＝Macから開ける。今日の合格ラインは3点だけ（「7」）。</p>
+        </div>
+      </div>
+    </section>
+
+    <section data-block="before-after" data-pattern="compare">
+      <h2><span class="num">2</span>旧計画 → 新方針の地図</h2>
+      <div class="map-board">
+        <div class="world current">
+          <div class="world-head">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <rect x="16" y="30" width="68" height="48" rx="10" fill="#fff" opacity=".95"/>
+              <path d="M28 42h44M28 54h32M28 66h24" stroke="#9f4d34" stroke-width="7" stroke-linecap="round"/>
+            </svg>
+            <div>
+              <h3>旧計画「ドメイン集約」（7/18版まで）</h3>
+              <p>co.jpの玄関（DNS）を工事してGitHubへ向ける計画。メールが道連れになる罠の修理と、工事日程の調整が重荷だった。</p>
+            </div>
+          </div>
+          <div class="world-body">
+            <pre class="tree">旧計画/
+├── co.jpの向き先をGitHubへ変更 <span class="hot">DNS工事が必須</span>
+├── 先にメール配達先の修理（MX罠） <span class="hot">順番を誤ると停止</span>
+├── 工事は清水社長の作業待ち <span class="warn">日程調整が必要</span>
+└── ゴール=キャリアメール解約 <span class="hot">前提が今日崩れた</span></pre>
+          </div>
+        </div>
+
+        <div class="mid-arrow">
+          <div class="big-arrow">→</div>
+          <div>家を分けて<br>両方守る</div>
+        </div>
+
+        <div class="world future">
+          <div class="world-head">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <circle cx="50" cy="50" r="35" fill="#fff" opacity=".96"/>
+              <path d="M34 52l11 11 23-27" fill="none" stroke="#20715a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <h3>新方針「2ドメイン体制」（今日から）</h3>
+              <p>会社の顔は現状凍結、仕事場は新築。DNS作業は新しい家の分だけで、co.jpのメール設定を開く場面そのものを作らない構え。</p>
+            </div>
+          </div>
+          <div class="world-body">
+            <pre class="tree">新方針/
+├── 表の家 co.jp = 現状のまま凍結 <span class="ok">メールも従来どおり</span>
+├── 工房 = 新ドメインを新設 <span class="new">名義VERA・自社で更新</span>
+├── DNS作業は工房側だけ <span class="ok">co.jpに波及しない</span>
+└── ゴール=「切らない・混ぜない」 <span class="new">解約はしない</span></pre>
+          </div>
+        </div>
+      </div>
+      <p class="muted" style="margin-top: 12px;">実測メモ（7/31 00:51）: co.jpのメール配達設定（MX）は今も「自分自身」を指したまま＝罠は残存中。ただし新方針ではco.jpのDNSを触らないため、この罠が発動する場面が無い。将来「co.jpもGitHubへ」の話が復活した時だけ思い出す（「9」の注意①）。</p>
+      <div class="opinion"><b>私はこう思います：</b>2ドメイン体制に賛成です。なぜなら「会社の信用（表の家）」と「実験の速度（工房）」は求めるものが正反対で、同じ家に住まわせる限りどちらかが我慢するからです。今日の3つの決めごとは、バラバラではなく1つの構え——切らない・混ぜない・触らない——に揃っています。</div>
+    </section>
+
+    <section data-block="output-tree" data-pattern="tree">
+      <h2><span class="num">3</span>どの資産が、どの家に住むか（行き先台帳）</h2>
+      <div class="grid two">
+        <div class="card blue">
+          <span class="label blue">🏛️ 表の家（触らない）</span>
+          <h3>vera-holdings.co.jp＝会社の信用の家</h3>
+          <pre class="tree">vera-holdings.co.jp/
+├── トップページ（ハイブリッド版） <span class="ok">現状のまま・清水社長管理</span>
+├── メール morioka-k@（Xserver） <span class="ok">現状のまま</span>
+└── （任意・後日）/company /lp を直接設置（FTP） <span class="new">DNS不要の裏ルートあり</span></pre>
+        </div>
+        <div class="card green">
+          <span class="label green">🛠️ 工房（新ドメイン）</span>
+          <h3>今の vera-hq.github.io が棚ごと新住所になる</h3>
+          <pre class="tree">新ドメイン/
+├── corp（コーポサイト「一本の線」） <span class="ok">生存確認済み</span>
+├── DEED一式・各社への鍵つきURL群 <span class="ok">長いURL=鍵のまま</span>
+├── 会社案内・公式LP・Diamond・Pulcher <span class="new">順次コピーで合流</span>
+└── house ほか将来の売り場 <span class="new">名前だけ予約</span></pre>
+        </div>
+        <div class="card orange">
+          <span class="label orange">🏘️ 退避・別の家</span>
+          <h3>新住所を与えない資産</h3>
+          <pre class="tree">別の家/
+├── 家賃推定ツール（今は vera-hq 内） <span class="warn">紐づけ前に退避が必須</span>
+├── 高砂ヤンキースHP（今は別サーバー） <span class="dim">チーム専用の家へ（別件・急がない）</span>
+└── BG試用版・動く組織図（今は別サーバー） <span class="dim">鍵つきのまま・看板は出さない</span></pre>
+        </div>
+        <div class="card">
+          <span class="label red">✋ 触らない（対象外）</span>
+          <h3>動かすと壊れる・他人の看板</h3>
+          <pre class="tree">対象外/
+├── 経営計画書 対外版 <span class="dim">配布済みURLを維持</span>
+├── サンエイ採用LP <span class="dim">他社の看板</span>
+└── ユニコ課題2本 <span class="dim">他人のシステム</span></pre>
+        </div>
+      </div>
+      <p class="muted" style="margin-top: 12px;">⚠️ 順番はこれだけ厳守：<b>「退避 → 紐づけ」</b>。紐づけると棚ごと新住所になり旧URLから自動転送されるため、載せたくない物を先に外へ出す。7/14の承認シート（27項目の仕分け）は生きたまま＝この台帳はその要約版。</p>
+    </section>
+
+    <section data-block="matrix" data-pattern="matrix">
+      <h2><span class="num">4</span>新しい住所の候補（今朝の実測つき）</h2>
+      <div class="compare-matrix">
+        <div class="head">候補</div>
+        <div class="head">実測（7/31 00:51）</div>
+        <div class="head">名前の意味</div>
+        <div class="head">見立て</div>
+        <div class="rowhead">vera-works.jp</div>
+        <div>DNS未登録（空きの可能性大）</div>
+        <div>works=作品・仕事</div>
+        <div>◎ 第一候補。お客様に見せても堅い</div>
+        <div class="rowhead">vera-hq.jp</div>
+        <div>DNS未登録（空きの可能性大）</div>
+        <div>HQ=本部。GitHub組織名と同じ</div>
+        <div>○ 覚えやすい</div>
+        <div class="rowhead">vera-lab.jp</div>
+        <div>DNS未登録（空きの可能性大）</div>
+        <div>lab=実験室</div>
+        <div>○ 実験色がやや強い</div>
+        <div class="rowhead">vera-holdings.jp</div>
+        <div>DNS未登録（空きの可能性大）</div>
+        <div>本体とそっくり</div>
+        <div>△ 混同しやすい。防衛で押さえる検討のみ</div>
+        <div class="rowhead">.com 3本（works／hq／holdings）</div>
+        <div>第三者が取得済み（実測）</div>
+        <div>—</div>
+        <div>✕ 使えない</div>
+      </div>
+      <p class="muted" style="margin-top: 12px;">「DNS未登録」＝ネットの住所録にまだ載っていない状態。空きの断定ではないため、最終確認は取得画面の在庫表示が正（面談冒頭の1分）。年額は数千円規模が相場〔取得画面で実額を確認〕。取得時はWhois公開代行ON・自動更新ON（「9」の注意②）。</p>
+    </section>
+
+    <section data-block="timeline" data-pattern="timeline">
+      <h2><span class="num">5</span>今日の動線（実働タイムライン）</h2>
+      <p class="muted" style="margin-bottom: 16px;">上から下へ時間が流れる。オレンジ=morioの手、紫=清水社長と一緒、青=私（Claude）、緑=自動チェック。</p>
+      <div class="timeline">
+
+        <div class="tl-phase">
+          <h3>PHASE A — 面談前（所要1分）</h3>
+          <p>やることは○を1つ付けるだけ</p>
+        </div>
+
+        <div class="tl-item human">
+          <div class="tl-when"><b>朝</b><span>1分</span></div>
+          <div class="tl-rail"><span class="tl-dot"></span></div>
+          <div class="tl-card">
+            <span class="tl-actor">👨 morio</span>
+            <h3>「4」の候補に○</h3>
+            <div class="tl-quote">「新しい住所は ○○ で行く」</div>
+            <p class="tl-note">この一言で面談の芯が決まる。迷ったら第一候補（vera-works.jp）のままでよい。</p>
+          </div>
+        </div>
+
+        <div class="tl-phase">
+          <h3>PHASE B — 面談 10:00〜（枠内の計20分）</h3>
+          <p>担当: morio×清水社長 ／ 宿題は発生させない設計</p>
+        </div>
+
+        <div class="tl-item dele">
+          <div class="tl-when"><b>10:00</b><span>15分</span></div>
+          <div class="tl-rail"><span class="tl-dot"></span></div>
+          <div class="tl-card">
+            <span class="tl-actor">🤝 清水社長と</span>
+            <h3>新ドメインをその場で取得</h3>
+            <div class="tl-quote">「会社の顔は触らず、アプリ用の家を1個増やします」</div>
+            <p class="tl-note">取得先は清水社長の推奨に乗ってよい。決めるのは3つだけ：名前・名義（VERA）・Whois公開代行ON。</p>
+          </div>
+        </div>
+
+        <div class="tl-item dele">
+          <div class="tl-when"><b>続き</b><span>5分</span></div>
+          <div class="tl-rail"><span class="tl-dot"></span></div>
+          <div class="tl-card">
+            <span class="tl-actor">🤝 清水社長と</span>
+            <h3>メールの擦り合わせ（共有のみ）</h3>
+            <p class="tl-note">①キャリアメールは当面廃止しない（多方面で使用中）②morioka-k@はXserverのまま継続 ③Workspace開通は不要のまま——の3点を共有するだけ。</p>
+          </div>
+        </div>
+
+        <div class="tl-item ai">
+          <div class="tl-when"><b>面談後</b></div>
+          <div class="tl-rail"><span class="tl-dot"></span></div>
+          <div class="tl-card">
+            <span class="tl-actor">🤖 私</span>
+            <h3>仕込みと点検</h3>
+            <p class="tl-note">①家賃推定の退避 ②新ドメインをGitHubへ紐づける設定の手引き（設定値は実施時に公式資料で最新確認）③紐づけ後の全URL総点検。実施はGOの一言から・半日目安。</p>
+          </div>
+        </div>
+
+        <div class="tl-phase">
+          <h3>PHASE C — 今日の残り時間（90分目安）</h3>
+          <p>16:00 西村さん121・20:30 コシモメシの前後、どちらの空きでも可</p>
+        </div>
+
+        <div class="tl-item human">
+          <div class="tl-when"><b>夕方〜夜</b><span>90分</span></div>
+          <div class="tl-rail"><span class="tl-dot"></span></div>
+          <div class="tl-card">
+            <span class="tl-actor">👨 morio</span>
+            <h3>Mac着手</h3>
+            <div class="tl-quote">「Mac始める」</div>
+            <p class="tl-note">この一言で、公式最新と照合した当日手引きを出す。進め方は「7」の5歩・合格ラインは3点だけ。</p>
+          </div>
+        </div>
+
+        <div class="tl-item script">
+          <div class="tl-when"><b>済み</b></div>
+          <div class="tl-rail"><span class="tl-dot"></span></div>
+          <div class="tl-card">
+            <span class="tl-actor">⚙️ 自動</span>
+            <h3>下ごしらえは完了を実測済み</h3>
+            <p class="tl-note">脳（記憶一式）はGitHubの非公開倉庫に複製済み・移行キットはGoogleドライブに複製済み・主要5URLは全部生存——を今朝の再実測で確認。</p>
+          </div>
+        </div>
+
+        <div class="tl-gate">
+          <div class="tl-gate-mark">🚪</div>
+          <div>
+            <b>承認ゲート — 決めるのは「11」の3つだけ</b>
+            <p class="see">見るもの: <em>候補表「4」と承認ポイント「11」</em> ／ やること: <em>一言ずつ返すだけ</em>（名前／名義と取得場所／MacのGO）。それ以外は私が進める。</p>
+          </div>
+        </div>
+
+        <div class="tl-loop"><b>↺ 還流:</b> 面談で決まった結果は「決まったよ、①は○○」の一言で受け取り、<b>5分でこのページに焼き込んで正本を更新</b>する。</div>
+
+      </div>
+
+      <div class="touch-row" style="margin-top: 16px;">
+        <div class="touch-card o"><span class="big">3回</span><p>morioの手<br>（○付け・その場取得・MacのGO）</p></div>
+        <div class="touch-card o"><span class="big">1回</span><p>清水社長<br>（取得のその場サポート）</p></div>
+        <div class="touch-card"><span class="big">残り</span><p>私の仕事<br>（退避・設定・総点検・手引き）</p></div>
+        <div class="touch-card g"><span class="big">2種</span><p>自動チェック<br>（DNS・URL生死の再実測）</p></div>
+      </div>
+    </section>
+
+    <section data-block="swimlane" data-pattern="swimlane">
+      <h2><span class="num">6</span>誰が何をするか（分担レーン）</h2>
+      <div class="swimlane">
+        <div class="lane human">
+          <div class="lane-title">morio</div>
+          <div class="lane-cell">候補に○（1分）</div>
+          <div class="lane-cell">面談でその場取得（15分）</div>
+          <div class="lane-cell">「Mac始める」の一言</div>
+          <div class="lane-cell">合格ライン3点の確認</div>
+        </div>
+        <div class="lane partner">
+          <div class="lane-title">清水社長</div>
+          <div class="lane-cell">取得先の推奨・その場サポート</div>
+          <div class="lane-cell">メール現状維持の共有を受ける</div>
+          <div class="lane-cell">（後日・任意）co.jpへ直接ファイルを置く設置（FTP）の相談</div>
+          <div class="lane-cell empty"></div>
+        </div>
+        <div class="lane ai">
+          <div class="lane-title">私<br>（Claude）</div>
+          <div class="lane-cell">本設計図・今朝の実測</div>
+          <div class="lane-cell">退避 → 紐づけ → 総点検</div>
+          <div class="lane-cell">Mac当日手引き・伴走</div>
+          <div class="lane-cell">鍵束メール台帳づくり</div>
+        </div>
+      </div>
+    </section>
+
+    <section data-block="flow" data-pattern="flow">
+      <h2><span class="num">7</span>Mac二拠点 — 今日の合格ラインは3点だけ</h2>
+      <p class="muted" style="margin-bottom: 12px;">合格ライン＝①Macで私（Claude Code）が起動する ②本人アカウントで入れている ③脳（記憶）が読める。ここまでで「Macで作業できる」が成立。書き込みの同期は後日、逆向き試験（消して復活を実測）を通してから常用する。</p>
+      <div class="card">
+        <div class="vflow">
+          <div class="vstep human">
+            <div class="rail"><div class="dot">1</div><div class="stick"></div></div>
+            <div class="body">
+              <span class="who">morio（5分）</span>
+              <h3>誤アカウントの罠を直す</h3>
+              <p class="desc">以前Macは「無料プラン」の別人アカウントに入っていた（7/10実測）。左下からログアウト→「メールアドレスで続行」にキャリアメール→iPhoneに届く6桁コード。Apple/Googleのボタンは押さない。</p>
+            </div>
+          </div>
+          <div class="vstep human">
+            <div class="rail"><div class="dot">2</div><div class="stick"></div></div>
+            <div class="body">
+              <span class="who">morio（10分）</span>
+              <h3>アプリを入れる</h3>
+              <p class="desc">第一候補=Claude Desktop（Mac版アプリ。この中の「Code」から私が動く）。コマンド式の新しい公式インストール方式（追加ソフト不要・macOS 13以上）でも可＝どちらも公式資料と照合済み（7/31）。正確な入手先とコマンドは当日、Mac画面に合わせて私が渡す。</p>
+            </div>
+          </div>
+          <div class="vstep human">
+            <div class="rail"><div class="dot">3</div><div class="stick"></div></div>
+            <div class="body">
+              <span class="who">morio（2分）</span>
+              <h3>ログイン確認</h3>
+              <p class="desc">有料プランの表示と過去の履歴が見えれば本人アカウント。見えなければ手順1へ戻る。</p>
+            </div>
+          </div>
+          <div class="vstep ai">
+            <div class="rail"><div class="dot">4</div><div class="stick"></div></div>
+            <div class="body">
+              <span class="who">私（15分）</span>
+              <h3>脳を繋ぐ（読み取りから）</h3>
+              <p class="desc">記憶の倉庫（GitHub非公開・複製済み）をMacへ引き込み、まず読み取り専用で運用開始。機密の保管庫と環境設定ファイルは、設計どおり同期しない。</p>
+            </div>
+          </div>
+          <div class="vstep script">
+            <div class="rail"><div class="dot">5</div><div class="stick"></div></div>
+            <div class="body">
+              <span class="who">合格判定</span>
+              <h3>3点そろえば今日は合格</h3>
+              <p class="desc">Brewfile（アプリ一括インストール表）でのフル移行は、野球の無い週末枠でよい。キットの置き場所: Googleドライブ VERA/03_資料/Mac移行キット_v1（Brewfile＋当日チェックリスト・今朝複製済み）。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section data-block="mail-ledger" class="ledger">
+      <h2><span class="num">8</span>鍵束メール台帳（キャリアメールの利用先・種まき）</h2>
+      <p class="muted" style="margin-bottom: 12px;">「廃止しない」を決めたので、次の仕事は「どこで使っているか」を1行ずつ記録すること。私が聞き取りで追記していく。全部の引っ越しが済んだ日に、初めて廃止を検討する（期限は切らない）。</p>
+      <div class="card">
+        <table>
+          <tr><th>使い先</th><th>確からしさ</th><th>扱い</th></tr>
+          <tr><td>Claude（私）のログイン</td><td>確定（公式ヘルプ照合済み・7/17）</td><td>存続の一番の理由。登録メールの変更が不可（公式仕様）＝この行は引っ越し自体ができない。解約=閉め出し</td></tr>
+          <tr><td>ソフトバンク回線まわりの通知</td><td>聞き取りで確認</td><td>〔追記待ち〕</td></tr>
+          <tr><td>各種サービスの登録メール</td><td>聞き取りで確認</td><td>〔追記待ち〕</td></tr>
+          <tr><td>（気づいたら追記）</td><td>—</td><td>「台帳に足して：○○」の一言でOK</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section data-block="caution" data-pattern="caution-cards">
+      <h2><span class="num">9</span>よくある注意点 3つ</h2>
+      <div class="grid three">
+        <div class="caution-card">
+          <b>① co.jpのDNSは今後も触らない</b>
+          <p>罠は消えたのではなく「引き金を引かない」だけ。将来「co.jpもGitHubへ」の話が復活したら、その時だけメール配達先の修理（MX張り替え）が必須——とセットで思い出す。</p>
+        </div>
+        <div class="caution-card">
+          <b>② 取得時はWhois公開代行を必ずON</b>
+          <p>ドメインの持ち主情報は世界に公開されるのが原則の仕組み。公開代行ONで住所・氏名の露出を防ぐ。名義はVERA、支払いは自動更新ON（切れると家ごと消える）。</p>
+        </div>
+        <div class="caution-card">
+          <b>③ 順番は「退避 → 紐づけ」</b>
+          <p>紐づけた瞬間、棚の全ページが新住所になり旧URLから自動転送される。家賃推定など「載せたくない物」が残っていると新住所が付いてしまうため、退避が先。</p>
+        </div>
+      </div>
+    </section>
+
+    <section data-block="faq" data-pattern="faq">
+      <h2><span class="num">10</span>よくある質問</h2>
+      <div class="grid three">
+        <div class="card faq-card">
+          <p class="q">住所が2つになって、お客様は迷わない？</p>
+          <p class="a">迷わない構え。名刺・請求書・信用の入口は co.jp、アプリや資料の配布は工房ドメイン。会社の顔と作業場でドメインを分けるのは広く使われている構えで、混ぜるより事故が少ない。</p>
+        </div>
+        <div class="card faq-card">
+          <p class="q">キャリアメールは結局いつまで残す？</p>
+          <p class="a">期限を切らない。「鍵束」として使う限り維持費だけ。台帳（「8」）の引っ越しが全部済んだ日に初めて廃止を検討する。今日は「廃止を急がない」を清水社長と共有するだけ。</p>
+        </div>
+        <div class="card faq-card">
+          <p class="q">これまで清水社長にお願いした作業は無駄になる？</p>
+          <p class="a">ならない。表の家（co.jp・メール・トップページ）は引き続き清水社長の管理で活き続ける。今日決めるのは「アプリ用の家を1個増やす」だけで、役割分担はむしろ明確になる。</p>
+        </div>
+      </div>
+    </section>
+
+    <section data-block="approval">
+      <h2><span class="num">11</span>承認ポイント（3つ・一言ずつで足りる）</h2>
+      <div class="grid three">
+        <div class="card approve-card">
+          <span class="no">①</span>
+          <b>新ドメインの名前</b>
+          <p>おすすめ=vera-works.jp。「4」の表から一言（別案も歓迎。その場でDNSを実測して見立てを返す）。</p>
+        </div>
+        <div class="card approve-card">
+          <span class="no">②</span>
+          <b>名義と取得場所</b>
+          <p>おすすめ=VERA名義・面談中にその場で取得。取得先にこだわりは無し（清水社長の推奨に乗る）。</p>
+        </div>
+        <div class="card approve-card">
+          <span class="no">③</span>
+          <b>MacのGO</b>
+          <p>おすすめ=今日の空き時間90分。「Mac始める」の一言で、公式最新と照合した当日手引きを出す。</p>
+        </div>
+      </div>
+      <p class="muted" style="margin-top: 12px;">3つとも決まり次第、このページを5分で正本更新する（「決まったよ、①は○○」だけでよい）。</p>
+    </section>
+
+    <section data-block="today">
+      <h2><span class="num">12</span>今日の一歩</h2>
+      <div class="today">
+        <div class="today-mark">芯</div>
+        <div>
+          <h3>面談の冒頭で「4」を見せて、「アプリ用の家を1個、その場で取りましょう」と言う</h3>
+          <p class="muted" style="margin: 0;">15分で今日の芯が終わる。残り（退避・紐づけ・点検・Mac手引き）は私の仕事。</p>
+        </div>
+      </div>
+    </section>
+
+    <section data-block="edit-notes" class="edit-notes">
+      <h2><span class="num">13</span>編集しやすいポイント</h2>
+      <div class="card">
+        <ul>
+          <li>面談の決定: ヒーローのチップと「14」更新履歴、「4」の候補表に追記する</li>
+          <li>候補の差し替え: 「4」の表と「11」①の2か所を同時に直す</li>
+          <li>Macの進み具合: 「7」の手順1〜5に✅を付けていく</li>
+          <li>旧版（7/18）: デスクトップに保管したまま。経緯は「14」から辿る</li>
+        </ul>
+      </div>
+    </section>
+
+    <section data-block="changelog" class="changelog">
+      <h2><span class="num">14</span>更新履歴</h2>
+      <div class="card">
+        <table>
+          <tr><th>日付</th><th>変更内容</th><th>理由</th></tr>
+          <tr><td>2026-07-17</td><td>初版「ドメイン集約」作成（co.jp集約・3レーン方式）</td><td>清水社長打ち合わせ用</td></tr>
+          <tr><td>2026-07-18</td><td>社長回答を反映（Claude引っ越し保留・noindex承認・かんたん説明追加）</td><td>22:05版＝旧版として保管</td></tr>
+          <tr><td>2026-07-31</td><td>全面改訂：2ドメイン体制へ転換（co.jp凍結・新ドメイン新設）・キャリアメール存続前提・Mac当日着手を追加。DNS・URL・ファイルを再実測し、図解骨格v1へ移行</td><td>本日10:00面談の3議題に合わせるため</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <p class="footer-note">この設計図は1ファイル完結のHTML+CSSです（外部読み込みなし）。実測時刻: 2026-07-31 00:51（メール配達設定MX・サーバー所在A・候補ドメインの登録有無・主要URL生死・キット実在・カレンダー）。Claudeアカウント関連の公式出典（メール変更不可・エクスポート・ログイン方式）は7/18版の脚注に記載＝本ページはリンクを持たない設計のため旧版を参照。</p>
+  </main>
+</body>
+</html>
