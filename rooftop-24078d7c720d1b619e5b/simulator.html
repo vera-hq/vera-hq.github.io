@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<title>（仮称）屋上庭園の家｜事業性シミュレーター</title>
+<style>
+:root{--navy:#1a2f5e;--gold:#c9a44c;--ink:#1f2a3a;--sub:#5b6878;--box:#f4f6f9;--line:#d7dde6;
+      --green:#2e8b57;--greenbg:#e8f4ec;--red:#c0392b;--redbg:#fbeaea;--amber:#9a6b00;--amberbg:#fdf3e3;--blue:#2f6fb3;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;background:#e9edf2;color:var(--ink);font-size:14px;line-height:1.5;padding:14px}
+.wrap{max-width:1200px;margin:0 auto}
+header{background:var(--navy);color:#fff;border-radius:8px 8px 0 0;padding:14px 20px}
+header h1{font-size:18px}
+header .sub{font-size:11.5px;color:#cfd9e8;margin-top:2px}
+.disc{background:#fff8e6;border:1px solid var(--gold);padding:8px 20px;font-size:11.5px;color:#5c4600}
+.grid{display:grid;grid-template-columns:380px 1fr;gap:14px;background:#fff;border-radius:0 0 8px 8px;padding:16px;box-shadow:0 2px 12px rgba(26,47,94,.12)}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.panel h2{font-size:13px;color:#fff;background:var(--navy);border-radius:5px;padding:5px 10px;margin:16px 0 8px}
+.panel h2:first-child{margin-top:0}
+.panel h2.gold{background:var(--gold);color:var(--navy)}
+.panel h2.blue{background:var(--blue)}
+.ctrl{margin:9px 0}
+.ctrl label{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:3px}
+.ctrl label b{color:var(--navy)}
+input[type=range]{width:100%;accent-color:var(--navy);height:20px}
+select{width:100%;padding:5px 8px;border:1px solid var(--line);border-radius:4px;font-size:13px;font-family:inherit;background:#fff}
+.seg{display:flex;gap:4px}
+.seg button{flex:1;padding:6px 4px;border:1px solid var(--line);background:var(--box);border-radius:4px;font-size:12px;cursor:pointer;font-family:inherit}
+.seg button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.kpi{border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.kpi .t{font-size:11.5px;color:var(--sub)}
+.kpi .v{font-size:clamp(17px,5.8vw,25px);font-weight:bold;color:var(--navy);margin-top:2px;white-space:nowrap}
+.kpi .v.red{color:var(--red)}
+.kpi .v.green{color:var(--green)}
+.kpi .s{font-size:11px;color:var(--sub);margin-top:2px}
+.kpi.hero{grid-column:1/-1;border:2px solid var(--gold);background:#fdf9ef}
+.kpi.hero .v{font-size:28px}
+.check{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.chk{flex:1;min-width:150px;border-radius:8px;padding:9px 12px;font-size:12.5px;font-weight:bold}
+.chk.ok{background:var(--greenbg);color:var(--green);border:1px solid var(--green)}
+.chk.ng{background:var(--redbg);color:var(--red);border:1px solid var(--red)}
+.chk.warn{background:var(--amberbg);color:var(--amber);border:1px solid var(--amber)}
+.box{border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-top:12px;background:var(--box)}
+.box h3{font-size:12.5px;color:var(--navy);margin-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:4px}
+td{padding:4px 6px;border-bottom:1px solid var(--line)}
+td:last-child{text-align:right;font-weight:bold;color:var(--navy);white-space:nowrap}
+tr.sum td{background:#eef2f8}
+.bar{display:flex;height:26px;border-radius:6px;overflow:hidden;margin:8px 0;border:1px solid var(--line)}
+.bar div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:bold;white-space:nowrap;overflow:hidden;min-width:fit-content;padding:0 6px}
+.bar .b1{background:var(--navy)}.bar .b2{background:var(--gold);color:var(--navy)}.bar .b3{background:var(--blue)}
+.note{font-size:11px;color:var(--sub);margin-top:6px}
+.row-actions{display:flex;gap:8px;margin-top:12px}
+.row-actions button{flex:1;padding:8px;border:1px solid var(--navy);background:#fff;color:var(--navy);border-radius:6px;font-size:12.5px;cursor:pointer;font-weight:bold;font-family:inherit}
+.cmp{margin-top:12px;font-size:12px}
+.cmp th{background:var(--navy);color:#fff;padding:5px 6px;font-size:12px;text-align:right}
+.cmp th:first-child{text-align:left}
+.cmp table td:nth-child(2),.cmp table td:nth-child(3){text-align:right}
+footer{font-size:10.5px;color:var(--sub);padding:10px 4px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>（仮称）屋上庭園の家 事業性シミュレーター <span style="font-size:12px;font-weight:normal;color:#cfd9e8;">百年住宅様向け・限定公開</span></h1>
+  <div class="sub">家賃 × 屋上看板 × 太陽光の3本立て。「庭園代は何年で広告費が払ってくれるか」まで出ます。数字はご自由に動かしてお試しください（入力はこの端末にだけ保存されます）。<a href="index.html" style="color:#c9a44c">← 目次へ戻る</a></div>
+</header>
+<div class="disc">⚠️ 概算です（初期値＝2026-08-09調査の相場レンジ中央値）。正式見積は施工会社、構造・法適合は建築士、看板可否は自治体、資金・税務は専門家へ。投資助言ではありません。</div>
+
+<div class="grid">
+  <!-- ============ 入力 ============ -->
+  <div class="panel">
+    <h2>立地・法規</h2>
+    <div class="ctrl"><label>条例の適用</label>
+      <div class="seg" id="prefSeg"><button data-v="saitama" class="on">埼玉県（草加ほか）</button><button data-v="tokyo">東京都</button></div></div>
+    <div class="ctrl"><label>用途地域</label><select id="zone">
+      <option value="l1">第一種低層住居専用</option>
+      <option value="l2">第二種低層住居専用</option>
+      <option value="m1" selected>第一種中高層住居専用</option>
+      <option value="m2">第二種中高層住居専用</option>
+      <option value="r1">第一種住居</option>
+      <option value="r3">準住居</option>
+      <option value="c1">近隣商業</option>
+      <option value="c2">商業</option>
+    </select></div>
+    <div class="ctrl"><label>建ぺい率 <b><span id="v_bcr"></span> %</b></label><input type="range" id="bcr" min="40" max="80" step="10" value="60"></div>
+    <div class="ctrl"><label>容積率 <b><span id="v_far"></span> %</b></label><input type="range" id="far" min="100" max="600" step="50" value="200"></div>
+
+    <h2>規模</h2>
+    <div class="ctrl"><label>敷地面積 <b><span id="v_site"></span> 坪</b></label><input type="range" id="site" min="40" max="150" step="1" value="80"></div>
+    <div class="ctrl"><label>階数 <b><span id="v_floors"></span> 階</b></label><input type="range" id="floors" min="2" max="6" step="1" value="3"></div>
+    <div class="ctrl"><label>賃貸戸数 <b><span id="v_units"></span> 戸</b></label><input type="range" id="units" min="4" max="20" step="1" value="8"></div>
+    <div class="ctrl"><label>1戸の広さ <b><span id="v_unit"></span> ㎡</b></label><input type="range" id="unit" min="18" max="45" step="1" value="30"></div>
+    <div class="ctrl"><label>オーナー自宅 <b><span id="v_home"></span> ㎡</b>（0＝純投資物件）</label><input type="range" id="home" min="0" max="160" step="5" value="0"></div>
+
+    <h2>土地・建築</h2>
+    <div class="ctrl"><label>土地 坪単価 <b><span id="v_land"></span> 万/坪</b><span style="font-size:10.5px;color:var(--sub)">自己所有地・建て替えなら0に。90＝草加圏の想定値</span></label><input type="range" id="land" min="0" max="250" step="1" value="90"></div>
+    <div class="ctrl"><label>建築 坪単価 <b><span id="v_build"></span> 万/坪</b><span style="font-size:10.5px;color:var(--sub)">エンド価格・3階自由設計の実勢</span></label><input type="range" id="build" min="90" max="170" step="1" value="110"></div>
+    <div class="ctrl"><label>屋上利用 単価 <b><span id="v_roofuse"></span> 万/坪</b><span style="font-size:10.5px;color:var(--sub)">手すり壁＋階段室（200万/25坪→8万/坪換算）</span></label><input type="range" id="roofuse" min="4" max="15" step="0.5" value="8"></div>
+
+    <h2 class="gold">① 屋上庭園</h2>
+    <div class="ctrl"><div class="seg" id="roofSeg">
+      <button data-v="none">なし</button><button data-v="simple">シンプル</button><button data-v="full" class="on">フル庭園</button></div></div>
+    <div class="ctrl"><label>庭園の面積 <b><span id="v_niwaM2"></span> ㎡</b></label><input type="range" id="niwaM2" min="0" max="200" step="5" value="60"></div>
+    <div class="ctrl"><label>造園の単価 <b><span id="v_niwaUnit"></span> 万/㎡</b><span style="font-size:10.5px;color:var(--sub)">樹木・土壌・防水・潅水込み</span></label><input type="range" id="niwaUnit" min="3" max="20" step="0.5" value="11"></div>
+    <div class="ctrl"><label>庭園の家賃プレミアム <b>+<span id="v_prem"></span> %</b></label><input type="range" id="prem" min="0" max="20" step="1" value="8"></div>
+
+    <h2 class="gold">② 屋上看板</h2>
+    <div class="ctrl"><label>置き方</label><div class="seg" id="signModeSeg">
+      <button data-v="overlay" class="on">庭園と重ね置き（支柱のみ）</button><button data-v="solo">独立配置</button></div></div>
+    <div class="ctrl"><label>看板の月額収入 <b><span id="v_sign"></span> 万/月</b></label><input type="range" id="sign" min="0" max="40" step="0.5" value="8"></div>
+    <div class="ctrl"><label>看板の初期費用 <b><span id="v_signInit"></span> 万</b></label><input type="range" id="signInit" min="0" max="300" step="10" value="120"></div>
+    <div class="ctrl"><label>看板の年間経費 <b><span id="v_signOpex"></span> 万/年</b><span style="font-size:10.5px;color:var(--sub)">許可・点検・保険・電気</span></label><input type="range" id="signOpex" min="0" max="40" step="1" value="12"></div>
+    <div class="ctrl"><label>広告塔の高さ <b><span id="v_signH"></span> m</b></label><input type="range" id="signH" min="2" max="8" step="0.1" value="3.9"></div>
+
+    <h2 class="blue">③ 太陽光</h2>
+    <div class="ctrl"><div class="seg" id="pvSeg">
+      <button data-v="none">なし</button><button data-v="own" class="on">自己所有</button><button data-v="ppa">PPA(0円設置)</button></div></div>
+    <div class="ctrl"><label>設備容量 <b><span id="v_kw"></span> kW</b><span style="font-size:10.5px;color:var(--sub)">容量・配置は太陽光パートナーとの設計協議で確定</span></label><input type="range" id="kw" min="0" max="30" step="1" value="4"></div>
+    <div class="ctrl"><label>設置単価 <b><span id="v_pvUnit"></span> 万/kW</b></label><input type="range" id="pvUnit" min="15" max="32" step="0.5" value="25.5"></div>
+    <div class="ctrl"><label>自家消費率 <b><span id="v_self"></span> %</b></label><input type="range" id="self" min="0" max="100" step="5" value="30"></div>
+    <div class="ctrl"><label>買う電気の単価 <b><span id="v_buy"></span> 円/kWh</b></label><input type="range" id="buy" min="20" max="45" step="1" value="34"></div>
+    <div class="ctrl"><label>売電単価(長期平均) <b><span id="v_sell"></span> 円/kWh</b></label><input type="range" id="sell" min="8" max="24" step="0.5" value="12"></div>
+    <div class="ctrl"><label>太陽光の家賃プレミアム <b>+<span id="v_pvPrem"></span> %</b></label><input type="range" id="pvPrem" min="0" max="15" step="1" value="4"></div>
+
+    <h2>家賃・資金</h2>
+    <div class="ctrl"><label>家賃 単価 <b><span id="v_rent"></span> 円/㎡/月</b></label><input type="range" id="rent" min="1800" max="4500" step="50" value="2800"></div>
+    <div class="ctrl"><label>空室率 <b><span id="v_vac"></span> %</b></label><input type="range" id="vac" min="0" max="25" step="1" value="8"></div>
+    <div class="ctrl"><label>運営費率 <b><span id="v_opex"></span> %</b></label><input type="range" id="opex" min="10" max="35" step="1" value="20"></div>
+    <div class="ctrl"><label>自己資金 <b><span id="v_cap"></span> 万</b></label><input type="range" id="cap" min="0" max="30000" step="500" value="6000"></div>
+    <div class="ctrl"><label>金利 <b><span id="v_rate"></span> %</b></label><input type="range" id="rate" min="0" max="5" step="0.1" value="2.0"></div>
+    <div class="ctrl"><label>返済期間 <b><span id="v_years"></span> 年</b></label><input type="range" id="years" min="10" max="40" step="1" value="30"></div>
+  </div>
+
+  <!-- ============ 結果 ============ -->
+  <div class="panel">
+    <div class="kpis">
+      <div class="kpi hero"><div class="t">🌳 この企画の芯 ── 庭園代を広告費が払い終わるまで</div><div class="v" id="k_hero">–</div><div class="s" id="k_hero_s"></div></div>
+      <div class="kpi"><div class="t">総投資額（土地込み）</div><div class="v" id="k_total">–</div><div class="s" id="k_total_s"></div></div>
+      <div class="kpi"><div class="t">年間キャッシュフロー（返済後・税引前）</div><div class="v" id="k_cf">–</div><div class="s" id="k_cf_s"></div></div>
+      <div class="kpi"><div class="t">実質利回り（NOI／総額）</div><div class="v" id="k_yield">–</div><div class="s" id="k_yield_s"></div></div>
+      <div class="kpi"><div class="t">看板・太陽光の効果</div><div class="v" id="k_lift">–</div><div class="s" id="k_lift_s"></div></div>
+    </div>
+
+    <div class="check">
+      <div class="chk" id="c_sign">看板可否</div>
+      <div class="chk" id="c_bcr">建ぺい率</div>
+      <div class="chk" id="c_far">容積率</div>
+      <div class="chk" id="c_roof">屋上の取り合い</div>
+      <div class="chk" id="c_kakunin">工作物確認</div>
+    </div>
+    <div class="note" id="roofAdvice" style="background:#f4f6f9;border-radius:6px;padding:8px 10px;margin-top:8px"></div>
+
+    <div class="box">
+      <h3>収益3本の構成（年間・運営費控除後）</h3>
+      <div class="bar" id="revBar"></div>
+      <table id="revTable"></table>
+    </div>
+
+    <div class="box">
+      <h3>投資と回収</h3>
+      <table id="breakdown"></table>
+    </div>
+
+    <div class="box">
+      <h3>必要家賃の逆算</h3>
+      <div class="ctrl"><label>目標NOI利回り <b><span id="v_target"></span> %</b></label><input type="range" id="target" min="3" max="9" step="0.1" value="4"></div>
+      <div id="reqRent" style="font-size:13px"></div>
+    </div>
+
+    <div class="row-actions">
+      <button id="saveA">A案に保存</button><button id="saveB">B案に保存</button><button id="clearAB">比較クリア</button>
+    </div>
+    <div class="cmp" id="cmp"></div>
+    <div class="note">スライダーを動かすと全部が即更新。入力はこの端末に自動保存されます。</div>
+  </div>
+</div>
+<footer>VERA Holdings ／（仮称）屋上庭園の家 事業性シミュレーター（限定公開・百年住宅様向け）／ 初期値の根拠は下記。数字は概算で確定値ではありません。<br>
+<b>建築110万/坪（エンド・3階自由設計）と屋上利用＋200万/25坪戸建て（内訳＝屋上手すり壁＋階段室）→8万/坪換算＝百年住宅 服部様にご教示いただいた実勢値（2026年8月時点）。土を入れて庭園にする分は「屋上庭園」欄で別計上。集合住宅仕様（水回り×8戸）は上振れ要因＝正式見積で確定</b>／土地90万/坪・家賃2,800円/㎡＝草加市内 2026-07調査の目安／造園11万/㎡＝類似案件の実績から逆算した目安（樹木・土壌・防水・潅水込み。正式見積は造園会社へ）／看板 月8万・初期120万・年経費12万＝屋上看板の相場レンジは住宅地1〜5万・好立地5〜30万超・ビル屋上20〜60万／初期50〜200万。月8万は幹線沿いの視認性＋連名スポンサー方式が前提の想定値で、住宅地の単独貸し看板より強気側です／太陽光25.5万/kW＝住宅用2026年度想定値、1kW≒7㎡・年1,000kWh、買電34円・売電12円（FIT2段階＝10kW未満は最初4年24円→8.3円の長期平均目安）<br>
+<b>屋上の取り合いに注意</b>：3階建て8戸ですと屋上は約104㎡です。庭園・太陽光・看板は物理的に場所を取り合うため、どこかを削る設計判断が必要になります。</footer>
+</div>
+
+<script>
+const TSUBO=3.305, COMMON=0.30;
+const roofPreset={none:{m2:0,unit:11},simple:{m2:30,unit:6},full:{m2:60,unit:11}};
+const PV_M2_PER_KW=7;       // 1kWあたり屋上占有 約7㎡（目安）
+const PV_KWH_PER_KW=1000;   // 1kWあたり年間発電量 約1,000kWh（目安）
+// 用途地域: 建ぺい/容積の代表値（実際は都市計画決定で異なる＝要確認）／看板可否
+const ZONE={
+  l1:{n:'第一種低層住居専用',bcr:50,far:100,saitama:false,tokyo:false},
+  l2:{n:'第二種低層住居専用',bcr:50,far:150,saitama:false,tokyo:false},
+  m1:{n:'第一種中高層住居専用',bcr:60,far:200,saitama:true, tokyo:false},
+  m2:{n:'第二種中高層住居専用',bcr:60,far:200,saitama:true, tokyo:false},
+  r1:{n:'第一種住居',bcr:60,far:200,saitama:true,tokyo:true},
+  r3:{n:'準住居',bcr:60,far:200,saitama:true,tokyo:true},
+  c1:{n:'近隣商業',bcr:80,far:300,saitama:true,tokyo:true},
+  c2:{n:'商業',bcr:80,far:400,saitama:true,tokyo:true}
+};
+let roof='full', pv='own', pref='saitama', signMode='overlay', slotA=null, slotB=null;
+const ids=['bcr','far','site','floors','units','unit','home','land','build','roofuse','niwaM2','niwaUnit','prem','sign','signInit','signOpex','signH','kw','pvUnit','self','buy','sell','pvPrem','rent','vac','opex','cap','rate','years','target'];
+const $=id=>document.getElementById(id);
+const yen=n=>Math.round(n).toLocaleString();
+const oku=n=>(n/10000).toFixed(2);
+
+function X(){const o={};ids.forEach(i=>o[i]=+$(i).value);o.zone=$('zone').value;o.roof=roof;o.pv=pv;o.pref=pref;o.signMode=signMode;return o;}
+
+function loanAnnual(P,ratePct,years){if(P<=0)return 0;const r=ratePct/100/12,n=years*12;
+  if(r===0)return P/years;return P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1)*12;}
+
+function calc(x){
+  const siteM2=x.site*TSUBO;
+  const netM2=x.units*x.unit+x.home;
+  const grossM2=netM2*(1+COMMON);
+  const grossTsubo=grossM2/TSUBO;
+  const footprint=grossM2/x.floors;          // ≒ 屋上面積
+  const bcrOK=footprint<=siteM2*(x.bcr/100)+0.5;
+  const farOK=grossM2<=siteM2*(x.far/100)+0.5;
+  // 看板可否
+  const signAllowed=ZONE[x.zone][x.pref];
+  const signOn=x.sign>0||x.signInit>0;
+  // 屋上の取り合い
+  const pvM2=(x.pv==='none'?0:x.kw*PV_M2_PER_KW);
+  const signM2=(signOn?(x.signMode==='overlay'?4:12):0); // 重ね置き=基礎2㎡×2のみ（柵内低木帯は庭園と共用）／独立=基礎+保守域12㎡
+  const usedM2=x.niwaM2+pvM2+signM2;
+  const roofOK=usedM2<=footprint;
+  // 費用（万円）
+  const landCost=x.site*x.land;
+  const buildCost=grossTsubo*x.build;
+  const roofUseCost=(footprint/TSUBO)*x.roofuse;
+  const niwaCost=x.niwaM2*x.niwaUnit;
+  const pvCost=(x.pv==='own'?x.kw*x.pvUnit:0);   // PPAは事業者負担＝0
+  const signCost=(signAllowed?x.signInit:0);
+  const misc=landCost*0.06+buildCost*0.02;
+  const total=landCost+buildCost+roofUseCost+niwaCost+pvCost+signCost+misc;
+  // ① 家賃（万円/年）
+  const premF=1+(x.roof!=='none'?x.prem/100:0)+(x.pv!=='none'?x.pvPrem/100:0);
+  const rentFull=x.units*x.unit*x.rent*premF*12/10000;
+  const rentEff=rentFull*(1-x.vac/100);
+  const rentNOI=rentEff*(1-x.opex/100);
+  // ② 看板（万円/年・純）
+  const signNOI=signAllowed?Math.max(0,x.sign*12-x.signOpex):0;
+  // ③ 太陽光（万円/年・純）
+  const kwh=(x.pv==='none'?0:x.kw*PV_KWH_PER_KW);
+  const pvNOI=(x.pv==='own')
+    ? (kwh*(x.self/100)*x.buy + kwh*(1-x.self/100)*x.sell)/10000
+    : 0;                                          // PPAはオーナー直接収益なし（家賃競争力で効く）
+  const noi=rentNOI+signNOI+pvNOI;
+  const loan=Math.max(0,total-x.cap);
+  const debt=loanAnnual(loan,x.rate,x.years);
+  const cf=noi-debt;
+  const noiYield=total>0?noi/total*100:0;
+  // 看板・太陽光なしの比較
+  const baseTotal=total-signCost-pvCost;
+  const baseRentFull=x.units*x.unit*x.rent*(1+(x.roof!=='none'?x.prem/100:0))*12/10000;
+  const baseNOI=baseRentFull*(1-x.vac/100)*(1-x.opex/100);
+  const baseYield=baseTotal>0?baseNOI/baseTotal*100:0;
+  // ★庭園代の広告回収
+  const niwaPayByAd=(niwaCost>0&&signNOI>0)?niwaCost/signNOI:null;
+  const niwaPayByRent=(()=>{const d=(x.units*x.unit*x.rent*12/10000)*(x.prem/100)*(1-x.vac/100)*(1-x.opex/100);
+    return (niwaCost>0&&d>0)?niwaCost/d:null;})();
+  const payback=noi>0?total/noi:null;
+  return {siteM2,grossM2,grossTsubo,footprint,bcrOK,farOK,signAllowed,signOn,pvM2,signM2,usedM2,roofOK,
+    landCost,buildCost,roofUseCost,niwaCost,pvCost,signCost,misc,total,rentFull,rentEff,rentNOI,signNOI,pvNOI,kwh,
+    noi,loan,debt,cf,noiYield,baseYield,baseNOI,baseTotal,niwaPayByAd,niwaPayByRent,payback};
+}
+
+function render(){
+  const x=X(), r=calc(x);
+  // readouts
+  const R={bcr:'%',far:'%',site:'坪',floors:'階',units:'戸',unit:'㎡',home:'㎡',land:'',build:'',niwaM2:'',prem:'',
+           sign:'',signInit:'',signOpex:'',signH:'',kw:'',pvUnit:'',self:'',buy:'',sell:'',pvPrem:'',rent:'',vac:'',opex:'',cap:'',rate:'',years:'',target:''};
+  ids.forEach(i=>{const el=$('v_'+i); if(!el)return;
+    let v=x[i]; if(i==='rent'||i==='cap')v=yen(v); else if(i==='rate'||i==='pvUnit')v=(+x[i]).toFixed(1); else if(i==='target')v=(+x[i]).toFixed(1);
+    el.textContent=v;});
+  // 看板可否
+  const cs=$('c_sign'), z=ZONE[x.zone], prefName=(x.pref==='saitama'?'埼玉県':'東京都');
+  if(r.signAllowed){cs.className='chk ok';cs.textContent='✓ 看板OK（'+prefName+'・'+z.n+'＝許可地域）';}
+  else{cs.className='chk ng';cs.textContent='✗ 看板NG（'+prefName+'・'+z.n+'＝禁止地域）';}
+  // 法規
+  const b=$('c_bcr'); b.className='chk '+(r.bcrOK?'ok':'ng');
+  b.textContent=(r.bcrOK?'✓':'✗')+' 建ぺい'+x.bcr+'% ('+r.footprint.toFixed(0)+'/'+(r.siteM2*x.bcr/100).toFixed(0)+'㎡)';
+  const f=$('c_far'); f.className='chk '+(r.farOK?'ok':'ng');
+  f.textContent=(r.farOK?'✓':'✗')+' 容積'+x.far+'% ('+r.grossM2.toFixed(0)+'/'+(r.siteM2*x.far/100).toFixed(0)+'㎡)';
+  const rf=$('c_roof'); rf.className='chk '+(r.roofOK?'ok':'ng');
+  rf.textContent=(r.roofOK?'✓':'✗')+' 屋上 '+r.usedM2.toFixed(0)+'/'+r.footprint.toFixed(0)+'㎡（庭園'+x.niwaM2+'+PV'+r.pvM2.toFixed(0)+'+看板'+r.signM2+'）';
+  // 屋上のトレードオフ助言
+  const rest=r.footprint-r.usedM2, addKw=Math.floor(Math.max(0,rest)/PV_M2_PER_KW);
+  $('roofAdvice').innerHTML = r.roofOK
+    ? '残り <b>'+rest.toFixed(0)+'㎡</b>（歩行スペース込み）。太陽光をあと <b>'+addKw+'kW</b> 足せる計算です。'
+    : '<b style="color:#c0392b">'+(r.usedM2-r.footprint).toFixed(0)+'㎡ オーバー。</b>屋上は3つの取り合いです ── '+
+      '<b>庭園を '+Math.ceil(r.usedM2-r.footprint)+'㎡ 削る</b>か、<b>太陽光を '+Math.ceil((r.usedM2-r.footprint)/PV_M2_PER_KW)+'kW 減らす</b>か、階数を増やして屋上面積を稼ぐか。'+
+      'ここが設計の一番の勝負どころです。';
+  const kk=$('c_kakunin');
+  if(!r.signAllowed||!r.signOn){kk.className='chk warn';kk.textContent='— 看板なし';}
+  else if(x.signH>4){kk.className='chk warn';kk.textContent='⚠ 広告塔'+x.signH+'m＞4m ＝工作物確認申請が必要';}
+  else{kk.className='chk ok';kk.textContent='✓ 広告塔'+x.signH+'m ≦4m ＝工作物確認は不要';}
+  // ★hero
+  const h=$('k_hero'), hs=$('k_hero_s');
+  if(r.niwaCost===0){h.textContent='庭園なし';h.className='v';hs.textContent='「フル庭園」を選ぶと、庭園代を広告費で何年で回収できるかが出ます。';}
+  else if(!r.signAllowed){h.textContent='看板が出せない立地';h.className='v red';
+    hs.textContent='この用途地域では他社広告NG＝庭園代'+yen(r.niwaCost)+'万は家賃だけで回収（'+(r.niwaPayByRent?r.niwaPayByRent.toFixed(0)+'年':'—')+'）。まず立地の再検討が必要になります。';}
+  else if(!r.niwaPayByAd){h.textContent='看板収入 0';h.className='v red';hs.textContent='看板の月額収入を入れると回収年が出ます。';}
+  else{const y=r.niwaPayByAd; h.textContent='約 '+y.toFixed(1)+' 年';
+    h.className='v '+(y<=8?'green':(y<=15?'':'red'));
+    hs.innerHTML='庭園 <b>'+yen(r.niwaCost)+'万</b> ÷ 看板の年間純収入 <b>'+yen(r.signNOI)+'万</b>。'+
+      (r.niwaPayByRent?'　家賃プレミアムだけで回収するなら <b>'+r.niwaPayByRent.toFixed(0)+'年</b>（＝'+(r.niwaPayByRent/y).toFixed(1)+'倍かかる）':'')+
+      (r.signCost>0?'　※看板の初期費用'+yen(r.signCost)+'万まで含めると約'+((r.niwaCost+r.signCost)/r.signNOI).toFixed(1)+'年':'');}
+  // KPI
+  $('k_total').textContent='約 '+oku(r.total)+' 億円';
+  $('k_total_s').textContent='延床'+Math.round(r.grossM2)+'㎡（'+r.grossTsubo.toFixed(0)+'坪）／借入 '+oku(r.loan)+'億';
+  const cf=$('k_cf'); cf.textContent=(r.cf>=0?'+':'−')+yen(Math.abs(r.cf))+' 万/年';
+  cf.className='v '+(r.cf>=0?'green':'red');
+  $('k_cf_s').textContent='NOI '+yen(r.noi)+'万 − 返済 '+yen(r.debt)+'万';
+  $('k_yield').textContent=r.noiYield.toFixed(2)+' %';
+  $('k_yield_s').textContent='単純回収 '+(r.payback?r.payback.toFixed(0)+'年':'—')+'（返済を考えない場合）';
+  const lift=r.noiYield-r.baseYield;
+  const lf=$('k_lift'); lf.textContent=(lift>=0?'+':'')+lift.toFixed(2)+' pt';
+  lf.className='v '+(lift>0?'green':'');
+  $('k_lift_s').textContent='看板・太陽光なしなら '+r.baseYield.toFixed(2)+'% → あり '+r.noiYield.toFixed(2)+'%';
+  // 収益バー
+  const tot=Math.max(1,r.rentNOI+r.signNOI+r.pvNOI);
+  const p1=r.rentNOI/tot*100,p2=r.signNOI/tot*100,p3=r.pvNOI/tot*100;
+  $('revBar').innerHTML='<div class="b1" style="flex:'+p1+' 1 0">家賃 '+p1.toFixed(0)+'%</div>'+
+    (p2>0?'<div class="b2" style="flex:'+p2+' 1 0">看板 '+p2.toFixed(0)+'%</div>':'')+
+    (p3>0?'<div class="b3" style="flex:'+p3+' 1 0">電気 '+p3.toFixed(0)+'%</div>':'');
+  $('revTable').innerHTML=
+    row('① 家賃 NOI（空室・運営費後）',yen(r.rentNOI)+' 万/年')+
+    row('② 看板 純収入（経費後）',(r.signAllowed?yen(r.signNOI)+' 万/年':'<span style="color:#c0392b">出せない立地</span>'))+
+    row('③ 太陽光 純収益',(x.pv==='ppa'?'0 万（PPA＝事業者収益。家賃競争力で効く）':yen(r.pvNOI)+' 万/年'))+
+    rowSum('合計 NOI',yen(r.noi)+' 万/年');
+  // 内訳
+  $('breakdown').innerHTML=
+    row('土地',oku(r.landCost)+' 億（'+yen(r.landCost)+'万）')+
+    row('建物（自由設計・エンド）',oku(r.buildCost)+' 億（'+yen(r.buildCost)+'万）')+
+    row('屋上利用（手すり壁＋階段室）',yen(r.roofUseCost)+' 万')+
+    row('屋上庭園',yen(r.niwaCost)+' 万')+
+    row('太陽光'+(x.pv==='ppa'?'（PPA＝0円設置）':''),yen(r.pvCost)+' 万')+
+    row('看板 初期',yen(r.signCost)+' 万')+
+    row('諸費用',yen(r.misc)+' 万')+
+    rowSum('総投資額','約 '+oku(r.total)+' 億')+
+    row('年間ローン返済',yen(r.debt)+' 万')+
+    rowSum('年間キャッシュフロー',(r.cf>=0?'+':'−')+yen(Math.abs(r.cf))+' 万');
+  // 必要家賃の逆算
+  const y=x.target/100;
+  const needFromRent=r.total*y-(r.signNOI+r.pvNOI);                       // 家賃NOIで賄う額（万/年）
+  const perUnitMan=needFromRent/(12*x.units*(1-x.vac/100)*(1-x.opex/100)); // 1戸あたり月額（万）
+  const needFromRentNoSign=r.total*y-r.pvNOI;
+  const perUnitNoSign=needFromRentNoSign/(12*x.units*(1-x.vac/100)*(1-x.opex/100));
+  const curPremF=1+(x.roof!=='none'?x.prem/100:0)+(x.pv!=='none'?x.pvPrem/100:0);
+  const cur=x.unit*x.rent*curPremF/10000;
+  $('reqRent').innerHTML=
+    '目標NOI <b>'+x.target.toFixed(1)+'%</b> を満たすのに必要な家賃：<b style="font-size:17px;color:'+(perUnitMan<=cur?'#2e8b57':'#c0392b')+'">'+
+    perUnitMan.toFixed(1)+' 万円/月・戸</b>（現在の設定・プレミアム込み '+cur.toFixed(1)+' 万）<br>'+
+    '<span class="note" style="font-size:12px">看板が無かった場合の必要家賃は <b>'+perUnitNoSign.toFixed(1)+' 万円/月</b> ＝ '+
+    '<b style="color:#c9a44c">看板のおかげで家賃を月 '+(perUnitNoSign-perUnitMan).toFixed(1)+' 万円ぶん安くできる</b>（＝入居者に安く・オーナーに同じ利回り）</span>';
+  save(x); renderCmp();
+}
+function row(a,b){return '<tr><td>'+a+'</td><td>'+b+'</td></tr>';}
+function rowSum(a,b){return '<tr class="sum"><td><b>'+a+'</b></td><td><b>'+b+'</b></td></tr>';}
+
+function snapshot(){const x=X(),r=calc(x);
+  return{zone:ZONE[x.zone].n,pref:(x.pref==='saitama'?'埼玉':'東京'),sign:(r.signAllowed?'可':'不可'),
+    total:oku(r.total),cf:(r.cf>=0?'+':'−')+yen(Math.abs(r.cf)),yield:r.noiYield.toFixed(2),
+    hero:(r.niwaPayByAd?r.niwaPayByAd.toFixed(1)+'年':'—'),units:x.units,signMan:x.sign,kw:(x.pv==='none'?0:x.kw)};}
+function renderCmp(){
+  if(!slotA&&!slotB){$('cmp').innerHTML='';return;}
+  const rows=[['都県×用途地域',s=>s.pref+'／'+s.zone],['看板',s=>s.sign+'（'+s.signMan+'万/月）'],['太陽光',s=>s.kw+'kW'],
+    ['戸数',s=>s.units+'戸'],['総額(億)',s=>s.total],['年間CF(万)',s=>s.cf],['NOI利回り(%)',s=>s.yield],['庭園代の広告回収',s=>s.hero]];
+  let h='<table><tr><th>項目</th><th>A案</th><th>B案</th></tr>';
+  rows.forEach(([k,f])=>{h+='<tr><td>'+k+'</td><td>'+(slotA?f(slotA):'–')+'</td><td>'+(slotB?f(slotB):'–')+'</td></tr>';});
+  $('cmp').innerHTML=h+'</table>';
+}
+function save(x){try{localStorage.setItem('hyakunen_sim1',JSON.stringify({x,roof,pv,pref,signMode,slotA,slotB}));}catch(e){}}
+function restore(){try{const d=JSON.parse(localStorage.getItem('hyakunen_sim1')||'null');if(!d)return;
+  ids.forEach(i=>{if(d.x[i]!==undefined)$(i).value=d.x[i];});
+  if(d.x.zone)$('zone').value=d.x.zone;
+  roof=d.roof||'full';pv=d.pv||'own';pref=d.pref||'saitama';signMode=d.signMode||'overlay';slotA=d.slotA||null;slotB=d.slotB||null;
+  document.querySelectorAll('#roofSeg button').forEach(b=>b.classList.toggle('on',b.dataset.v===roof));
+  document.querySelectorAll('#pvSeg button').forEach(b=>b.classList.toggle('on',b.dataset.v===pv));
+  document.querySelectorAll('#prefSeg button').forEach(b=>b.classList.toggle('on',b.dataset.v===pref));
+  document.querySelectorAll('#signModeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.v===signMode));
+}catch(e){}}
+
+ids.forEach(i=>$(i).addEventListener('input',render));
+$('zone').addEventListener('change',()=>{const z=ZONE[$('zone').value];$('bcr').value=z.bcr;$('far').value=z.far;render();});
+document.querySelectorAll('#roofSeg button').forEach(b=>b.addEventListener('click',()=>{
+  roof=b.dataset.v;document.querySelectorAll('#roofSeg button').forEach(o=>o.classList.toggle('on',o===b));
+  const p=roofPreset[roof]; $('niwaM2').value=p.m2; $('niwaUnit').value=p.unit;
+  render();}));
+document.querySelectorAll('#pvSeg button').forEach(b=>b.addEventListener('click',()=>{
+  pv=b.dataset.v;document.querySelectorAll('#pvSeg button').forEach(o=>o.classList.toggle('on',o===b));
+  if(pv==='ppa')$('pvUnit').value=25.5; render();}));
+document.querySelectorAll('#prefSeg button').forEach(b=>b.addEventListener('click',()=>{
+  pref=b.dataset.v;document.querySelectorAll('#prefSeg button').forEach(o=>o.classList.toggle('on',o===b));render();}));
+document.querySelectorAll('#signModeSeg button').forEach(b=>b.addEventListener('click',()=>{
+  signMode=b.dataset.v;document.querySelectorAll('#signModeSeg button').forEach(o=>o.classList.toggle('on',o===b));render();}));
+$('saveA').addEventListener('click',()=>{slotA=snapshot();render();});
+$('saveB').addEventListener('click',()=>{slotB=snapshot();render();});
+$('clearAB').addEventListener('click',()=>{slotA=null;slotB=null;render();});
+restore();render();
+</script>
+</body>
+</html>
