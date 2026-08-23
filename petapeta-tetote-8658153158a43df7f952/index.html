@@ -462,7 +462,7 @@ nav.tabbar .dot{
       <div class="head"><span class="pin">固定</span>📢 本部からのお知らせ</div>
       <ul>
         <li>夏の認定講師オンライン茶話会、日程が決まりました <span class="dummy">※ダミー</span></li>
-        <li>新しい素材テンプレ「敬老の日ギフト告知セット」を素材室に追加しました <span class="dummy">※ダミー</span></li>
+        <li>新しい素材テンプレ「夏の思い出アート まとめ告知セット」を素材室に追加しました <span class="dummy">※ダミー</span></li>
       </ul>
     </div>
 
@@ -1085,14 +1085,14 @@ function matSVG(type, c1, c2, bg1, bg2){
   return head + body + '</svg>';
 }
 
-/* ---------- 素材室（7月末基準の棚） ---------- */
+/* ---------- 素材室（8月中旬基準の棚） ---------- */
 var MATERIALS = [
- {name:"夏の思い出 足形うちわ 告知テンプレ（Instagram用）", isNew:true,  type:"insta", c1:"#F6A9B8", c2:"#EBA8B2", b1:"#FDEFF2", b2:"#FBF6EE"},
- {name:"敬老の日ギフト 告知テンプレ",                       isNew:true,  type:"insta", c1:"#E8A24E", c2:"#D9B45A", b1:"#FBF4DF", b2:"#FFF9F5"},
+ {name:"夏の思い出アート 作品まとめ告知テンプレ（Instagram用）", isNew:true,  type:"insta", c1:"#F6A9B8", c2:"#EBA8B2", b1:"#FDEFF2", b2:"#FBF6EE"},
+ {name:"敬老の日ギフト 告知テンプレ（8/5配布済）",           isNew:false, type:"insta", c1:"#E8A24E", c2:"#D9B45A", b1:"#FBF4DF", b2:"#FFF9F5"},
  {name:"教室POP「はじめてさん歓迎」",                       isNew:false, type:"pop",   c1:"#9FD6AE", c2:"#66B584", b1:"#EDF7F0", b2:"#FBF6EE"},
  {name:"参加費のご案内 ひな形（価格表）",                   isNew:false, type:"price", c1:"#9FC1E8", c2:"#5E93D8", b1:"#EEF4FB", b2:"#FBF6EE"},
  {name:"公式LINE配信 文例セット（月4本）",                  isNew:true,  type:"pop",   c1:"#C7A8E0", c2:"#9A76C8", b1:"#F4EEFA", b2:"#FBF6EE"},
- {name:"体験会アンケート ひな形",                           isNew:false, type:"price", c1:"#F7C08A", c2:"#E8A24E", b1:"#FDF2E4", b2:"#FBF6EE"}
+ {name:"2学期スタート 教室再開のお知らせひな形",             isNew:true,  type:"price", c1:"#F7C08A", c2:"#E8A24E", b1:"#FDF2E4", b2:"#FBF6EE"}
 ];
 function renderMaterials(){
   $("#mat-grid").innerHTML = MATERIALS.map(function(m,i){
@@ -1141,14 +1141,14 @@ function closeReportModal(){ $("#report-modal").classList.remove("open"); docume
 
 /* ---------- 季節の仕込みカレンダー（月めくり付き） ---------- */
 var SEASON_NOW = [
- {when:"今週",   text:"夏休み体験会ウィーク後半。足形うちわの告知テンプレ、素材室にあります"},
- {when:"今月中", text:"敬老の日（9/21）手形ギフト体験会の会場予約はお早めに"},
+ {when:"今週",   text:"お盆明けの教室再開ウィーク。「夏の思い出アート」の告知テンプレ、素材室にあります"},
+ {when:"今月中", text:"敬老の日（9/21）手形ギフト体験会の会場予約はお早めに。告知テンプレは配布済みです"},
  {when:"来月",   text:"ハロウィン企画の素材と告知ひな形を公開予定（先行告知は9月上旬から）"}
 ];
 var SEASON_NEXT = [
- {when:"8月上旬", text:"敬老の日ギフトの告知スタート。テンプレは配布済みです"},
- {when:"お盆明け", text:"「夏の思い出アート」で夏の教室を締めくくり。作品展示のコツも配信予定"},
- {when:"月末",   text:"ハロウィン先行告知の準備。クリスマス材料の仕入れリストも公開予定"}
+ {when:"9月上旬", text:"ハロウィン先行告知スタート。素材と告知ひな形を公開します"},
+ {when:"9/21",   text:"敬老の日 本番。当日レポは実績ノートに残しておきましょう"},
+ {when:"月末",   text:"クリスマス材料の仕入れリストを公開予定。年賀の手形デザインも先行公開します"}
 ];
 var showingNext = false;
 function renderSeason(){
