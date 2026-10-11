@@ -1,0 +1,772 @@
+/* =========================================================================
+   VERA Holdings — "The Unbroken Line" · world-class edition (v2)
+   思想：沈めてから、一点の光を通す。 写真は紺で沈め、赤は一本の線として絞る。
+   navy #1d447c / navy-deep #0f2546 × red #c5201d ／ gold禁止 ／ 赤は面積2–3%
+   Progressive enhancement: JS無しでも全文表示（html.js が演出の隠し状態を制御）
+   ========================================================================= */
+
+:root{
+  --navy:#1d447c; --navy-deep:#0f2546; --navy-soft:#2a5690; --navy-ink:#0a1a33;
+  --red:#c5201d; --red-deep:#a51916; --red-soft:#e5544e;
+  --paper:#f7f5f0; --paper-2:#efe9dd; --card:#fffdfa;
+  --ink:#1b2230; --ink-2:#3a4557; --muted:#586275; --line:#e4ddcf;
+  --measure:min(42ch,90vw);
+  --off:#f2efe8; --off-dim:#c6cfdd;
+  --serif:'Zen Old Mincho', serif; --serif-2:'Shippori Mincho', serif;
+  --sans:'Noto Sans JP', sans-serif; --cor:'Cormorant Garamond', serif;
+  --ma-1:clamp(8px,1.4vw,16px); --ma-2:clamp(14px,2.4vw,28px); --ma-3:clamp(24px,4vw,48px);
+  --ma-4:clamp(40px,7vw,92px); --ma-5:clamp(64px,12vw,150px); --ma-6:clamp(96px,18vh,230px);
+  --pad-quiet:clamp(120px,22vh,300px); --pad-dense:clamp(56px,8vh,110px);
+  --gut:clamp(22px,6vw,104px);
+  --e-rev:cubic-bezier(.16,1,.3,1);
+  --e-hero:cubic-bezier(.76,0,.24,1);
+  --e-mask:cubic-bezier(.7,0,.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden}
+body{
+  font-family:var(--sans);color:var(--ink);background:var(--paper);
+  font-weight:300;line-height:1.9;font-feature-settings:"palt" 1;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+::selection{background:rgba(29,68,124,.22);color:inherit}
+img{display:block;max-width:100%}
+em{font-style:normal;color:var(--red)}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;background:none;border:0;color:inherit}
+
+/* film grain — offline-robust, always on */
+body::before{
+  content:"";position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.05;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+/* ---------- reveal system (JS-guarded) ---------- */
+.line{display:block;overflow:hidden;padding-bottom:.04em}
+.line .i{display:inline-block;will-change:transform}
+html.js .line .i{transform:translateY(118%) rotate(1.6deg);transform-origin:0 100%}
+html.js .line.is-in .i{transform:translateY(0) rotate(0deg);transition:transform 1.05s var(--e-hero)}
+html.js .reveal{opacity:0;transform:translateY(26px);will-change:opacity,transform}
+html.js .reveal.is-in{opacity:1;transform:none;transition:opacity 1s var(--e-rev),transform 1s var(--e-rev)}
+html.js .hero-r{opacity:0;transform:translateY(20px)}
+html.js .hero-r.is-in{opacity:1;transform:none;transition:opacity 1.1s var(--e-rev),transform 1.1s var(--e-rev)}
+[data-d="0"]{transition-delay:0s}[data-d="1"]{transition-delay:.09s}[data-d="2"]{transition-delay:.18s}
+[data-d="3"]{transition-delay:.27s}[data-d="4"]{transition-delay:.36s}
+
+/* ---------- sunk photography ---------- */
+.sunk{position:absolute;inset:0;z-index:0;pointer-events:none;background-color:var(--navy-deep);background-size:cover;background-position:center;
+  filter:grayscale(.5) saturate(.82) brightness(.9) contrast(1.02);opacity:0;transition:opacity 1.6s var(--e-mask);will-change:opacity}
+.sunk.shown{opacity:1}
+/* LCP候補：静的<img>層。CSS背景ではなく実imgにして preload と同一リクエスト→JS実行前に絵が出る */
+/* :has()対応ブラウザでは親ごと開ける（二重保険）。非対応/JS落ち経路は下の img 自体の opacity:1 と html:not(.js) 開放で救済 */
+.sunk:has(.sunk__img){opacity:1}
+html:not(.js) .r-hero .sunk{opacity:1}
+.sunk__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:1;
+  filter:grayscale(.5) saturate(.82) brightness(.9) contrast(1.02);z-index:0}
+.sunk::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(15,37,70,.55) 0%,rgba(15,37,70,.72) 55%,rgba(10,20,40,.94) 100%);
+  mix-blend-mode:multiply}
+.sunk.deep{filter:saturate(.7) brightness(.72)}
+.sunk.deep::after{background:linear-gradient(180deg,rgba(15,37,70,.82),rgba(9,17,32,.96))}
+.r-story .sunk.deep::after{background:linear-gradient(180deg,rgba(11,22,44,.7) 0%,rgba(9,17,32,.9) 100%)}
+/* 1章だけ写真を主役化する“息継ぎ”（LV基準の1画面1メッセージ）。紺ヴェールを薄め、他章との対比で全体を締める */
+.sunk.lift{filter:grayscale(.25) saturate(.95) brightness(.98)}
+.sunk.lift::after{background:linear-gradient(180deg,rgba(15,37,70,.28),rgba(10,20,40,.62))}
+.sunk.lift::before{opacity:.3}
+
+/* =========================================================================
+   INTRO (one cinematic cut) + VEIL
+   ========================================================================= */
+.intro{position:fixed;inset:0;z-index:9999;background:var(--navy-deep);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:34px;color:#fff}
+html:not(.js) .intro,html:not(.js) .veil{display:none}
+.intro__mark{font-family:var(--cor);letter-spacing:.34em;text-align:center;opacity:0}
+.intro__mark .cor{display:block;font-size:clamp(26px,5vw,46px);color:#fff;text-indent:.34em}
+.intro__mark i{display:block;font-style:normal;font-family:var(--serif);font-size:10px;letter-spacing:.5em;color:var(--off-dim);margin-top:8px;text-indent:.5em}
+.intro__line{width:min(46vw,360px);height:1px;background:rgba(255,255,255,.14);position:relative;overflow:hidden}
+.intro__line span{position:absolute;inset:0;transform-origin:left;transform:scaleX(0);background:var(--red);box-shadow:0 0 14px rgba(197,32,29,.8)}
+.intro__meta{display:flex;align-items:baseline;gap:16px;font-family:var(--serif);opacity:0}
+#intro-count{font-size:14px;letter-spacing:.14em;color:var(--red-soft);font-variant-numeric:tabular-nums}
+.intro__cap{font-size:10px;letter-spacing:.42em;color:var(--off-dim)}
+.intro.gone{opacity:0;pointer-events:none;transition:opacity .6s ease}
+
+.veil{position:fixed;inset:0;z-index:9990;background:var(--navy-deep);clip-path:inset(0 0 0 0);pointer-events:none}
+.veil.lift{clip-path:inset(0 0 100% 0);transition:clip-path 1.05s var(--e-hero)}
+.veil.done{display:none}
+
+/* =========================================================================
+   CUSTOM CURSOR
+   ========================================================================= */
+.cursor{position:fixed;left:0;top:0;z-index:9995;pointer-events:none;mix-blend-mode:difference}
+html.touch .cursor{display:none}
+.cursor__dot{position:fixed;left:0;top:0;width:6px;height:6px;border-radius:50%;background:#fff;transform:translate(-50%,-50%)}
+.cursor__ring{position:fixed;left:0;top:0;width:36px;height:36px;border:1px solid rgba(255,255,255,.7);border-radius:50%;
+  transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;
+  transition:width .3s var(--e-rev),height .3s var(--e-rev),background .3s,border-color .3s}
+.cursor__ring b{font-family:var(--serif);font-style:normal;font-weight:400;font-size:9px;letter-spacing:.14em;color:#fff;opacity:0;transition:opacity .25s;white-space:nowrap}
+.cursor.on-view .cursor__ring{width:74px;height:74px;background:rgba(255,255,255,.06)}
+.cursor.on-drag .cursor__ring{width:92px;height:92px;border-color:var(--red-soft)}
+.cursor.on-soon .cursor__ring{width:78px;height:78px;border-style:dashed}
+.cursor.label .cursor__ring b{opacity:1}
+.cursor.down .cursor__ring{width:26px;height:26px}
+html.js body{cursor:none}
+html.js a,html.js button,html.js .tee__stage{cursor:none}
+html.touch body,html.touch a,html.touch button{cursor:auto}
+/* フェイルセーフ：customカーソル初期化が例外を投げたらネイティブを復帰（盲目状態の回避）*/
+html.cursor-fail body,html.cursor-fail a,html.cursor-fail button,html.cursor-fail .tee__stage{cursor:auto!important}
+html.cursor-fail .cursor{display:none!important}
+
+/* =========================================================================
+   NAV
+   ========================================================================= */
+.rnav{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;justify-content:space-between;
+  padding:22px var(--gut);transition:padding .5s var(--e-rev),background .5s,backdrop-filter .5s;
+  opacity:0;transform:translateY(-12px)}
+.rnav.ready{opacity:1;transform:none;transition:opacity 1s var(--e-rev) .1s,transform 1s var(--e-rev) .1s,padding .5s var(--e-rev),background .5s}
+.rnav.scrolled{padding:13px var(--gut);background:rgba(247,245,240,.78);backdrop-filter:blur(14px);border-bottom:1px solid rgba(228,221,207,.6)}
+.rnav.scrolled.on-dark{background:rgba(15,37,70,.5)}
+.rnav__brand{display:flex;align-items:center}
+.rnav__brand .brand-logo{height:46px;width:auto;display:block;transition:height .4s var(--e-rev)}
+.rnav__brand .lg-white{display:none}
+.rnav.on-dark .rnav__brand .lg-navy{display:none}
+.rnav.on-dark .rnav__brand .lg-white{display:block}
+.rnav.scrolled .rnav__brand .brand-logo{height:40px}
+.rnav__menu{display:flex;gap:clamp(16px,2vw,32px);list-style:none;margin-left:auto;margin-right:28px}
+.rnav__menu a{font-size:12.5px;letter-spacing:.14em;color:var(--ink);position:relative;padding:4px 0}
+.rnav.on-dark .rnav__menu a{color:var(--off-dim)}
+.rnav__menu a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--red);transition:width .4s var(--e-rev)}
+.rnav__menu a:hover::after{width:100%}
+.rnav__right{display:flex;align-items:baseline;gap:13px}
+.rnav__idx{font-family:var(--serif);font-size:12px;color:var(--red);letter-spacing:.1em;font-variant-numeric:tabular-nums}
+.rnav__cap{font-family:var(--serif);font-size:12px;color:var(--navy);letter-spacing:.16em;opacity:.72}
+.rnav.on-dark .rnav__cap{color:var(--off-dim)}
+.rnav__toggle{display:none;width:34px;height:34px;position:relative;z-index:60}
+.rnav__toggle span{position:absolute;left:6px;right:6px;height:1.6px;background:var(--navy);transition:transform .4s var(--e-hero),opacity .3s}
+.rnav.on-dark .rnav__toggle span{background:#fff}
+.rnav__toggle span:nth-child(1){top:13px}.rnav__toggle span:nth-child(2){top:20px}
+body.r-menu .rnav__toggle span:nth-child(1){transform:translateY(3.5px) rotate(45deg)}
+body.r-menu .rnav__toggle span:nth-child(2){transform:translateY(-3.5px) rotate(-45deg)}
+@media(max-width:820px){
+  .rnav__menu{position:fixed;inset:0;flex-direction:column;justify-content:center;align-items:center;gap:30px;
+    background:rgba(15,37,70,.97);backdrop-filter:blur(12px);margin:0;transform:translateX(100%);transition:transform .6s var(--e-hero),opacity .6s,visibility .6s;opacity:0;pointer-events:none;visibility:hidden}
+  body.r-menu .rnav__menu{transform:none;opacity:1;pointer-events:auto;visibility:visible}
+  .rnav__menu a{font-size:22px;font-family:var(--serif);color:#fff}
+  .rnav__menu a::after{display:none}
+  .rnav__toggle{display:block}
+  .rnav__right{display:none}
+}
+@media(max-width:680px){.rnav__cap{display:none}}
+
+/* =========================================================================
+   THREAD (the unbroken line)
+   ========================================================================= */
+#r-main{position:relative;z-index:1}
+.thread{position:absolute;top:0;left:0;width:100%;height:100%;z-index:6;pointer-events:none;overflow:visible}
+#thread-track{opacity:.16}
+.thread .node{fill:var(--red);opacity:0;transition:opacity .5s var(--e-rev)}
+.thread .node.on{opacity:1}
+.thread .node-ring{fill:none;stroke:var(--red);stroke-width:1.4;opacity:0;transform-box:fill-box;transform-origin:center}
+.thread .node-ring.on{opacity:.5;animation:ring 3.6s var(--e-rev) infinite}
+@keyframes ring{0%{transform:scale(.6);opacity:.55}70%,100%{transform:scale(2.2);opacity:0}}
+/* 線が節に到達した瞬間の“コツッ”＝一撃だけ重ねるハロー（常時pulseとは別の到達イベント）*/
+.thread .node-ring.hit{animation:nodeHit .5s var(--e-rev)}
+@keyframes nodeHit{0%{transform:scale(.5);opacity:.9}100%{transform:scale(2.6);opacity:0}}
+
+/* ---------- shared atoms ---------- */
+.r-eyebrow{font-family:var(--serif);font-size:11px;letter-spacing:.34em;color:var(--red);font-weight:500;display:flex;align-items:center;gap:1em;text-indent:.34em;margin-bottom:22px}
+.r-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--red);flex:0 0 7px}
+/* dark面のラベル文字は赤で塗らず off-dim（AA準拠）／赤はドットの小面積だけに残す */
+.dark .r-eyebrow,.r-eyebrow.light{color:var(--off-dim)}
+.r-eyebrow.light .dot{background:var(--red-soft)}
+
+section{position:relative}
+.dark{color:#fff}
+/* 紺ベタ面に「深さ」を敷く：上からの放射光＋内側ヴィネット（写真の無い章でも面が沈む）。本文=z3・グレイン=z2の下、地=0側 */
+.dark::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(120% 80% at 50% 0%,rgba(42,86,144,.18),transparent 60%);
+  box-shadow:inset 0 0 clamp(80px,20vh,260px) rgba(9,17,32,.6)}
+.dark>*{position:relative;z-index:3}
+/* .dark>* の position:relative が .sunk(絶対配置・inset:0)を高さ0に潰す事故の根治：absoluteを明示 */
+.dark>.sunk{z-index:0;position:absolute}.dark>.r-ghost{z-index:2}
+
+/* =========================================================================
+   01 · HERO  (dark cinematic)
+   ========================================================================= */
+.r-hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;overflow:hidden;
+  padding:clamp(94px,13vh,150px) var(--gut) 40px;background:var(--navy-deep);color:#fff;isolation:isolate}
+.r-hero .sunk{opacity:0}
+.r-hero .sunk.shown{opacity:1}
+.r-hero .sunk:has(.sunk__img){opacity:1}
+.r-hero__grid{position:relative;z-index:3;max-width:1150px}
+.r-hero .r-eyebrow{color:var(--off-dim)}.r-hero .r-eyebrow .dot{background:var(--red-soft)}
+.r-hero__tag{font-family:var(--serif);font-weight:700;color:#fff;
+  font-size:clamp(48px,11vw,150px);line-height:1.0;letter-spacing:.01em;margin:22px 0 0}
+.r-hero__tag .line.ind{margin-left:clamp(40px,12vw,220px)}
+.r-hero__tag .mk{color:var(--red)}
+.r-hero__lead{font-family:var(--serif);font-size:clamp(15px,2vw,20px);color:var(--off-dim);
+  letter-spacing:.04em;line-height:2.05;margin-top:clamp(34px,5vw,60px);max-width:34em;font-weight:400}
+.r-hero__cta{margin-top:clamp(30px,4vw,50px)}
+.r-hero__cta a{display:inline-flex;align-items:center;gap:14px;font-family:var(--serif);font-size:15px;letter-spacing:.12em;color:#fff;
+  border:1px solid rgba(255,255,255,.28);border-radius:100px;padding:15px 30px}
+.r-hero__cta .arw{font-style:normal;color:var(--red-soft)}
+.r-tate{position:absolute;top:clamp(120px,18vh,220px);right:var(--gut);z-index:3;
+  writing-mode:vertical-rl;font-family:var(--serif);font-size:clamp(15px,1.7vw,19px);
+  letter-spacing:.34em;color:#fff;font-weight:500;padding-left:18px;border-left:1px solid rgba(255,255,255,.28)}
+.r-tate::first-letter{color:var(--red-soft)}
+.r-hero__foot{margin-top:auto;position:relative;z-index:3;display:flex;align-items:flex-end;justify-content:space-between;padding-top:clamp(28px,5vh,60px)}
+.r-hero__foot .en{font-family:var(--cor);font-size:11px;letter-spacing:.34em;color:var(--off-dim)}
+.r-hero__foot .scroll{display:flex;flex-direction:column;align-items:center;gap:8px;font-family:var(--serif);font-size:9px;letter-spacing:.3em;color:var(--off-dim)}
+.r-hero__foot .scroll i{width:1px;height:48px;background:linear-gradient(rgba(255,255,255,.4),transparent);position:relative;overflow:hidden}
+.r-hero__foot .scroll i::after{content:"";position:absolute;left:0;top:-48px;width:1px;height:48px;background:var(--red);animation:sc 2.6s var(--e-rev) infinite}
+@keyframes sc{0%{top:-48px}60%,100%{top:48px}}
+@media(max-width:560px){.r-tate{display:none}.r-hero__tag .line.ind{margin-left:12vw}}
+
+/* =========================================================================
+   MARQUEE
+   ========================================================================= */
+.marquee{overflow:hidden;background:var(--paper-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0}
+.marquee__row{display:flex;gap:0;width:max-content;animation:marq 46s linear infinite}
+.marquee__row span{display:inline-flex;align-items:baseline;gap:.5em;font-family:var(--serif);font-size:clamp(22px,3.4vw,40px);color:var(--navy);font-weight:500;padding:0 clamp(28px,5vw,64px);white-space:nowrap}
+.marquee__row span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--navy);align-self:center;margin-right:.4em}
+.marquee__row span:first-child::before{background:var(--red)}
+.marquee__row span i{font-family:var(--cor);font-style:normal;font-size:.42em;letter-spacing:.3em;color:var(--muted)}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* =========================================================================
+   03 · CONCEPT
+   ========================================================================= */
+.r-con{padding:var(--ma-6) var(--gut);max-width:1280px;margin:0 auto}
+.r-con__head{max-width:640px}
+.r-con__lead{font-family:var(--serif);font-weight:500;color:var(--navy);font-size:clamp(40px,7vw,104px);line-height:1.14;letter-spacing:.015em;margin-top:24px}
+/* eyebrow→大見出しのジャンプ率を中間リードで連続化 */
+.r-con__mid{font-family:var(--serif);font-size:clamp(18px,2.6vw,28px);color:var(--navy);font-weight:500;line-height:1.7;letter-spacing:.03em;margin-top:20px;max-width:30em}
+.r-con__note{font-size:clamp(13.5px,1.6vw,15px);color:var(--ink-2);line-height:2;margin-top:26px;max-width:36em}
+.r-clover{position:absolute;top:clamp(80px,12vh,150px);right:clamp(10px,4vw,80px);width:clamp(140px,20vw,260px);opacity:1}
+.r-clover img{width:100%}
+.r-clover.is-in{animation:bloom 1.4s var(--e-rev) both}
+@keyframes bloom{0%{opacity:0;transform:scale(1.03)}100%{opacity:1;transform:none}}
+.r-beliefs{list-style:none;margin:clamp(54px,9vw,110px) 0 0;border-top:1px solid var(--line)}
+.r-beliefs li{display:grid;grid-template-columns:clamp(70px,9vw,130px) 1fr auto;align-items:baseline;
+  gap:clamp(14px,3vw,40px);padding:clamp(22px,3.4vw,40px) 4px;border-bottom:1px solid var(--line);
+  transition:background .5s var(--e-rev),padding-left .5s var(--e-rev)}
+.r-beliefs li:hover{background:linear-gradient(90deg,rgba(197,32,29,.045),transparent);padding-left:18px}
+.r-beliefs .bl{font-family:var(--serif);font-weight:500;color:var(--navy);font-size:clamp(44px,7.4vw,98px);line-height:.8;transition:color .4s}
+.r-beliefs li:hover .bl,.r-beliefs li:hover .bj{color:var(--red)}
+.r-beliefs .be{font-family:var(--cor);font-size:clamp(12px,1.5vw,15px);letter-spacing:.2em;color:var(--red);align-self:center}
+.r-beliefs .bj{font-family:var(--serif);font-size:clamp(20px,2.6vw,30px);color:var(--ink);font-weight:500;margin-left:10px;transition:color .4s var(--e-rev)}
+.r-beliefs .bd{font-size:clamp(12px,1.5vw,14px);color:var(--muted);letter-spacing:.04em;text-align:right;grid-column:2 / -1;margin-top:6px}
+.r-con__recover{font-family:var(--serif);font-size:clamp(16px,2.2vw,24px);color:var(--navy);letter-spacing:.03em;line-height:1.9;margin-top:clamp(48px,7vw,90px);max-width:30em}
+@media(max-width:860px){
+  .r-beliefs li{grid-template-columns:64px 1fr;gap:14px}
+  .r-beliefs .bd{grid-column:1 / -1;text-align:left;margin-left:0}
+  .r-clover{position:static;margin:40px 0 0;width:170px}
+}
+
+/* =========================================================================
+   02 · BACKBONE (dark)
+   ========================================================================= */
+.r-back{overflow:hidden;padding:var(--ma-6) var(--gut);display:flex;align-items:center;min-height:92svh;background:var(--navy)}
+.r-back__inner{position:relative;max-width:1000px;z-index:3}
+.r-back__stmt{font-family:var(--serif);font-weight:500;letter-spacing:.04em;font-size:clamp(26px,5.2vw,66px);line-height:1.5;margin-top:30px}
+.r-back__stmt em{color:var(--red-soft)}
+.r-back__note{font-family:var(--serif);color:var(--off-dim);font-size:clamp(13px,1.5vw,16px);letter-spacing:.08em;margin-top:38px}
+.r-side{position:absolute;top:50%;left:clamp(10px,2.4vw,30px);writing-mode:vertical-rl;transform:translateY(-50%);z-index:3;
+  font-family:var(--cor);font-size:11px;letter-spacing:.42em;color:rgba(255,255,255,.34)}
+.r-side.dark{color:rgba(255,255,255,.3)}
+.r-ghost{position:absolute;right:-2%;bottom:-14%;font-family:var(--serif);font-weight:900;font-size:min(56vh,640px);line-height:.8;color:rgba(255,255,255,.05);z-index:2;pointer-events:none;user-select:none}
+@media(max-width:560px){.r-back__stmt{font-size:clamp(24px,7vw,40px)}}
+
+/* shared section frame */
+.r-found,.r-vmap,.r-story,.r-pillars,.r-biz,.r-service,.r-strength,.r-message,.r-company,.r-show{
+  padding:var(--ma-6) var(--gut);max-width:1280px;margin:0 auto}
+.r-found__lead,.r-vmap__lead,.r-pillars__lead,.r-service__lead,.r-company__lead,.r-biz__lead,.r-strength__lead,.r-message__lead,.r-show__lead{
+  font-family:var(--serif);font-weight:500;color:var(--navy);line-height:1.18;letter-spacing:.015em}
+.dark .r-found__lead,.dark .r-service__lead,.dark .r-message__lead,.dark .r-show__lead{color:#fff}
+/* ---- 声量差：主要H2を章の性格別に3段化（編集リズム）。感情の頂点=代表メッセージは大ティアへ昇格 ---- */
+.r-vmap__lead,.r-pillars__lead,.r-found__lead,.r-show__lead,.r-message__lead{font-size:clamp(34px,6vw,80px)}
+.r-biz__lead,.r-company__lead,.r-strength__lead,.r-service__lead{font-size:clamp(26px,3.5vw,44px)}
+/* 事務章のheadは静かに畳む */
+.r-biz,.r-company{padding-block:var(--pad-dense)}
+
+/* 04 FOUNDATION */
+.r-found__head{max-width:760px;margin-bottom:clamp(40px,6vw,70px)}
+.r-floors{max-width:820px;margin:0 auto}
+.r-roof{width:0;height:0;margin:0 auto;border-left:60px solid transparent;border-right:60px solid transparent;border-bottom:34px solid var(--red)}
+.r-floor{border:1px solid var(--line);border-top:none;padding:clamp(26px,3.6vw,44px) clamp(24px,3vw,46px);background:var(--card)}
+.r-floor.f2{background:var(--navy);color:#fff;border-color:var(--navy)}
+.r-floor .lv{font-family:var(--serif);font-size:12px;letter-spacing:.24em;color:var(--red)}
+.r-floor.f2 .lv{color:var(--red-soft)}
+.r-floor h3{font-family:var(--serif);font-weight:500;font-size:clamp(20px,3vw,32px);margin-top:8px;letter-spacing:.02em}
+.r-floor p{font-size:clamp(13px,1.5vw,15px);color:var(--muted);margin-top:12px;line-height:1.9}
+.r-floor.f2 p{color:var(--off-dim)}
+.r-steps{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:22px;font-family:var(--serif);font-size:clamp(13px,1.6vw,16px);color:var(--navy)}
+.r-steps i{width:26px;height:1px;background:var(--line)}
+.r-steps .goal{color:var(--red);font-weight:700}
+.r-found__note{max-width:680px;margin:clamp(40px,6vw,70px) auto 0;text-align:center;font-size:clamp(13px,1.5vw,15px);color:var(--ink-2);line-height:2}
+
+/* 05 VALUE MAP */
+.r-vmap{background:var(--paper-2);text-align:center;max-width:none}
+.r-vmap>*{max-width:900px;margin-left:auto;margin-right:auto}
+.r-map{list-style:none;max-width:560px;margin:clamp(48px,7vw,86px) auto 0;display:flex;flex-direction:column;gap:clamp(20px,3vw,38px)}
+.r-map li{display:flex;flex-direction:column;align-items:center;gap:4px}
+.r-map .k{font-family:var(--serif);font-size:clamp(22px,3.4vw,38px);color:var(--navy);font-weight:500;letter-spacing:.04em}
+.r-map small{font-size:12.5px;color:var(--muted);letter-spacing:.04em}
+.r-map .m-star .star{font-size:clamp(34px,5vw,52px);color:var(--red);line-height:1}
+.r-map .m-star b{font-family:var(--serif);font-size:clamp(26px,4vw,44px);color:var(--navy);font-weight:700;margin-top:6px}
+.r-vmap__foot{font-family:var(--serif);color:var(--muted);font-size:clamp(13px,1.5vw,15px);margin-top:clamp(40px,6vw,70px);letter-spacing:.06em}
+
+/* 06 STORY */
+.r-story{overflow:hidden;background:var(--navy-deep)}
+.r-story .sunk__img{filter:grayscale(.28) saturate(.85) brightness(.8)}
+.r-story .r-eyebrow,.r-story__q,.r-story__body{position:relative;z-index:3}
+.r-story.lit{color:#fff}
+.r-story.lit .r-eyebrow{color:var(--red-soft)}
+.r-story__q{font-family:var(--serif);font-weight:500;color:var(--navy);font-size:clamp(32px,6.6vw,92px);line-height:1.2;letter-spacing:.015em;margin:18px 0 clamp(40px,6vw,68px)}
+.r-story.lit .r-story__q{color:#fff}
+.r-story__body{max-width:var(--measure)}
+.r-story__body p{font-size:clamp(14.5px,1.8vw,17px);line-height:2;color:var(--ink-2)}
+.r-story.lit .r-story__body p{color:var(--off-dim)}
+.r-story__body p+p{margin-top:1.5em}
+.r-story__more[hidden]{display:none}
+.r-story__more p{margin-top:1.5em}
+.r-more{display:inline-flex;align-items:center;gap:12px;margin-top:30px;font-family:var(--serif);font-size:13.5px;letter-spacing:.12em;color:var(--red)}
+.r-more i{width:34px;height:1px;background:var(--red);transition:width .4s var(--e-rev)}
+.r-more:hover i{width:54px}
+
+/* 07 FIVE PILLARS */
+.r-pillars{background:var(--paper-2)}
+.r-pillars__head{max-width:760px;margin-bottom:clamp(40px,6vw,72px)}
+.r-pills{border-top:1px solid var(--line)}
+.r-pill{display:grid;grid-template-columns:clamp(150px,22vw,260px) 1fr;gap:clamp(18px,4vw,60px);
+  padding:clamp(30px,4vw,52px) 4px;border-bottom:1px solid var(--line);align-items:baseline;transition:padding-left .5s var(--e-rev)}
+.r-pill:hover{padding-left:16px}
+.r-pill__t .e{font-family:var(--cor);font-size:12px;letter-spacing:.28em;color:var(--red);display:block}
+.r-pill__t .j{font-family:var(--serif);font-size:clamp(28px,3.8vw,50px);color:var(--navy);font-weight:500;display:block;margin-top:8px;line-height:1;letter-spacing:.04em}
+.r-pill__b .one{font-family:var(--serif);font-size:clamp(16px,2vw,21px);color:var(--ink);font-weight:500;line-height:1.7;letter-spacing:.02em}
+.r-pill__b .d{font-size:clamp(13px,1.5vw,14.5px);color:var(--muted);margin-top:12px;line-height:2}
+.r-bridge{margin-top:clamp(34px,5vw,56px);border:1px solid var(--line);border-left:2px solid var(--red);border-radius:4px;padding:clamp(22px,3vw,32px);text-align:center;background:rgba(255,255,255,.5)}
+.r-bridge .b{font-family:var(--serif);font-size:clamp(15px,2vw,20px);color:var(--red-deep);letter-spacing:.02em}
+.r-bridge .s{font-size:12.5px;color:var(--muted);margin-top:9px}
+@media(max-width:680px){.r-pill{grid-template-columns:1fr;gap:10px}.r-pill__t{display:flex;align-items:baseline;gap:12px}.r-pill__t .j{margin-top:0}}
+
+/* 08 MISSION ― 思想の頂点として1章だけ格上げ（フルブリード・余白倍・巨大明朝）*/
+.r-mission{background:var(--navy-deep);text-align:center;overflow:hidden;min-height:100svh;display:flex;align-items:center;padding-block:var(--pad-quiet)}
+.r-mission__inner{position:relative;z-index:3;max-width:920px;margin:0 auto;padding-inline:var(--gut)}
+.r-mission__k{font-family:var(--serif);font-weight:500;font-size:clamp(40px,8vw,104px);line-height:1.32;letter-spacing:.015em;margin-top:24px;color:#fff}
+.r-mission__k em{color:var(--red-soft)}
+.r-mission__p{color:var(--off-dim);font-size:clamp(14px,1.7vw,16px);line-height:2.1;margin-top:30px;max-width:680px;margin-inline:auto}
+.r-ghost.light{color:rgba(255,255,255,.05);right:auto;left:50%;top:50%;transform:translate(-50%,-50%);bottom:auto;font-size:min(60vh,560px)}
+
+/* 09 BUSINESS */
+.r-biz__head{max-width:760px;margin-bottom:clamp(30px,5vw,56px)}
+.r-biz__list{list-style:none;border-top:1px solid var(--line)}
+.r-biz__list li{display:grid;grid-template-columns:clamp(64px,9vw,120px) 1fr auto;gap:clamp(16px,3vw,46px);
+  padding:clamp(28px,3.6vw,46px) 4px;border-bottom:1px solid var(--line);align-items:center;transition:padding-left .5s var(--e-rev),background .5s}
+.r-biz__list li:hover{padding-left:16px;background:linear-gradient(90deg,rgba(197,32,29,.04),transparent)}
+.r-biz__list .n{font-family:var(--cor);font-size:clamp(26px,4vw,54px);color:var(--navy);opacity:.55;line-height:1;font-weight:600;transition:color .4s var(--e-rev),opacity .4s var(--e-rev)}
+.r-biz__list li:hover .n{color:var(--red);opacity:1}
+.r-biz__list h3{font-family:var(--serif);font-size:clamp(18px,2.4vw,26px);color:var(--navy);font-weight:500;letter-spacing:.02em;line-height:1.5}
+.r-biz__list p{font-size:clamp(13px,1.5vw,15px);color:var(--muted);margin-top:12px;line-height:2;max-width:46em}
+.r-biz__more{font-family:var(--serif);font-style:normal;font-size:12px;letter-spacing:.14em;color:var(--muted);border:1px solid var(--line);border-radius:100px;padding:8px 16px;white-space:nowrap;transition:all .4s var(--e-rev)}
+.r-biz__list li:hover .r-biz__more{color:var(--red);border-color:var(--red)}
+.r-biz__list li.soon .r-biz__more{color:var(--muted)}
+.chip{display:inline-block;font-size:10.5px;color:var(--red);border:1px solid var(--red);border-radius:20px;padding:2px 11px;margin-left:10px;vertical-align:middle;letter-spacing:.06em;line-height:1.4}
+@media(max-width:680px){.r-biz__list li{grid-template-columns:44px 1fr;gap:14px}.r-biz__more{grid-column:2;justify-self:start;margin-top:10px}}
+
+/* 10 SERVICE ― SHOWCASE(§11 濃紺)と直結して一枚板に潰れるのを防ぐため一段 navy に起こす（明→暗の呼吸）*/
+.r-service{background:var(--navy);max-width:none}
+.r-service>*{max-width:1280px;margin-inline:auto}
+.r-service__head{max-width:760px;margin-bottom:clamp(30px,5vw,56px)}
+.r-service__list{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.1)}
+.r-service__list li{display:flex;gap:16px;align-items:flex-start;padding:clamp(22px,2.6vw,34px);background:var(--navy);transition:background .4s}
+.r-service__list li:hover{background:#265091}
+.r-service__list li:last-child{grid-column:1 / -1}
+.r-service__list .dot{flex:0 0 9px;width:9px;height:9px;border-radius:50%;background:#8fa6c4;margin-top:9px}
+.r-service__list .dot.r{background:var(--red)}
+.r-service__list h4{font-family:var(--serif);font-size:clamp(15px,1.8vw,18px);color:#fff;font-weight:500;letter-spacing:.02em}
+.r-service__list span{display:block;font-size:13px;color:var(--off-dim);margin-top:6px;line-height:1.8}
+.r-service .chip{color:var(--red-soft);border-color:var(--red-soft)}
+@media(max-width:820px){.r-service__list{grid-template-columns:1fr}}
+
+/* =========================================================================
+   11 · SHOWCASE (360 tee)
+   ========================================================================= */
+.r-show{background:var(--navy-deep);max-width:none}
+.r-show>*{max-width:1280px;margin-inline:auto}
+.r-show__head{max-width:760px;margin-bottom:clamp(36px,5vw,64px)}
+.r-show__note{color:var(--off-dim);font-size:clamp(13.5px,1.6vw,15.5px);line-height:2;margin-top:24px;max-width:40em}
+.tee{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(24px,4vw,60px);align-items:center;
+  background:linear-gradient(160deg,#12294a,#0b1c38);border:1px solid rgba(255,255,255,.08);border-radius:8px;overflow:hidden}
+.tee__stage{position:relative;min-height:clamp(360px,52vh,560px);display:flex;align-items:center;justify-content:center;touch-action:pan-y}
+.tee__stage canvas{display:block}
+.tee__glow{position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 42%,rgba(120,150,210,.22),transparent 70%);pointer-events:none}
+.tee__fallback{position:relative;z-index:2;filter:drop-shadow(0 30px 40px rgba(0,0,0,.4))}
+.tee__stage.has3d .tee__fallback{display:none}
+.tee__panel{padding:clamp(28px,4vw,54px) clamp(28px,4vw,54px) clamp(28px,4vw,54px) 0}
+@media(max-width:860px){.tee__panel{padding:0 clamp(24px,5vw,40px) clamp(36px,6vw,50px)}}
+.tee__soon{display:inline-flex;align-items:center;gap:9px;font-family:var(--serif);font-size:11px;letter-spacing:.24em;color:var(--off-dim)}
+.tee__soon .d{width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.tee__name{font-family:var(--serif);font-size:clamp(24px,3vw,38px);color:#fff;font-weight:700;letter-spacing:.04em;margin:16px 0 14px}
+.tee__desc{color:var(--off-dim);font-size:clamp(13px,1.5vw,15px);line-height:2}
+.tee__swatches{display:flex;gap:12px;margin:26px 0 22px}
+.tee__swatches .sw{width:30px;height:30px;border-radius:50%;background:var(--sw);border:1px solid rgba(255,255,255,.35);position:relative;transition:transform .3s var(--e-rev)}
+.tee__swatches .sw:hover{transform:scale(1.12)}
+.tee__swatches .sw.active::after{content:"";position:absolute;inset:-5px;border:1px solid var(--red-soft);border-radius:50%}
+.tee__label{display:block;font-family:var(--serif);font-size:12px;letter-spacing:.16em;color:var(--off-dim);opacity:.72;margin:0 0 20px;transition:opacity .4s var(--e-rev)}
+.tee__stage.grabbing{cursor:grabbing}
+.tee__stage.grabbing~.tee__panel .tee__hint .dr{border-color:var(--red)}
+.tee__hint{display:inline-flex;align-items:center;gap:11px;font-family:var(--serif);font-size:12px;letter-spacing:.14em;color:var(--off-dim);
+  border:1px solid rgba(255,255,255,.16);border-radius:100px;padding:10px 18px}
+.tee__hint .dr{width:16px;height:16px;border:1px solid var(--red-soft);border-radius:50%;position:relative}
+.tee__hint .dr::after{content:"";position:absolute;left:50%;top:50%;width:9px;height:1px;background:var(--red-soft);transform:translate(-50%,-50%);animation:drag 2.2s var(--e-rev) infinite}
+@keyframes drag{0%,100%{transform:translate(-140%,-50%)}50%{transform:translate(40%,-50%)}}
+@media(max-width:860px){.tee{grid-template-columns:1fr}}
+
+/* 12 STRENGTH */
+.r-strength__head{max-width:760px;margin-bottom:clamp(34px,5vw,60px)}
+.r-strength__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(28px,4vw,60px) clamp(34px,5vw,80px)}
+.r-strength__grid .n{font-family:var(--cor);font-size:clamp(22px,3vw,34px);color:var(--navy);opacity:.55;line-height:1;font-weight:600;transition:color .4s var(--e-rev),opacity .4s var(--e-rev)}
+.r-strength__grid>div:hover .n{color:var(--red);opacity:1}
+.r-strength__grid h4{font-family:var(--serif);font-size:clamp(17px,2.2vw,22px);color:var(--navy);font-weight:500;margin:10px 0 10px;letter-spacing:.02em}
+.r-strength__grid p{font-size:clamp(13px,1.5vw,15px);color:var(--muted);line-height:2}
+@media(max-width:680px){.r-strength__grid{grid-template-columns:1fr}}
+
+/* 13 MESSAGE (sticky greeting) */
+.r-message{background:var(--navy-deep);max-width:none}
+.r-message__inner{max-width:780px;margin:0 auto;position:sticky;top:14vh}
+.r-message__body{color:var(--off-dim);font-size:clamp(14.5px,1.7vw,16.5px);line-height:2.05;margin-top:30px}
+.r-sign{margin-top:40px}
+.r-sign .role{font-family:var(--serif);font-size:14px;color:var(--off-dim);letter-spacing:.16em}
+.r-sign img{width:clamp(190px,28vw,240px);margin-top:10px}
+
+/* 14 COMPANY */
+.r-company__head{max-width:760px;margin-bottom:clamp(30px,5vw,52px)}
+.r-company__tbl{border-top:1px solid var(--line)}
+.r-company__tbl>div{display:grid;grid-template-columns:clamp(110px,18vw,200px) 1fr;gap:clamp(16px,3vw,40px);padding:clamp(20px,2.4vw,30px) 4px;border-bottom:1px solid var(--line)}
+.r-company__tbl dt{font-family:var(--serif);color:var(--navy);font-size:15px;letter-spacing:.08em}
+.r-company__tbl dd{font-size:clamp(13.5px,1.6vw,15px);color:var(--ink-2);line-height:1.9}
+@media(max-width:680px){.r-company__tbl>div{grid-template-columns:1fr;gap:6px}}
+
+/* FOOTER */
+.r-footer{background:var(--navy);color:#fff;text-align:center;padding:clamp(60px,9vh,96px) var(--gut) 46px;position:relative;z-index:1}
+.r-footer .logo{width:clamp(150px,22vw,186px);margin:0 auto 22px}
+.r-footer .tag{font-family:var(--serif);color:var(--red-soft);font-size:14px;letter-spacing:.2em;text-indent:.2em}
+.r-footer .addr{font-size:12.5px;color:var(--off-dim);margin-top:22px;line-height:1.9;letter-spacing:.06em}
+.r-footer .copy{font-family:var(--cor);font-size:11px;color:var(--off-dim);margin-top:22px;letter-spacing:.12em}
+.r-footer .top{margin-top:28px;color:var(--off-dim);font-family:var(--serif);font-size:11px;letter-spacing:.22em;transition:color .3s}
+.r-footer .top:hover{color:#fff}
+
+/* =========================================================================
+   MAGNETIC
+   ========================================================================= */
+.magnetic{display:inline-flex;will-change:transform}
+.mag-in{display:inline-flex;will-change:transform}
+
+/* =========================================================================
+   MODAL
+   ========================================================================= */
+.modal{position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;padding:clamp(20px,5vw,60px);
+  opacity:0;pointer-events:none;visibility:hidden}
+.modal.open{opacity:1;pointer-events:auto;visibility:visible;transition:opacity .4s var(--e-mask)}
+.modal__veil{position:absolute;inset:0;background:rgba(9,17,32,.72);backdrop-filter:blur(6px)}
+.modal__panel{position:relative;background:var(--navy);color:#fff;max-width:640px;width:100%;border:1px solid rgba(255,255,255,.1);
+  border-radius:6px;padding:clamp(34px,5vw,58px);clip-path:inset(0 0 100% 0);transform:translateY(20px)}
+.modal.open .modal__panel{clip-path:inset(0 0 0 0);transform:none;transition:clip-path .55s var(--e-mask) .05s,transform .55s var(--e-mask) .05s}
+.modal__x{position:absolute;top:18px;right:18px;width:38px;height:38px}
+.modal__x span{position:absolute;left:9px;right:9px;top:18px;height:1.4px;background:#fff;transition:background .3s}
+.modal__x span:first-child{transform:rotate(45deg)}.modal__x span:last-child{transform:rotate(-45deg)}
+.modal__x:hover span{background:var(--red-soft)}
+.modal__body .m-eye{font-family:var(--cor);font-size:11px;letter-spacing:.3em;color:var(--red-soft)}
+.modal__body h3{font-family:var(--serif);font-size:clamp(22px,3vw,32px);font-weight:700;margin:14px 0 18px;line-height:1.4}
+.modal__body p{color:var(--off-dim);font-size:clamp(13.5px,1.6vw,15px);line-height:2.1}
+.modal__body em{color:var(--red-soft)}
+.m-list{list-style:none;margin-top:20px;border-top:1px solid rgba(255,255,255,.12)}
+.m-list li{padding:13px 0 13px 22px;border-bottom:1px solid rgba(255,255,255,.12);font-size:14px;color:#fff;position:relative}
+.m-list li::before{content:"";position:absolute;left:0;top:22px;width:8px;height:1px;background:var(--red)}
+
+/* =========================================================================
+   FOCUS VISIBLE (WCAG 2.4.7) — cursor:none で消えるマウス手掛かりを補う
+   ========================================================================= */
+a:focus-visible,button:focus-visible,.sw:focus-visible,
+[data-modal]:focus-visible,[data-more]:focus-visible,[tabindex]:focus-visible{
+  outline:2px solid var(--red-soft);outline-offset:3px}
+
+/* ---- grid reveal micro-stagger（HTML無改修・CSSのみで組み上げ感） ---- */
+html.js .r-pills .r-pill:nth-child(2),html.js .r-biz__list li:nth-child(2),
+html.js .r-strength__grid>div:nth-child(2),html.js .r-service__list li:nth-child(2){transition-delay:.07s}
+html.js .r-pills .r-pill:nth-child(3),html.js .r-biz__list li:nth-child(3),
+html.js .r-strength__grid>div:nth-child(3),html.js .r-service__list li:nth-child(3){transition-delay:.14s}
+html.js .r-pills .r-pill:nth-child(4),html.js .r-biz__list li:nth-child(4),
+html.js .r-strength__grid>div:nth-child(4),html.js .r-service__list li:nth-child(4){transition-delay:.21s}
+html.js .r-pills .r-pill:nth-child(5),html.js .r-biz__list li:nth-child(5),
+html.js .r-service__list li:nth-child(5){transition-delay:.28s}
+
+/* ---- 写真デュオトーン統一（一枚の作品集化・依存ゼロ） ---- */
+.sunk::before{content:"";position:absolute;inset:0;background:var(--navy);mix-blend-mode:color;opacity:.55;z-index:1}
+.sunk::after{z-index:2}
+
+/* ---- ヒーロー背景に本物の scroll-scrub（dolly）を1点だけ ---- */
+@supports (animation-timeline: view()){
+  @media not (prefers-reduced-motion:reduce){
+    html.js .r-hero .sunk{animation:heroDolly linear both;animation-timeline:view();animation-range:entry cover}
+    @keyframes heroDolly{from{transform:scale(1.06)}to{transform:scale(1.0)}}
+  }
+}
+
+/* =========================================================================
+   reduced motion / touch
+   ========================================================================= */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  html.js .reveal,html.js .hero-r{opacity:1!important;transform:none!important;transition:none!important}
+  html.js .line .i{transform:none!important}
+  .sunk{opacity:1;transition:none}
+  .intro,.veil{display:none!important}
+  .marquee__row,.thread .node-ring.on,.thread .node-ring.hit,.r-hero__foot .scroll i::after,.tee__soon .d,.tee__hint .dr::after,.studio__badge .d{animation:none!important}
+  .cursor{display:none!important}
+  html.js body,html.js a,html.js button{cursor:auto!important}
+}
+
+/* =========================================================================
+   SHOWCASE STUDIO (SVG 着せ替え)
+   ========================================================================= */
+.studio{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(20px,3vw,50px);align-items:center;
+  background:linear-gradient(160deg,#12294a,#0b1c38);border:1px solid rgba(255,255,255,.08);border-radius:8px;overflow:hidden}
+.studio__stage{position:relative;display:flex;align-items:center;justify-content:center;padding:clamp(18px,3vw,40px);min-height:clamp(420px,60vh,640px)}
+.studio__fig{width:auto;height:clamp(380px,58vh,600px);max-width:100%}
+.studio__badge{position:absolute;top:18px;left:18px;display:inline-flex;align-items:center;gap:8px;font-family:var(--serif);font-size:10.5px;letter-spacing:.22em;color:var(--red-soft);
+  border:1px solid rgba(255,138,118,.3);border-radius:100px;padding:7px 14px;background:rgba(9,17,32,.4)}
+.studio__badge .d{width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 8px var(--red);animation:pulse 2s infinite}
+.g-tee{fill:var(--tee-fill,#f2efe8)}
+#studio[data-style="private"] .g-business{display:none}
+#studio[data-style="business"] .g-private{display:none}
+.g-wrap{transform-box:view-box;transform-origin:230px 205px;transition:transform .55s var(--e-rev)}
+#studio[data-size="S"] .g-wrap{transform:scale(.946,.957)}
+#studio[data-size="M"] .g-wrap{transform:scale(1,1)}
+#studio[data-size="L"] .g-wrap{transform:scale(1.054,1.043)}
+#studio[data-size="XL"] .g-wrap{transform:scale(1.126,1.087)}
+.studio__panel{padding:clamp(26px,3.5vw,48px) clamp(26px,3.5vw,48px) clamp(26px,3.5vw,48px) 0}
+.studio__ctrl{display:flex;align-items:center;gap:16px;margin-top:20px;flex-wrap:wrap}
+.studio__ctrl-l{font-family:var(--serif);font-size:10.5px;letter-spacing:.2em;color:var(--off-dim);min-width:104px}
+.seg{display:inline-flex;border:1px solid rgba(255,255,255,.18);border-radius:100px;overflow:hidden}
+.seg button{font-family:var(--serif);font-size:12.5px;letter-spacing:.06em;color:var(--off-dim);padding:9px 17px;transition:color .35s var(--e-rev),background .35s var(--e-rev);border-right:1px solid rgba(255,255,255,.1)}
+.seg button:last-child{border-right:0}
+.seg button:hover{color:#fff}
+.seg button.active{background:var(--paper);color:var(--navy-deep)}
+.studio__size{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:26px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.1);border-radius:5px;overflow:hidden}
+.studio__size>div{background:#0e2444;padding:13px 8px;text-align:center}
+.studio__size dt{font-family:var(--serif);font-size:11px;letter-spacing:.1em;color:var(--off-dim)}
+.studio__size dd{font-family:var(--cor);font-size:19px;color:#fff;margin-top:4px}
+.studio__size dd::after{content:" cm";font-size:10px;color:var(--off-dim);letter-spacing:.06em}
+.studio__src{font-size:11.5px;color:var(--muted);margin-top:14px;line-height:1.7}
+@media(max-width:860px){.studio{grid-template-columns:1fr}.studio__panel{padding:0 clamp(22px,5vw,40px) clamp(34px,6vw,48px)}.studio__ctrl-l{min-width:auto}}
+
+#r-main section[data-idx]{scroll-margin-top:86px}
+
+/* ===== SHOWCASE 3D stage (charcoal mannequin) ===== */
+#tee3d{position:relative;min-height:clamp(440px,62vh,620px);display:flex;align-items:center;justify-content:center;touch-action:pan-y}
+#tee3d canvas{display:block}
+#tee3d.no3d::after{content:"（3Dプレビューは対応ブラウザで表示されます）";color:var(--off-dim);font-size:12px;letter-spacing:.06em}
+#tee3d.no3d .tee3d-hint{display:none}
+.tee3d-hint{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:10px;font-family:var(--serif);font-size:11.5px;letter-spacing:.14em;color:var(--off-dim);border:1px solid rgba(255,255,255,.16);border-radius:100px;padding:8px 16px;background:rgba(9,17,32,.4);pointer-events:none;white-space:nowrap}
+.tee3d-hint .dr{width:15px;height:15px;border:1px solid var(--red-soft);border-radius:50%;position:relative}
+.tee3d-hint .dr::after{content:"";position:absolute;left:50%;top:50%;width:8px;height:1px;background:var(--red-soft);transform:translate(-50%,-50%)}
+
+/* =========================================================================
+   v2.1 研ぎ澄ましレイヤー（2026-07-02）— 4レンズ統合
+   背景の研ぎ(BG)／躍動(MO)／エレガンス(EL)／文脈(TX)
+   不変条件：紺×赤のみ・赤は線と点だけ・reduced-motion全対応・3D保留域不接触
+   ========================================================================= */
+
+/* ==== BG-1: FIVE PILLARS 帯の全幅化（1280px打ち切りの根治・r-service方式） ==== */
+.r-pillars{max-width:none}
+.r-pillars>*{max-width:1280px;margin-inline:auto}
+/* 見出しは従来どおり1280カラムの左肩に留める（センタリング化させない） */
+.r-pillars__head{max-width:760px;margin-left:max(0px,calc((100% - 1280px)/2));margin-right:auto}
+
+/* ==== BG-2: STORY 紺面＋写真の全幅化（.sunk と縦書きラベルは除外して全幅のまま） ==== */
+.r-story{max-width:none}
+.r-story>:where(:not(.sunk):not(.r-side)){max-width:1280px;margin-inline:auto}
+/* 本文は従来の42chを維持し、1280カラムの左肩に揃える */
+.r-story__body{max-width:var(--measure);margin-left:max(0px,calc((100% - 1280px)/2));margin-right:auto}
+/* 見出しQも同じ左肩へ（センタリングで浮かないように） */
+.r-story__q,.r-story .r-eyebrow{margin-left:max(0px,calc((100% - 1280px)/2));margin-right:auto}
+
+/* ==== BG-3: HERO 斜めの光条（生成り一条）＋端の締め ==== */
+.r-hero::before{content:"";position:absolute;inset:-12% -18%;z-index:1;pointer-events:none;
+  background:linear-gradient(115deg,transparent 38%,rgba(247,245,240,.045) 46%,rgba(247,245,240,.10) 51%,rgba(247,245,240,.045) 56%,transparent 64%);
+  mix-blend-mode:screen}
+.r-hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(130% 90% at 50% 110%,rgba(9,17,32,.5),transparent 55%),
+    linear-gradient(90deg,rgba(9,17,32,.34),transparent 12% 88%,rgba(9,17,32,.34))}
+@media not (prefers-reduced-motion:reduce){
+  html.js .r-hero::before{animation:heroShaft 16s ease-in-out infinite alternate}
+  @keyframes heroShaft{from{transform:translateX(-1.5%);opacity:.82}to{transform:translateX(1.5%);opacity:1}}
+}
+
+/* ==== BG-4: 紺面の呼吸＋BACKBONEの斜光・底の沈み ==== */
+@media not (prefers-reduced-motion:reduce){
+  html.js .dark::before{animation:darkBreath 13s ease-in-out infinite alternate}
+  @keyframes darkBreath{from{opacity:.8}to{opacity:1}}
+}
+.r-back::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:
+    linear-gradient(118deg,rgba(247,245,240,.05) 0%,transparent 34%),
+    radial-gradient(70% 55% at 82% 88%,rgba(9,17,32,.5),transparent 70%)}
+
+/* ==== BG-5: 生成り紙面の気配（極薄の天光＋左ガターの細い罫） ==== */
+.r-con,.r-found,.r-strength,.r-company{
+  background-image:
+    radial-gradient(88% 42% at 50% 0%,rgba(29,68,124,.038),transparent 72%),
+    linear-gradient(180deg,transparent,rgba(29,68,124,.12) 18% 82%,transparent);
+  background-repeat:no-repeat;
+  background-size:100% 100%,1px 72%;
+  background-position:0 0,calc(var(--gut)/2) 58%}
+
+/* ==== BG-6: sunk写真のCSSスクロール視差（対応ブラウザのみ・依存ゼロ） ==== */
+/* .r-message は sticky(.r-message__inner) を内包するため overflow:hidden 不可 → clip で封止（スクロールコンテナを作らずstickyと共存） */
+.r-message{overflow:clip}
+@supports (animation-timeline: view()){
+  @media not (prefers-reduced-motion:reduce){
+    html.js .r-back .sunk,html.js .r-story .sunk,html.js .r-mission .sunk,html.js .r-message .sunk{
+      animation:sunkDrift linear both;animation-timeline:view();animation-range:cover}
+    @keyframes sunkDrift{from{transform:translateY(-4.5%) scale(1.1)}to{transform:translateY(4.5%) scale(1.1)}}
+  }
+}
+
+/* ==== BG-7: ghost巨大文字の奥行きドリフト（translateプロパティ＝transformと合成・衝突なし） ==== */
+@supports (animation-timeline: view()){
+  @media not (prefers-reduced-motion:reduce){
+    html.js .r-ghost{animation:ghostDrift linear both;animation-timeline:view();animation-range:cover}
+    @keyframes ghostDrift{from{translate:0 4%}to{translate:0 -4%}}
+  }
+}
+
+/* ==== BG-8: 基準グレーディングの研ぎ（deep/lift/story個別指定は特異度で不変のまま） ==== */
+.sunk,.sunk__img{filter:grayscale(.58) saturate(.78) brightness(.88) contrast(1.07)}
+
+/* ==== MO-2: CTA 塗りのせり上がり ==== */
+.r-hero__cta a{position:relative;overflow:hidden;isolation:isolate;
+  transition:color .45s var(--e-hero),border-color .45s var(--e-hero)}
+.r-hero__cta a::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--paper);
+  transform:translateY(101%);transition:transform .5s var(--e-hero)}
+.r-hero__cta a:hover,.r-hero__cta a:focus-visible{color:var(--navy-deep);border-color:var(--paper)}
+.r-hero__cta a:hover::before,.r-hero__cta a:focus-visible::before{transform:translateY(0)}
+.r-hero__cta .arw{transition:transform .5s var(--e-hero),color .45s var(--e-hero)}
+.r-hero__cta a:hover .arw,.r-hero__cta a:focus-visible .arw{color:var(--red);transform:translateY(3px)}
+@media(prefers-reduced-motion:reduce){
+  .r-hero__cta a,.r-hero__cta a::before,.r-hero__cta .arw{transition:none!important}
+}
+
+/* ==== MO-3: eyebrow 罫線ドロー（“筆を引く”出現・全13章一括） ==== */
+.r-eyebrow::after{content:"";display:block;width:clamp(36px,5vw,64px);height:1px;background:currentColor;opacity:.42}
+html.js .r-eyebrow::after{transform:scaleX(0);transform-origin:left center}
+html.js .r-eyebrow.is-in::after{transform:scaleX(1);transition:transform .9s var(--e-hero) .3s}
+@media(prefers-reduced-motion:reduce){
+  html.js .r-eyebrow::after{transform:none!important;transition:none!important}
+}
+
+/* ==== MO-4: thread 筆先（先端を走る赤い一点） ==== */
+.thread .tip{fill:var(--red);filter:url(#halo)}
+@media(prefers-reduced-motion:reduce){.thread .tip{display:none}}
+
+/* ==== MO-5: 強み 下線ドロー（一本の線の文法をhoverでも） ==== */
+.r-strength__grid h4{position:relative;display:inline-block;padding-bottom:4px}
+.r-strength__grid h4::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--red);
+  transform:scaleX(0);transform-origin:left center;transition:transform .55s var(--e-hero)}
+.r-strength__grid>div:hover .n{transform:translateX(4px)}
+.r-strength__grid .n{display:inline-block;transition:color .4s var(--e-rev),opacity .4s var(--e-rev),transform .4s var(--e-rev)}
+.r-strength__grid>div:hover h4::after{transform:scaleX(1)}
+@media(prefers-reduced-motion:reduce){
+  /* transitionだけ切る＝scaleX(0)の隠し状態は維持（transform:noneを掛けると下線が常時表示になる） */
+  .r-strength__grid h4::after{transition:none!important}
+  .r-strength__grid .n{transition:none!important;transform:none!important}
+}
+
+/* ==== MO-7: SERVICE カードの点火（上端の赤線＋見出しスライド＋自社ドット発光） ==== */
+.r-service__list li{position:relative;overflow:hidden}
+.r-service__list li::after{content:"";position:absolute;left:0;top:0;width:100%;height:1px;background:var(--red);
+  transform:scaleX(0);transform-origin:left center;transition:transform .6s var(--e-hero)}
+.r-service__list li:hover::after{transform:scaleX(1)}
+.r-service__list h4{transition:transform .5s var(--e-rev)}
+.r-service__list li:hover h4{transform:translateX(6px)}
+.r-service__list .dot{transition:box-shadow .4s var(--e-rev),transform .4s var(--e-rev)}
+.r-service__list li:hover .dot.r{box-shadow:0 0 12px rgba(197,32,29,.7);transform:scale(1.2)}
+@media(prefers-reduced-motion:reduce){
+  /* li::after は scaleX(0) の隠し状態を維持するため transform:none を掛けない */
+  .r-service__list li::after{transition:none!important}
+  .r-service__list h4,.r-service__list .dot{transition:none!important;transform:none!important;box-shadow:none!important}
+}
+
+/* ==== MO-8: 押し込みフィードバック（studioパネル＝3Dステージ外・可変域のみ） ==== */
+.seg button{transition:color .35s var(--e-rev),background .35s var(--e-rev),transform .25s var(--e-rev)}
+.seg button:active{transform:scale(.94)}
+.tee__swatches .sw:active{transform:scale(.94)}
+.r-biz__list li:hover .r-biz__more{transform:translateX(-4px)}
+@media(prefers-reduced-motion:reduce){
+  .seg button,.tee__swatches .sw,.r-biz__more{transition:none!important;transform:none!important}
+}
+
+/* ===== EL-2: radius token unification（カード=8px／ピル=100px）===== */
+:root{--r-card:8px;--r-pill:100px}
+.r-bridge{border-radius:var(--r-card)}
+.modal__panel{border-radius:var(--r-card)}
+.studio__size{border-radius:var(--r-card)}
+.chip{border-radius:var(--r-pill)}
+
+/* ===== EL-3: studio注記のAA可読性（dark面はoff-dim系で統一）===== */
+.studio__src{color:var(--off-dim);opacity:.78}
+
+/* ===== EL-4: 見出し下余白の2トークン化（声量ティアと同期）===== */
+:root{--head-gap-l:clamp(40px,6vw,72px);--head-gap-s:clamp(30px,4.5vw,54px)}
+.r-found__head,.r-pillars__head,.r-show__head{margin-bottom:var(--head-gap-l)}
+.r-biz__head,.r-company__head,.r-strength__head,.r-service__head{margin-bottom:var(--head-gap-s)}
+
+/* ===== EL-5: 数字はCormorantに統一（番号の文法を1つに）===== */
+.rnav__idx{font-family:var(--cor);font-weight:600;font-size:13px}
+#intro-count{font-family:var(--cor);font-weight:600}
+
+/* ===== EL-6: ナビ通し番号（CSSカウンタのみ・HTML無改修）===== */
+.rnav__menu{counter-reset:navi}
+.rnav__menu a::before{counter-increment:navi;content:counter(navi,decimal-leading-zero);
+  font-family:var(--cor);font-weight:600;font-size:10px;letter-spacing:.08em;
+  color:var(--red);margin-right:8px;vertical-align:.1em}
+.rnav.on-dark .rnav__menu a::before{color:var(--off-dim)}
+@media(max-width:820px){
+  .rnav__menu a::before{font-size:13px;margin-right:14px;color:var(--off-dim)}
+}
+
+/* ===== EL-7: フッター奥付化（ヘアライン＋ピルPAGE TOP）===== */
+.r-footer .copy{margin-top:34px;padding-top:24px;border-top:1px solid rgba(255,255,255,.14);
+  max-width:560px;margin-inline:auto;letter-spacing:.18em;text-indent:.18em}
+.r-footer .top{margin-top:30px;border:1px solid rgba(255,255,255,.22);border-radius:100px;
+  padding:12px 26px;transition:color .3s,border-color .3s}
+.r-footer .top:hover{color:#fff;border-color:rgba(255,255,255,.55)}
+
+/* ===== EL-8: 準備中バッジの一本化＋micro-capの字送り統一(.22em) ===== */
+.studio__panel .tee__soon{display:none}
+.studio__panel .tee__name{margin-top:2px}
+.studio__ctrl-l,.studio__badge{letter-spacing:.22em}
+.tee__soon{font-size:10.5px;letter-spacing:.22em}
+
+/* ===== EL-9: 会社概要＝事務章の静けさ（baseline・等幅数字・行長）===== */
+.r-company__tbl>div{align-items:baseline}
+.r-company__tbl dt{letter-spacing:.14em}
+.r-company__tbl dd{font-variant-numeric:tabular-nums;letter-spacing:.02em;max-width:56em}
+@media(max-width:680px){.r-company__tbl>div{align-items:start}}
+
+/* ==== TX-4: SERVICE 凡例：赤点=自社ブランド／灰点=厳選パートナー（色の意味を明示） ==== */
+.r-service__legend{display:flex;align-items:center;gap:10px;margin-top:18px;font-family:var(--serif);font-size:12px;color:var(--off-dim);letter-spacing:.08em}
+.r-service__legend .dot{width:9px;height:9px;border-radius:50%;background:#8fa6c4;flex:0 0 9px;margin-left:14px}
+.r-service__legend .dot:first-child{margin-left:0}
+.r-service__legend .dot.r{background:var(--red)}
+
+/* ==== TX-5: モーダル内写真：.sunk と同じ「紺で沈める」思想のデュオトーン ==== */
+.m-photo{position:relative;margin:18px 0 20px;border-radius:4px;overflow:hidden}
+.m-photo img{width:100%;height:clamp(140px,22vw,200px);object-fit:cover;filter:grayscale(.5) saturate(.82) brightness(.9)}
+.m-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,37,70,.35),rgba(15,37,70,.6));mix-blend-mode:multiply}
+
+/* ==== TX-7: cursor: read（続きを読む）＝ view と同径のリング ==== */
+.cursor.on-read .cursor__ring{width:74px;height:74px;background:rgba(255,255,255,.06)}

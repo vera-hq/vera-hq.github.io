@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="googlebot" content="noindex,nofollow,noarchive,nosnippet">
+<title>想定家賃・想定年収 推定フォーマット（バッググラウンドチェック用）</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#fff; --ink:#1a1f2c; --sub:#5b6473;
+    --accent:#2a6df4; --accent2:#0f3da3;
+    --ok:#0a8a4a; --warn:#c87f00; --bad:#b3261e;
+    --border:#e3e6ec; --chip:#eef2ff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI","Hiragino Sans","Yu Gothic UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+  header{background:linear-gradient(135deg,#1a3a8a,#2a6df4);color:#fff;padding:18px 22px}
+  header h1{margin:0;font-size:20px;letter-spacing:.02em}
+  header p{margin:6px 0 0;font-size:12px;opacity:.9}
+  main{max-width:1080px;margin:0 auto;padding:18px;display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
+  @media(max-width:900px){main{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  h2{font-size:15px;margin:0 0 12px;color:var(--accent2);border-left:4px solid var(--accent);padding-left:8px}
+  label{display:block;font-size:12px;color:var(--sub);margin:10px 0 4px}
+  input,select,textarea{width:100%;padding:9px 10px;border:1px solid var(--border);border-radius:8px;font-size:14px;background:#fff;color:var(--ink)}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  button{cursor:pointer;border:none;background:var(--accent);color:#fff;padding:11px 18px;border-radius:10px;font-size:14px;font-weight:600;width:100%;margin-top:14px}
+  button:hover{background:var(--accent2)}
+  .btn-sub{background:#fff;color:var(--accent);border:1px solid var(--accent);margin-top:8px}
+  .result{font-size:13px}
+  .big{font-size:28px;font-weight:700;color:var(--accent2);margin:6px 0}
+  .pill{display:inline-block;background:var(--chip);color:var(--accent2);padding:3px 9px;border-radius:99px;font-size:11px;font-weight:600;margin-right:6px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+  th,td{border-bottom:1px solid var(--border);padding:6px 4px;text-align:left;vertical-align:top}
+  th{color:var(--sub);font-weight:600;width:38%}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  .hint{font-size:11.5px;color:var(--sub);margin-top:4px}
+  .placeholder{color:#9aa3b2;font-style:italic;text-align:center;padding:30px 10px}
+  .sources{font-size:11.5px;color:var(--sub);margin-top:10px;line-height:1.7}
+  .sources a{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+  .badge{display:inline-block;padding:2px 7px;border-radius:6px;font-size:11px;font-weight:600;margin-left:6px}
+  .b-low{background:#e8f5ec;color:var(--ok)}
+  .b-mid{background:#fff5e0;color:var(--warn)}
+  .b-high{background:#fde7e6;color:var(--bad)}
+  .notice{background:#fffbe6;border:1px solid #ffd966;color:#7a5b00;padding:10px;border-radius:10px;font-size:12px;margin-bottom:14px}
+  footer{padding:14px 22px;color:var(--sub);font-size:11.5px;text-align:center}
+  details{margin-top:8px;border:1px solid var(--border);border-radius:8px;padding:8px 10px;background:#fafbfd}
+  summary{cursor:pointer;font-size:12.5px;color:var(--accent2);font-weight:600}
+</style>
+</head>
+<body>
+<header>
+  <h1>想定家賃・想定年収 推定フォーマット</h1>
+  <p>住居情報からバッググラウンドチェック用の想定家賃／想定年収レンジを算出します（公開家賃相場データに基づく目安）</p>
+</header>
+
+<main>
+  <section class="card" id="input">
+    <h2>1. 物件情報を入力</h2>
+    <div class="notice">
+      ※ このツールは<b>本人の自己申告ではなく住居情報からの推定</b>です。実際の家賃・収入とは異なる可能性があります。BG調査の補助資料としてご利用ください。
+    </div>
+
+    <div class="row">
+      <div>
+        <label>都道府県</label>
+        <select id="pref"></select>
+      </div>
+      <div>
+        <label>市区町村</label>
+        <select id="city"></select>
+      </div>
+    </div>
+
+    <label>マンション名（メモ・任意／高級物件判定に使用）</label>
+    <input id="bldg" placeholder="例：パークコート〇〇、ザ・タワー△△、〇〇ハイツ">
+
+    <div class="row3">
+      <div>
+        <label>間取り</label>
+        <select id="layout">
+          <option value="1R">1R</option>
+          <option value="1K" selected>1K</option>
+          <option value="1DK">1DK</option>
+          <option value="1LDK">1LDK</option>
+          <option value="2K">2K</option>
+          <option value="2DK">2DK</option>
+          <option value="2LDK">2LDK</option>
+          <option value="3DK">3DK</option>
+          <option value="3LDK">3LDK</option>
+          <option value="4LDK">4LDK</option>
+          <option value="5LDK+">5LDK以上</option>
+        </select>
+      </div>
+      <div>
+        <label>専有面積（㎡）</label>
+        <input id="area" type="number" value="25" min="10" max="400" step="0.1">
+      </div>
+      <div>
+        <label>築年数（年）</label>
+        <input id="age" type="number" value="10" min="0" max="80">
+      </div>
+    </div>
+
+    <div class="row3">
+      <div>
+        <label>構造</label>
+        <select id="struct">
+          <option value="wood">木造</option>
+          <option value="steel">鉄骨</option>
+          <option value="rc" selected>RC（鉄筋コンクリート）</option>
+          <option value="src">SRC（鉄骨鉄筋コンクリート）</option>
+        </select>
+      </div>
+      <div>
+        <label>最寄駅徒歩（分）</label>
+        <input id="walk" type="number" value="8" min="0" max="40">
+      </div>
+      <div>
+        <label>所在階</label>
+        <input id="floor" type="number" value="3" min="1" max="60">
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>高級グレード（任意）</label>
+        <select id="grade">
+          <option value="0">標準</option>
+          <option value="1">準ハイグレード（+10%）</option>
+          <option value="2">タワマン／高級ブランド（+25%）</option>
+          <option value="3">超高級・億ション級（+45%）</option>
+        </select>
+        <div class="hint">「パークコート」「ザ・パークハウス」「プラウドタワー」「ブリリアタワー」「グランドメゾン」等の三井・三菱・野村系ブランド、麻布台ヒルズ・虎ノ門ヒルズなどは2〜3を選択</div>
+      </div>
+      <div>
+        <label>世帯人数（任意・年収レンジ調整に使用）</label>
+        <select id="household">
+          <option value="single" selected>単身</option>
+          <option value="dual">夫婦（共働きの可能性あり）</option>
+          <option value="family">家族（扶養あり）</option>
+        </select>
+      </div>
+    </div>
+
+    <button onclick="compute()">想定家賃・想定年収を算出</button>
+    <button class="btn-sub" onclick="resetForm()">入力リセット</button>
+  </section>
+
+  <section class="card" id="output">
+    <h2>2. 算出結果</h2>
+    <div id="result">
+      <div class="placeholder">左の物件情報を入力して「算出」ボタンを押してください</div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © Background Check Helper / 公開家賃相場（SUUMO・LIFULL HOME'S・at home）と国交省 不動産取引価格情報を参考に内蔵<br>
+  本ツールはあくまで参考推計です。最終判断は他の調査資料と併せて行ってください。
+</footer>
+
+<script>
+// ===========================================================
+// データ：地域別 家賃㎡単価（円/㎡/月）— 2025年公開家賃相場をベースに策定
+// 出典：SUUMO家賃相場 / LIFULL HOME'S家賃相場 / at home / 国交省 不動産取引価格情報
+// ※ ベースは「築10年・1K・鉄骨・駅徒歩10分・低層階」を想定した㎡単価。各種補正係数で調整。
+// ===========================================================
+const RENT_PSM = {
+  "東京都": {
+    "千代田区":7200,"中央区":6500,"港区":8000,"新宿区":5000,"文京区":4600,
+    "台東区":4200,"墨田区":3700,"江東区":3900,"品川区":4700,"目黒区":5000,
+    "大田区":3700,"世田谷区":3800,"渋谷区":5200,"中野区":4000,"杉並区":3700,
+    "豊島区":4200,"北区":3500,"荒川区":3400,"板橋区":3300,"練馬区":3300,
+    "足立区":2900,"葛飾区":2900,"江戸川区":3100,
+    "武蔵野市":3800,"三鷹市":3500,"調布市":3200,"府中市":3000,"町田市":2700,
+    "八王子市":2400,"立川市":2700,"小金井市":3000,"国分寺市":3000
+  },
+  "神奈川県": {
+    "横浜市西区":3700,"横浜市中区":3500,"横浜市神奈川区":3200,"横浜市港北区":3200,
+    "横浜市青葉区":3000,"横浜市都筑区":3000,"横浜市鶴見区":2900,"横浜市港南区":2700,
+    "横浜市南区":2700,"横浜市磯子区":2600,"横浜市金沢区":2500,"横浜市戸塚区":2600,
+    "横浜市保土ケ谷区":2700,"横浜市旭区":2400,"横浜市緑区":2600,"横浜市瀬谷区":2400,
+    "横浜市栄区":2500,"横浜市泉区":2400,
+    "川崎市川崎区":3000,"川崎市幸区":3100,"川崎市中原区":3500,"川崎市高津区":3100,
+    "川崎市宮前区":2900,"川崎市多摩区":2700,"川崎市麻生区":2800,
+    "相模原市中央区":2300,"相模原市緑区":2100,"相模原市南区":2400,
+    "藤沢市":2700,"鎌倉市":3000,"茅ヶ崎市":2600,"平塚市":2300,"厚木市":2400,"大和市":2500
+  },
+  "埼玉県": {
+    "さいたま市大宮区":3000,"さいたま市浦和区":3200,"さいたま市中央区":2900,
+    "さいたま市南区":2800,"さいたま市北区":2700,"さいたま市見沼区":2500,
+    "さいたま市緑区":2500,"さいたま市西区":2400,"さいたま市岩槻区":2300,"さいたま市桜区":2600,
+    "川口市":2800,"所沢市":2500,"川越市":2400,"越谷市":2400,"草加市":2500,
+    "春日部市":2200,"上尾市":2300,"熊谷市":2000
+  },
+  "千葉県": {
+    "千葉市中央区":2700,"千葉市美浜区":2600,"千葉市花見川区":2300,"千葉市稲毛区":2400,
+    "千葉市若葉区":2200,"千葉市緑区":2300,
+    "船橋市":2800,"市川市":2900,"浦安市":3100,"松戸市":2700,"柏市":2600,
+    "流山市":2700,"我孫子市":2300,"習志野市":2700,"八千代市":2400
+  },
+  "大阪府": {
+    "大阪市北区":3300,"大阪市中央区":3500,"大阪市西区":3200,"大阪市福島区":3100,
+    "大阪市天王寺区":3000,"大阪市浪速区":2900,"大阪市淀川区":2700,"大阪市東淀川区":2400,
+    "大阪市都島区":2700,"大阪市城東区":2600,"大阪市鶴見区":2500,"大阪市旭区":2300,
+    "大阪市東成区":2500,"大阪市生野区":2200,"大阪市住之江区":2300,"大阪市住吉区":2400,
+    "大阪市阿倍野区":2800,"大阪市東住吉区":2300,"大阪市平野区":2200,"大阪市西成区":2000,
+    "大阪市港区":2400,"大阪市大正区":2200,"大阪市此花区":2300,
+    "堺市堺区":2300,"堺市北区":2300,"堺市西区":2200,"堺市中区":2100,"堺市東区":2100,
+    "豊中市":2500,"吹田市":2700,"高槻市":2300,"枚方市":2200,"茨木市":2400,
+    "東大阪市":2200,"八尾市":2100,"寝屋川市":2100
+  },
+  "京都府": {
+    "京都市中京区":2900,"京都市下京区":2800,"京都市上京区":2600,"京都市左京区":2500,
+    "京都市東山区":2700,"京都市北区":2400,"京都市南区":2400,"京都市右京区":2300,
+    "京都市西京区":2200,"京都市山科区":2100,"京都市伏見区":2200,
+    "宇治市":2000,"亀岡市":1800
+  },
+  "兵庫県": {
+    "神戸市中央区":2900,"神戸市灘区":2600,"神戸市東灘区":2700,"神戸市兵庫区":2300,
+    "神戸市須磨区":2200,"神戸市垂水区":2100,"神戸市西区":2000,"神戸市北区":1900,
+    "神戸市長田区":2000,
+    "西宮市":2700,"芦屋市":3100,"尼崎市":2300,"宝塚市":2400,"伊丹市":2200,"明石市":2000
+  },
+  "愛知県": {
+    "名古屋市中区":2900,"名古屋市東区":2700,"名古屋市西区":2400,"名古屋市北区":2200,
+    "名古屋市南区":2100,"名古屋市中村区":2500,"名古屋市瑞穂区":2400,"名古屋市熱田区":2400,
+    "名古屋市中川区":2100,"名古屋市港区":2000,"名古屋市守山区":2100,"名古屋市緑区":2200,
+    "名古屋市名東区":2300,"名古屋市天白区":2200,"名古屋市千種区":2500,"名古屋市昭和区":2500,
+    "豊田市":1900,"岡崎市":1900,"一宮市":1800,"豊橋市":1800,"春日井市":1800
+  },
+  "福岡県": {
+    "福岡市中央区":2900,"福岡市博多区":2700,"福岡市早良区":2300,"福岡市南区":2200,
+    "福岡市東区":2100,"福岡市城南区":2200,"福岡市西区":2000,
+    "北九州市小倉北区":1900,"北九州市小倉南区":1700,"北九州市八幡西区":1700,
+    "久留米市":1700
+  },
+  "北海道": {
+    "札幌市中央区":2300,"札幌市北区":1900,"札幌市東区":1800,"札幌市白石区":1800,
+    "札幌市豊平区":1900,"札幌市南区":1700,"札幌市西区":1800,"札幌市厚別区":1700,
+    "札幌市手稲区":1700,"札幌市清田区":1700,
+    "旭川市":1500,"函館市":1500
+  },
+  "宮城県": {
+    "仙台市青葉区":2400,"仙台市宮城野区":2000,"仙台市若林区":1900,
+    "仙台市太白区":1800,"仙台市泉区":1800
+  },
+  "広島県": {
+    "広島市中区":2400,"広島市南区":2100,"広島市東区":1900,"広島市西区":1900,
+    "広島市安佐南区":1700,"広島市安佐北区":1600
+  },
+  "その他主要都市": {
+    "新潟市中央区":1800,"金沢市":2000,"静岡市葵区":1900,"浜松市中央区":1700,
+    "岡山市北区":1900,"高松市":1700,"松山市":1600,"熊本市中央区":1800,
+    "鹿児島市":1600,"那覇市":2100,"宇都宮市":1800,"前橋市":1600,"水戸市":1600,
+    "長野市":1600,"富山市":1600,"福井市":1500,"大津市":2000,"奈良市":2000,
+    "和歌山市":1500,"鳥取市":1400,"松江市":1500,"山口市":1500,"徳島市":1500,
+    "高知市":1500,"佐賀市":1500,"長崎市":1700,"大分市":1600,"宮崎市":1500
+  }
+};
+
+// 間取り別 ㎡単価補正（小さい部屋ほど㎡単価が高い）
+const LAYOUT_FACTOR = {
+  "1R":1.05,"1K":1.00,"1DK":0.97,"1LDK":0.95,
+  "2K":0.92,"2DK":0.90,"2LDK":0.88,
+  "3DK":0.85,"3LDK":0.82,"4LDK":0.78,"5LDK+":0.74
+};
+
+// 築年数補正
+function ageFactor(y){
+  if(y<=3) return 1.10;
+  if(y<=5) return 1.05;
+  if(y<=10) return 1.00;
+  if(y<=15) return 0.92;
+  if(y<=20) return 0.84;
+  if(y<=25) return 0.76;
+  if(y<=30) return 0.70;
+  if(y<=40) return 0.62;
+  return 0.55;
+}
+
+// 構造補正
+const STRUCT_FACTOR = {wood:0.85, steel:1.00, rc:1.10, src:1.15};
+
+// 駅徒歩補正
+function walkFactor(m){
+  if(m<=3) return 1.12;
+  if(m<=5) return 1.08;
+  if(m<=7) return 1.04;
+  if(m<=10) return 1.00;
+  if(m<=15) return 0.93;
+  if(m<=20) return 0.86;
+  return 0.78;
+}
+
+// 階数補正
+function floorFactor(f){
+  if(f<=1) return 0.93;
+  if(f<=2) return 0.97;
+  if(f<=5) return 1.00;
+  if(f<=10) return 1.05;
+  if(f<=20) return 1.10;
+  return 1.15;
+}
+
+// グレード補正
+const GRADE_FACTOR = [1.00, 1.10, 1.25, 1.45];
+
+// 高級ブランド検出（マンション名から）
+const PREMIUM_KEYWORDS = [
+  {kw:["パークコート","パークマンション","パークタワー","パークハウス","パークホームズ"], boost:1.15, name:"三井不動産系プレミアム"},
+  {kw:["ザ・パークハウス","ザ・パークワンズ"], boost:1.15, name:"三菱地所系"},
+  {kw:["プラウドタワー","プラウド"], boost:1.10, name:"野村不動産系"},
+  {kw:["ブリリアタワー","ブリリア"], boost:1.10, name:"東京建物系"},
+  {kw:["グランドメゾン"], boost:1.10, name:"積水ハウス系"},
+  {kw:["シティタワー","シティハウス"], boost:1.10, name:"住友不動産系"},
+  {kw:["ザ・タワー","ザ・センチュリー","ザ・千代田","ザ・港"], boost:1.20, name:"超高級タワー"},
+  {kw:["麻布台ヒルズ","虎ノ門ヒルズ","表参道ヒルズ","六本木ヒルズ"], boost:1.50, name:"森ビル ヒルズ族"},
+  {kw:["ミッドタウン"], boost:1.30, name:"ミッドタウン系"},
+  {kw:["タワー","TOWER","Tower"], boost:1.08, name:"タワーマンション一般"}
+];
+
+// 世帯人数による「年収倍率」レンジ（家賃×年）
+const HOUSEHOLD_INCOME_MULT = {
+  single: {low:36, mid:40, high:48},   // 単身：手取りの25-33%が家賃の通説
+  dual:   {low:30, mid:36, high:42},   // 共働き：世帯年収はやや低倍率（家賃負担割合が低めでもOK）
+  family: {low:36, mid:42, high:50}    // 扶養あり：家計に余裕必要
+};
+
+// ===========================================================
+// UI 初期化
+// ===========================================================
+function initSelects(){
+  const pref = document.getElementById("pref");
+  Object.keys(RENT_PSM).forEach(p=>{
+    const o=document.createElement("option"); o.value=p; o.textContent=p; pref.appendChild(o);
+  });
+  pref.value="東京都";
+  updateCities();
+  pref.onchange = updateCities;
+}
+function updateCities(){
+  const p = document.getElementById("pref").value;
+  const city = document.getElementById("city");
+  city.innerHTML="";
+  Object.keys(RENT_PSM[p]).forEach(c=>{
+    const o=document.createElement("option"); o.value=c; o.textContent=c; city.appendChild(o);
+  });
+}
+
+function resetForm(){
+  document.getElementById("bldg").value="";
+  document.getElementById("area").value=25;
+  document.getElementById("age").value=10;
+  document.getElementById("walk").value=8;
+  document.getElementById("floor").value=3;
+  document.getElementById("grade").value=0;
+  document.getElementById("layout").value="1K";
+  document.getElementById("struct").value="rc";
+  document.getElementById("household").value="single";
+  document.getElementById("pref").value="東京都";
+  updateCities();
+  document.getElementById("result").innerHTML='<div class="placeholder">左の物件情報を入力して「算出」ボタンを押してください</div>';
+}
+
+// ===========================================================
+// 計算ロジック
+// ===========================================================
+function compute(){
+  const pref = document.getElementById("pref").value;
+  const city = document.getElementById("city").value;
+  const layout = document.getElementById("layout").value;
+  const area = parseFloat(document.getElementById("area").value)||25;
+  const age = parseInt(document.getElementById("age").value)||10;
+  const struct = document.getElementById("struct").value;
+  const walk = parseInt(document.getElementById("walk").value)||10;
+  const floor = parseInt(document.getElementById("floor").value)||3;
+  const grade = parseInt(document.getElementById("grade").value)||0;
+  const bldg = document.getElementById("bldg").value.trim();
+  const household = document.getElementById("household").value;
+
+  const basePsm = RENT_PSM[pref][city];
+  const fLayout = LAYOUT_FACTOR[layout];
+  const fAge = ageFactor(age);
+  const fStruct = STRUCT_FACTOR[struct];
+  const fWalk = walkFactor(walk);
+  const fFloor = floorFactor(floor);
+  const fGrade = GRADE_FACTOR[grade];
+
+  // 高級ブランド自動検出
+  let brandHit = null;
+  let fBrand = 1.0;
+  if(bldg){
+    for(const b of PREMIUM_KEYWORDS){
+      if(b.kw.some(k=>bldg.includes(k))){
+        brandHit = b;
+        fBrand = b.boost;
+        break;
+      }
+    }
+  }
+
+  // 二重加算ガード：グレード手動指定とブランド自動検出が両方発火したら大きい方のみ採用
+  let dedup = false;
+  let fLuxury = fGrade * fBrand;
+  if(fGrade>1 && fBrand>1){
+    fLuxury = Math.max(fGrade, fBrand);
+    dedup = true;
+  }
+
+  // 月額家賃（円）= 基準㎡単価 × 面積 × 補正係数の積
+  const total = basePsm * area * fLayout * fAge * fStruct * fWalk * fFloor * fLuxury;
+
+  // 想定家賃レンジ（±15%）
+  const rentLow  = Math.round(total*0.85/1000)*1000;
+  const rentMid  = Math.round(total/1000)*1000;
+  const rentHigh = Math.round(total*1.15/1000)*1000;
+
+  // 想定年収レンジ
+  const mult = HOUSEHOLD_INCOME_MULT[household];
+  const incomeLow  = Math.round(rentMid * mult.low  / 10000);   // 万円
+  const incomeMid  = Math.round(rentMid * mult.mid  / 10000);
+  const incomeHigh = Math.round(rentMid * mult.high / 10000);
+
+  // 信頼度判定
+  let trust = "中";
+  let trustClass = "b-mid";
+  let wealthyNote = "";
+  if(grade>=2 || brandHit){ trust="やや低（高級物件は実勢ブレが大きい）"; trustClass="b-high"; }
+  else if(age>30){ trust="やや低（築古は個別差が大きい）"; trustClass="b-high"; }
+  else { trust="中（一般的なファミリー／単身物件）"; trustClass="b-mid"; }
+  if(rentMid >= 500000){
+    wealthyNote = "⚠ 月家賃50万円超の高級物件は、居住者が役員報酬・資産収入・社宅補助等を含む富裕層である可能性が高く、家賃倍率による年収逆算の信頼性は大幅に低下します。年収はあくまで「家賃を支払える最低水準」の参考値としてください。";
+    trust="低（富裕層は資産収入混在で年収逆算困難）"; trustClass="b-high";
+  }
+
+  // 出力
+  const fmtY = n=>"¥"+n.toLocaleString();
+  let html = `
+    <div class="result">
+      <div><span class="pill">想定家賃／月</span><span class="badge ${trustClass}">信頼度：${trust}</span></div>
+      <div class="big">${fmtY(rentLow)} 〜 ${fmtY(rentHigh)}</div>
+      <div class="hint">中央値：${fmtY(rentMid)}／月（±15%レンジ）</div>
+
+      <div style="margin-top:16px"><span class="pill">想定年収（${household==='single'?'本人':'世帯'}）</span></div>
+      <div class="big">${incomeLow} 〜 ${incomeHigh} 万円</div>
+      <div class="hint">中央値：約 ${incomeMid} 万円　／　家賃の年${mult.low}〜${mult.high}倍を採用（家賃は手取り月収の25〜33%が一般的）</div>
+
+      <details open style="margin-top:14px">
+        <summary>算出内訳（クリックで開閉）</summary>
+        <table>
+          <tr><th>エリア</th><td>${pref} ${city}</td></tr>
+          <tr><th>基準㎡単価</th><td class="num">${fmtY(basePsm)}/㎡・月</td></tr>
+          <tr><th>専有面積</th><td class="num">${area} ㎡</td></tr>
+          <tr><th>間取り補正</th><td class="num">×${fLayout.toFixed(2)} （${layout}）</td></tr>
+          <tr><th>築年数補正</th><td class="num">×${fAge.toFixed(2)} （${age}年）</td></tr>
+          <tr><th>構造補正</th><td class="num">×${fStruct.toFixed(2)} （${({wood:"木造",steel:"鉄骨",rc:"RC",src:"SRC"})[struct]}）</td></tr>
+          <tr><th>駅徒歩補正</th><td class="num">×${fWalk.toFixed(2)} （${walk}分）</td></tr>
+          <tr><th>所在階補正</th><td class="num">×${fFloor.toFixed(2)} （${floor}階）</td></tr>
+          <tr><th>グレード補正</th><td class="num">×${fGrade.toFixed(2)}</td></tr>
+          <tr><th>ブランド自動検出</th><td>${brandHit?`×${fBrand.toFixed(2)}（${brandHit.name}）`:'なし'}</td></tr>
+          <tr><th>高級補正（最終採用）</th><td class="num">×${fLuxury.toFixed(2)}${dedup?' <span style="color:#c87f00;font-size:11px">※二重加算ガード適用（大きい方のみ採用）</span>':''}</td></tr>
+          <tr><th>計算結果（中央値）</th><td class="num"><b>${fmtY(rentMid)}/月</b></td></tr>
+        </table>
+      </details>
+      ${wealthyNote?`<div class="notice" style="margin-top:12px">${wealthyNote}</div>`:''}
+
+      <details>
+        <summary>BG調査メモ用テンプレ（コピペ用）</summary>
+        <textarea readonly rows="9" style="margin-top:8px;font-size:12px;font-family:Consolas,monospace">【住居推定】
+所在地：${pref} ${city}
+物件：${bldg || "(未入力)"}　${layout} / ${area}㎡ / 築${age}年 / ${({wood:"木造",steel:"鉄骨",rc:"RC",src:"SRC"})[struct]} / ${floor}階 / 駅徒歩${walk}分
+${brandHit?`ブランド推定：${brandHit.name}`:""}
+推定家賃：${fmtY(rentLow)}〜${fmtY(rentHigh)}/月（中央値 ${fmtY(rentMid)}）
+推定${household==='single'?'本人':'世帯'}年収：${incomeLow}〜${incomeHigh}万円（中央値 約${incomeMid}万円）
+※ 公開家賃相場（SUUMO/LIFULL HOME'S/at home）と国交省 不動産取引価格情報をベースに算定
+※ 信頼度：${trust}</textarea>
+        <button class="btn-sub" onclick="copyMemo(this)">クリップボードにコピー</button>
+      </details>
+
+      <div class="sources">
+        <b>算出根拠の出典：</b><br>
+        ・<a href="https://suumo.jp/jj/chintai/soba/" target="_blank" rel="noopener">SUUMO 家賃相場（駅・エリア別）</a><br>
+        ・<a href="https://www.homes.co.jp/chintai/price/" target="_blank" rel="noopener">LIFULL HOME'S 家賃相場</a><br>
+        ・<a href="https://www.athome.co.jp/chintai/soba/" target="_blank" rel="noopener">at home 家賃相場</a><br>
+        ・<a href="https://www.land.mlit.go.jp/webland/" target="_blank" rel="noopener">国土交通省 不動産取引価格情報検索</a><br>
+        ・<a href="https://www.reins.or.jp/" target="_blank" rel="noopener">REINS（不動産流通標準情報システム）</a><br>
+        年収逆算：家賃は手取り月収の25-33%（家賃年36-48倍）— 全国賃貸管理ビジネス協会／不動産流通推進センター 等の一般指標
+      </div>
+    </div>`;
+  document.getElementById("result").innerHTML = html;
+}
+
+function copyMemo(btn){
+  const ta = btn.parentElement.querySelector("textarea");
+  ta.select();
+  try{
+    navigator.clipboard.writeText(ta.value).then(()=>{
+      btn.textContent="コピーしました ✓";
+      setTimeout(()=>btn.textContent="クリップボードにコピー",1500);
+    }).catch(()=>fallback());
+  }catch(e){ fallback(); }
+  function fallback(){
+    document.execCommand("copy");
+    btn.textContent="コピーしました ✓";
+    setTimeout(()=>btn.textContent="クリップボードにコピー",1500);
+  }
+}
+
+initSelects();
+</script>
+</body>
+</html>

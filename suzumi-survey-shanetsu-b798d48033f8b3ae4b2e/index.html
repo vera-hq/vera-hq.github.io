@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>遮熱テント体感アンケート</title>
+<style>
+  :root {
+    --main: #d9480f;
+    --main-light: #ffe8d9;
+    --border: #d0d0d0;
+    --text: #222;
+    --bg: #f7f5f2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 0 0 60px;
+  }
+  header {
+    background: var(--main);
+    color: #fff;
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  header h1 { font-size: 18px; margin: 0 0 4px; }
+  header .counter { font-size: 13px; opacity: 0.9; }
+  main { max-width: 640px; margin: 0 auto; padding: 16px; }
+  section.card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  section.card h2 {
+    font-size: 15px;
+    margin: 0 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--main-light);
+    color: var(--main);
+  }
+  section.card.tent-shading h2 { color: #c0392b; border-bottom-color: #f6d5cf; }
+  section.card.tent-normal h2 { color: #2266aa; border-bottom-color: #d5e6f6; }
+  .q { margin-bottom: 18px; }
+  .q:last-child { margin-bottom: 0; }
+  .q label.qtitle {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  .q .hint { font-weight: normal; font-size: 12px; color: #777; margin-left: 4px; }
+  select, input[type=text], input[type=number], input[type=date], textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+  }
+  textarea { min-height: 60px; resize: vertical; }
+  .scale {
+    display: flex;
+    gap: 6px;
+  }
+  .scale label {
+    flex: 1;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 2px;
+    font-size: 12px;
+    cursor: pointer;
+    user-select: none;
+    background: #fff;
+  }
+  .scale input { display: none; }
+  .scale input:checked + span {
+    display: block;
+  }
+  .scale label:has(input:checked) {
+    background: var(--main);
+    color: #fff;
+    border-color: var(--main);
+    font-weight: bold;
+  }
+  .scale-caption {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #888;
+    margin-top: 4px;
+  }
+  .choice-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .choice-row label {
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    background: #fff;
+  }
+  .choice-row input { display: none; }
+  .choice-row label:has(input:checked) {
+    background: var(--main);
+    color: #fff;
+    border-color: var(--main);
+    font-weight: bold;
+  }
+  .required::after {
+    content: " *";
+    color: #d9480f;
+  }
+  .btn-row {
+    position: sticky;
+    bottom: 0;
+    background: linear-gradient(to top, var(--bg) 70%, transparent);
+    padding: 14px 0 0;
+    display: flex;
+    gap: 10px;
+  }
+  button {
+    font-size: 16px;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    flex: 1;
+  }
+  #submitBtn { background: var(--main); color: #fff; font-weight: bold; }
+  #submitBtn:disabled { background: #ccc; }
+  .tool-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .tool-row button {
+    background: #fff;
+    border: 1px solid var(--border);
+    color: #555;
+    font-size: 13px;
+    padding: 10px;
+  }
+  #toast {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-40px);
+    background: #2c974b;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    opacity: 0;
+    transition: all 0.25s ease;
+    z-index: 100;
+    white-space: nowrap;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .error-msg {
+    color: #d9480f;
+    font-size: 12px;
+    margin-top: 6px;
+    display: none;
+  }
+  #browserWarning {
+    display: none;
+    background: #fff3cd;
+    color: #7a5b00;
+    font-size: 13px;
+    padding: 12px 16px;
+    border-bottom: 2px solid #ffe08a;
+  }
+</style>
+</head>
+<body>
+
+<div id="browserWarning">
+  ⚠ LINEやGmailなどのアプリ内ブラウザで開いている可能性があります。回答が正しく保存されないことがあるため、共有メニューなどから<strong>Safari／Chromeで直接開き直して</strong>ご利用ください。
+</div>
+
+<header>
+  <h1>遮熱テント体感アンケート</h1>
+  <div class="counter">これまでの回答件数: <span id="countDisplay">0</span> 件</div>
+</header>
+
+<div id="toast"></div>
+
+<main>
+<form id="surveyForm">
+
+  <section class="card">
+    <h2>実施情報</h2>
+    <div class="q">
+      <label class="qtitle required">学校名</label>
+      <input type="text" id="school" placeholder="例：〇〇高校 サッカー部">
+    </div>
+    <div class="q">
+      <label class="qtitle required">競技種目</label>
+      <input type="text" id="sport" placeholder="例：サッカー">
+    </div>
+    <div class="q">
+      <label class="qtitle required">実施日</label>
+      <input type="date" id="date">
+    </div>
+    <div class="q">
+      <label class="qtitle required">天候</label>
+      <div class="choice-row" data-name="weather">
+        <label><input type="radio" name="weather" value="晴れ"><span>晴れ</span></label>
+        <label><input type="radio" name="weather" value="曇り"><span>曇り</span></label>
+        <label><input type="radio" name="weather" value="雨"><span>雨</span></label>
+        <label><input type="radio" name="weather" value="その他"><span>その他</span></label>
+      </div>
+    </div>
+    <div class="q">
+      <label class="qtitle">気温（℃）<span class="hint">任意・わかれば</span></label>
+      <input type="number" id="temperature" placeholder="例：32">
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>回答者情報</h2>
+    <div class="q">
+      <label class="qtitle required">学年</label>
+      <div class="choice-row" data-name="grade">
+        <label><input type="radio" name="grade" value="高校1年"><span>高校1年</span></label>
+        <label><input type="radio" name="grade" value="高校2年"><span>高校2年</span></label>
+        <label><input type="radio" name="grade" value="高校3年"><span>高校3年</span></label>
+        <label><input type="radio" name="grade" value="大学1年"><span>大学1年</span></label>
+        <label><input type="radio" name="grade" value="大学2年"><span>大学2年</span></label>
+        <label><input type="radio" name="grade" value="大学3年"><span>大学3年</span></label>
+        <label><input type="radio" name="grade" value="大学4年"><span>大学4年</span></label>
+      </div>
+    </div>
+    <div class="q">
+      <label class="qtitle required">性別</label>
+      <div class="choice-row" data-name="gender">
+        <label><input type="radio" name="gender" value="男性"><span>男性</span></label>
+        <label><input type="radio" name="gender" value="女性"><span>女性</span></label>
+        <label><input type="radio" name="gender" value="回答しない"><span>回答しない</span></label>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>体感順序</h2>
+    <div class="q">
+      <label class="qtitle required">どちらを先に体感しましたか</label>
+      <div class="choice-row" data-name="order">
+        <label><input type="radio" name="order" value="遮熱テントが先"><span>遮熱テントが先</span></label>
+        <label><input type="radio" name="order" value="一般テントが先"><span>一般テントが先</span></label>
+      </div>
+    </div>
+  </section>
+
+  <section class="card tent-shading">
+    <h2>①遮熱テントの評価</h2>
+    <div class="q">
+      <label class="qtitle required">涼しさ・体感温度</label>
+      <div class="scale" data-name="shading_coolness">
+        <label><input type="radio" name="shading_coolness" value="1"><span>1</span></label>
+        <label><input type="radio" name="shading_coolness" value="2"><span>2</span></label>
+        <label><input type="radio" name="shading_coolness" value="3"><span>3</span></label>
+        <label><input type="radio" name="shading_coolness" value="4"><span>4</span></label>
+        <label><input type="radio" name="shading_coolness" value="5"><span>5</span></label>
+      </div>
+      <div class="scale-caption"><span>暑い</span><span>涼しい</span></div>
+    </div>
+    <div class="q">
+      <label class="qtitle required">快適さ（ムレ感・風通し）</label>
+      <div class="scale" data-name="shading_comfort">
+        <label><input type="radio" name="shading_comfort" value="1"><span>1</span></label>
+        <label><input type="radio" name="shading_comfort" value="2"><span>2</span></label>
+        <label><input type="radio" name="shading_comfort" value="3"><span>3</span></label>
+        <label><input type="radio" name="shading_comfort" value="4"><span>4</span></label>
+        <label><input type="radio" name="shading_comfort" value="5"><span>5</span></label>
+      </div>
+      <div class="scale-caption"><span>不快</span><span>快適</span></div>
+    </div>
+    <div class="q">
+      <label class="qtitle required">直射日光の遮り具合</label>
+      <div class="scale" data-name="shading_shade">
+        <label><input type="radio" name="shading_shade" value="1"><span>1</span></label>
+        <label><input type="radio" name="shading_shade" value="2"><span>2</span></label>
+        <label><input type="radio" name="shading_shade" value="3"><span>3</span></label>
+        <label><input type="radio" name="shading_shade" value="4"><span>4</span></label>
+        <label><input type="radio" name="shading_shade" value="5"><span>5</span></label>
+      </div>
+      <div class="scale-caption"><span>遮れていない</span><span>よく遮れている</span></div>
+    </div>
+    <div class="q">
+      <label class="qtitle required">見た目・圧迫感の少なさ</label>
+      <div class="scale" data-name="shading_appearance">
+        <label><input type="radio" name="shading_appearance" value="1"><span>1</span></label>
+        <label><input type="radio" name="shading_appearance" value="2"><span>2</span></label>
+        <label><input type="radio" name="shading_appearance" value="3"><span>3</span></label>
+        <label><input type="radio" name="shading_appearance" value="4"><span>4</span></label>
+        <label><input type="radio" name="shading_appearance" value="5"><span>5</span></label>
+      </div>
+      <div class="scale-caption"><span>圧迫感がある</span><span>圧迫感がない</span></div>
+    </div>
+  </section>
+
+  <section class="card tent-normal">
+    <h2>②一般テントの評価</h2>
+    <div class="q">
+      <label class="qtitle required">涼しさ・体感温度</label>
+      <div class="scale" data-name="normal_coolness">
+        <label><input type="radio" name="normal_coolness" value="1"><span>1</span></label>
+        <label><input type="radio" name="normal_coolness" value="2"><span>2</span></label>
+        <label><input type="radio" name="normal_coolness" value="3"><span>3</span></label>
+        <label><input type="radio" name="normal_coolness" value="4"><span>4</span></label>
+        <label><input type="radio" name="normal_coolness" value="5"><span>5</span></label>
+      </div>
+      <div class="scale-caption"><span>暑い</span><span>涼しい</span></div>
+    </div>
+    <div class="q">
+      <label class="qtitle required">快適さ（ムレ感・風通し）</label>
+      <div class="scale" data-name="normal_comfort">
+        <label><input type="radio" name="normal_comfort" value="1"><span>1</span></label>
+        <label><input type="radio" name="normal_comfort" value="2"><span>2</span></label>
+        <label><input type="radio" name="normal_comfort" value="3"><span>3</span></label>
+        <label><input type="radio" name="normal_comfort" value="4"><span>4</span></label>
+        <label><input type="radio" name="normal_comfort" value="5"><span>5</span></label>
+      </div>
+      <div class="scale-caption"><span>不快</span><span>快適</span></div>
+    </div>
+    <div class="q">
+      <label class="qtitle required">直射日光の遮り具合</label>
+      <div class="scale" data-name="normal_shade">
+        <label><input type="radio" name="normal_shade" value="1"><span>1</span></label>
+        <label><input type="radio" name="normal_shade" value="2"><span>2</span></label>
+        <label><input type="radio" name="normal_shade" value="3"><span>3</span></label>
+        <label><input type="radio" name="normal_shade" value="4"><span>4</span></label>
+        <label><input type="radio" name="normal_shade" value="5"><span>5</span></label>
+      </div>
+      <div class="scale-caption"><span>遮れていない</span><span>よく遮れている</span></div>
+    </div>
+    <div class="q">
+      <label class="qtitle required">見た目・圧迫感の少なさ</label>
+      <div class="scale" data-name="normal_appearance">
+        <label><input type="radio" name="normal_appearance" value="1"><span>1</span></label>
+        <label><input type="radio" name="normal_appearance" value="2"><span>2</span></label>
+        <label><input type="radio" name="normal_appearance" value="3"><span>3</span></label>
+        <label><input type="radio" name="normal_appearance" value="4"><span>4</span></label>
+        <label><input type="radio" name="normal_appearance" value="5"><span>5</span></label>
+      </div>
+      <div class="scale-caption"><span>圧迫感がある</span><span>圧迫感がない</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>総合比較・意向</h2>
+    <div class="q">
+      <label class="qtitle required">総合的にどちらが良かったですか</label>
+      <div class="choice-row" data-name="overall_pref">
+        <label><input type="radio" name="overall_pref" value="遮熱テント"><span>遮熱テント</span></label>
+        <label><input type="radio" name="overall_pref" value="一般テント"><span>一般テント</span></label>
+        <label><input type="radio" name="overall_pref" value="どちらも同じ"><span>どちらも同じ</span></label>
+      </div>
+    </div>
+    <div class="q">
+      <label class="qtitle">その理由<span class="hint">任意</span></label>
+      <textarea id="overall_reason" placeholder="回答者のコメントを入力"></textarea>
+    </div>
+    <div class="q">
+      <label class="qtitle required">遮熱テントへの総合満足度</label>
+      <div class="scale" data-name="satisfaction">
+        <label><input type="radio" name="satisfaction" value="1"><span>1</span></label>
+        <label><input type="radio" name="satisfaction" value="2"><span>2</span></label>
+        <label><input type="radio" name="satisfaction" value="3"><span>3</span></label>
+        <label><input type="radio" name="satisfaction" value="4"><span>4</span></label>
+        <label><input type="radio" name="satisfaction" value="5"><span>5</span></label>
+      </div>
+      <div class="scale-caption"><span>不満</span><span>満足</span></div>
+    </div>
+    <div class="q">
+      <label class="qtitle">改善してほしい点<span class="hint">任意</span></label>
+      <textarea id="improvement" placeholder="回答者のコメントを入力"></textarea>
+    </div>
+    <div class="q">
+      <label class="qtitle required">今後の継続利用意向</label>
+      <div class="scale" data-name="intent_use">
+        <label><input type="radio" name="intent_use" value="1"><span>1</span></label>
+        <label><input type="radio" name="intent_use" value="2"><span>2</span></label>
+        <label><input type="radio" name="intent_use" value="3"><span>3</span></label>
+        <label><input type="radio" name="intent_use" value="4"><span>4</span></label>
+        <label><input type="radio" name="intent_use" value="5"><span>5</span></label>
+      </div>
+      <div class="scale-caption"><span>使いたくない</span><span>使いたい</span></div>
+    </div>
+    <div class="q">
+      <label class="qtitle required">購入・導入意向（部・チームとして）</label>
+      <div class="scale" data-name="intent_purchase">
+        <label><input type="radio" name="intent_purchase" value="1"><span>1</span></label>
+        <label><input type="radio" name="intent_purchase" value="2"><span>2</span></label>
+        <label><input type="radio" name="intent_purchase" value="3"><span>3</span></label>
+        <label><input type="radio" name="intent_purchase" value="4"><span>4</span></label>
+        <label><input type="radio" name="intent_purchase" value="5"><span>5</span></label>
+      </div>
+      <div class="scale-caption"><span>興味ない</span><span>ぜひ欲しい</span></div>
+    </div>
+  </section>
+
+  <div class="error-msg" id="errorMsg">未回答の必須項目があります。上に戻って確認してください。</div>
+
+  <div class="btn-row">
+    <button type="submit" id="submitBtn">回答を保存して次の人へ</button>
+  </div>
+  <div class="tool-row">
+    <button type="button" id="exportBtn">CSVダウンロード</button>
+    <button type="button" id="clearBtn">全データ消去</button>
+  </div>
+</form>
+</main>
+
+<script>
+const STORAGE_KEY = 'shading_tent_survey_responses';
+
+const fieldsText = ['school', 'sport', 'date', 'temperature', 'overall_reason', 'improvement'];
+const fieldsChoice = ['weather', 'grade', 'gender', 'order', 'overall_pref'];
+const fieldsScale = [
+  'shading_coolness', 'shading_comfort', 'shading_shade', 'shading_appearance',
+  'normal_coolness', 'normal_comfort', 'normal_shade', 'normal_appearance',
+  'satisfaction', 'intent_use', 'intent_purchase'
+];
+const requiredFields = [
+  'school', 'sport', 'date', 'weather', 'grade', 'gender', 'order',
+  'shading_coolness', 'shading_comfort', 'shading_shade', 'shading_appearance',
+  'normal_coolness', 'normal_comfort', 'normal_shade', 'normal_appearance',
+  'overall_pref', 'satisfaction', 'intent_use', 'intent_purchase'
+];
+
+const form = document.getElementById('surveyForm');
+const dateInput = document.getElementById('date');
+const countDisplay = document.getElementById('countDisplay');
+const errorMsg = document.getElementById('errorMsg');
+
+function today() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+dateInput.value = today();
+
+function isInAppBrowser() {
+  const ua = navigator.userAgent || '';
+  return /Line\//i.test(ua) || /FBAN|FBAV/i.test(ua) || /Instagram/i.test(ua) ||
+         /GSA\//i.test(ua) || /wv\)/i.test(ua) || /MicroMessenger/i.test(ua);
+}
+
+function checkStorageAvailable() {
+  try {
+    const testKey = '__storage_test__';
+    localStorage.setItem(testKey, '1');
+    localStorage.removeItem(testKey);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+if (isInAppBrowser() || !checkStorageAvailable()) {
+  document.getElementById('browserWarning').style.display = 'block';
+}
+
+function loadResponses() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+function saveResponses(list) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+function refreshCount() {
+  countDisplay.textContent = loadResponses().length;
+}
+refreshCount();
+
+function getChoiceValue(name) {
+  const el = form.querySelector('input[name="' + name + '"]:checked');
+  return el ? el.value : '';
+}
+
+function collectData() {
+  const data = { timestamp: new Date().toISOString() };
+  fieldsText.forEach(id => { data[id] = document.getElementById(id).value.trim(); });
+  fieldsChoice.concat(fieldsScale).forEach(name => { data[name] = getChoiceValue(name); });
+  return data;
+}
+
+function validate(data) {
+  return requiredFields.every(f => data[f] !== '' && data[f] !== undefined);
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 1800);
+}
+
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const data = collectData();
+  if (!validate(data)) {
+    errorMsg.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+  errorMsg.style.display = 'none';
+  const list = loadResponses();
+  list.push(data);
+  try {
+    saveResponses(list);
+  } catch (err) {
+    alert('回答の保存に失敗しました。このブラウザ（アプリ内ブラウザ等）では保存できない可能性があります。Safari／Chromeで直接開き直してから再度お試しください。');
+    return;
+  }
+  refreshCount();
+  showToast('回答を保存しました（合計 ' + list.length + ' 件）');
+  const keepSchool = data.school;
+  const keepSport = data.sport;
+  form.reset();
+  dateInput.value = today();
+  document.getElementById('school').value = keepSchool;
+  document.getElementById('sport').value = keepSport;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+document.getElementById('exportBtn').addEventListener('click', function() {
+  const list = loadResponses();
+  if (list.length === 0) {
+    showToast('保存されたデータがありません');
+    return;
+  }
+  const headers = ['timestamp'].concat(fieldsText, fieldsChoice, fieldsScale);
+  const rows = [headers.join(',')];
+  list.forEach(item => {
+    const row = headers.map(h => {
+      const v = (item[h] !== undefined ? String(item[h]) : '');
+      return '"' + v.replace(/"/g, '""') + '"';
+    });
+    rows.push(row.join(','));
+  });
+  const csv = '﻿' + rows.join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'survey_responses_' + today() + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('clearBtn').addEventListener('click', function() {
+  if (confirm('保存済みの全回答データを消去します。よろしいですか？（CSV出力していない場合は失われます）')) {
+    localStorage.removeItem(STORAGE_KEY);
+    refreshCount();
+    showToast('データを消去しました');
+  }
+});
+</script>
+
+</body>
+</html>

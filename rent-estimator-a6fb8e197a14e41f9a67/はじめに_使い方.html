@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="googlebot" content="noindex,nofollow,noarchive,nosnippet">
+<title>はじめに ─ 想定家賃推定ツール 使い方</title>
+<style>
+  body{font-family:"Segoe UI","Hiragino Sans","Yu Gothic UI",sans-serif;max-width:780px;margin:30px auto;padding:0 20px;color:#1a1f2c;line-height:1.75;background:#fafbfd}
+  h1{color:#0f3da3;border-left:6px solid #2a6df4;padding-left:12px}
+  h2{color:#1a3a8a;border-bottom:2px solid #e3e6ec;padding-bottom:6px;margin-top:32px}
+  .card{background:#fff;border:1px solid #e3e6ec;border-radius:12px;padding:18px 24px;margin:14px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .step{display:flex;gap:14px;margin:14px 0;align-items:flex-start}
+  .num{flex:0 0 36px;height:36px;background:#2a6df4;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
+  .step-body{flex:1}
+  .note{background:#fffbe6;border:1px solid #ffd966;color:#7a5b00;padding:10px 14px;border-radius:8px;font-size:14px;margin:12px 0}
+  .ok{background:#e8f5ec;border:1px solid #a8d8b9;color:#0a8a4a;padding:10px 14px;border-radius:8px;font-size:14px;margin:12px 0}
+  code{background:#f1f3f7;padding:2px 6px;border-radius:4px;font-size:13px}
+  .btn{display:inline-block;background:#2a6df4;color:#fff;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:10px}
+  .btn:hover{background:#0f3da3}
+  table{border-collapse:collapse;width:100%;margin:10px 0;font-size:14px}
+  th,td{border:1px solid #e3e6ec;padding:8px 10px;text-align:left}
+  th{background:#eef2ff;color:#0f3da3}
+</style>
+</head>
+<body>
+
+<h1>想定家賃推定ツール ─ 使い方ガイド</h1>
+<p>このツールは、バッググラウンドチェックで対象者の住居情報から<b>想定家賃</b>と<b>想定年収レンジ</b>を推定するものです。</p>
+
+<div class="ok">
+✅ <b>このフォルダだけあれば動きます。</b>インターネット接続も不要、ソフトのインストールも不要です。
+</div>
+
+<h2>📂 フォルダの中身</h2>
+<table>
+  <tr><th>ファイル名</th><th>内容</th></tr>
+  <tr><td><b>想定家賃推定ツール.html</b></td><td>本体（これをダブルクリック）</td></tr>
+  <tr><td>はじめに_使い方.html</td><td>このページ</td></tr>
+</table>
+
+<h2>🚀 使い方（3ステップ）</h2>
+
+<div class="card">
+  <div class="step">
+    <div class="num">1</div>
+    <div class="step-body">
+      <b>「想定家賃推定ツール.html」をダブルクリック</b><br>
+      ブラウザ（Chrome / Edge 推奨）で自動的に開きます。
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="num">2</div>
+    <div class="step-body">
+      <b>物件情報を入力</b><br>
+      左のフォームに、対象者が住んでいるマンション情報を入力します：
+      <ul>
+        <li>都道府県 → 市区町村（プルダウン選択）</li>
+        <li>マンション名（任意・高級ブランドは自動検出されます）</li>
+        <li>間取り（1K〜5LDK+）／専有面積（㎡）／築年数</li>
+        <li>構造（木造/鉄骨/RC/SRC）／駅徒歩（分）／所在階</li>
+        <li>高級グレード（必要に応じて）／世帯人数</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="num">3</div>
+    <div class="step-body">
+      <b>「想定家賃・想定年収を算出」ボタンを押す</b><br>
+      右側に結果が表示されます：
+      <ul>
+        <li>想定家賃レンジ（月額）</li>
+        <li>想定年収レンジ（万円）</li>
+        <li>算出内訳（補正係数の内訳テーブル）</li>
+        <li>BG調査メモ用テンプレ（コピペして報告書に貼り付け可能）</li>
+        <li>算出根拠の出典リンク（SUUMO・国交省など）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h2>💡 入力のコツ</h2>
+
+<div class="card">
+<h3 style="margin-top:0">📍 マンション名がわかる場合</h3>
+<p>マンション名欄に正式名称を入れると、以下のブランドが自動で高級補正されます（手動で高級グレードを選ぶ必要なし）：</p>
+<ul>
+  <li>パークコート/パークマンション/パークタワー（三井系）</li>
+  <li>ザ・パークハウス（三菱系）</li>
+  <li>プラウドタワー/プラウド（野村系）</li>
+  <li>ブリリアタワー（東京建物系）</li>
+  <li>グランドメゾン（積水ハウス系）</li>
+  <li>シティタワー/シティハウス（住友系）</li>
+  <li>麻布台ヒルズ／虎ノ門ヒルズ／六本木ヒルズ／ミッドタウン</li>
+</ul>
+
+<h3>📐 専有面積がわからない場合（目安）</h3>
+<table>
+  <tr><th>間取り</th><th>専有面積の目安</th></tr>
+  <tr><td>1R / 1K</td><td>18〜25㎡</td></tr>
+  <tr><td>1DK / 1LDK</td><td>30〜45㎡</td></tr>
+  <tr><td>2LDK</td><td>50〜65㎡</td></tr>
+  <tr><td>3LDK</td><td>65〜85㎡</td></tr>
+  <tr><td>4LDK</td><td>85〜110㎡</td></tr>
+</table>
+
+<h3>🚉 駅徒歩がわからない場合</h3>
+<p>Googleマップで住所→最寄り駅までの徒歩時間を調べて入力してください（不明なら<b>10分</b>を入力で標準扱い）。</p>
+</div>
+
+<h2>⚠️ 注意事項</h2>
+
+<div class="note">
+<b>このツールはあくまで「推定」です。</b>以下の場合は信頼度が下がります：
+<ul>
+  <li>家賃50万円超の高級物件（資産収入・役員報酬・社宅補助等が混在する可能性）</li>
+  <li>築30年以上の物件（個別差が大きい）</li>
+  <li>マンション名が特殊で公開相場が取りにくい物件</li>
+</ul>
+このツール単体で判断せず、他の調査資料と併せて活用してください。
+</div>
+
+<h2>📊 算出の仕組み（簡単に）</h2>
+<div class="card">
+<p>地域ごとの<b>1㎡あたり月家賃の相場</b>（SUUMO・LIFULL HOME'S・国交省データに基づく）を基準に、以下の補正係数を掛け合わせて算出します：</p>
+<ol>
+  <li>基準㎡単価（130市区エリア）× 専有面積</li>
+  <li>× 間取り補正（1Rほど㎡単価は高い）</li>
+  <li>× 築年数補正（新築〜築40年で 1.10〜0.62）</li>
+  <li>× 構造補正（木造0.85 / RC 1.10 / SRC 1.15）</li>
+  <li>× 駅徒歩補正（3分1.12 〜 20分超0.78）</li>
+  <li>× 所在階補正（1階0.93 〜 タワー高層1.15）</li>
+  <li>× 高級グレード or ブランド補正（大きい方のみ採用）</li>
+</ol>
+<p>そこから想定年収を「家賃の年36〜48倍」で逆算します（家賃は手取り月収の25〜33%が一般的）。</p>
+</div>
+
+<p style="margin-top:30px"><a class="btn" href="想定家賃推定ツール.html">▶ ツールを開く</a></p>
+
+<hr style="margin-top:40px;border:none;border-top:1px solid #e3e6ec">
+<p style="color:#888;font-size:12px;text-align:center">
+© Background Check Helper / 公開家賃相場（SUUMO・LIFULL HOME'S・at home・国交省 不動産取引価格情報）を参考に内蔵<br>
+本ツールは参考推計であり、最終判断は他の調査資料と併せて行ってください。
+</p>
+
+</body>
+</html>
