@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:">
+<meta name="robots" content="noindex, nofollow">
+<title>スタメン案づくり</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif; background: #f3f5f8; color: #1d2a3a; }
+  main { max-width: 480px; margin: 0 auto; padding: 16px 14px 48px; }
+  h1 { margin: 4px 0 6px; font-size: 24px; color: #1d3557; }
+  h2 { margin: 22px 0 8px; font-size: 18px; color: #1d3557; }
+  .lead { margin: 0 0 14px; font-size: 15px; line-height: 1.6; }
+  label.coach { display: block; font-size: 15px; font-weight: 700; margin-bottom: 14px; }
+  input, select, textarea { font-size: 16px; font-family: inherit; }
+  input#coach { display: block; width: 100%; height: 46px; margin-top: 6px; padding: 0 12px; border: 2px solid #c9d2de; border-radius: 10px; background: #fff; }
+  .row { display: grid; grid-template-columns: 48px 1fr 1fr; gap: 6px; align-items: center; background: #fff; border: 2px solid #e1e6ee; border-radius: 12px; padding: 6px; margin-bottom: 6px; }
+  .row.bad { border-color: #d62839; background: #fff3f4; }
+  .no { font-weight: 900; font-size: 18px; text-align: center; color: #1d3557; }
+  .row select { width: 100%; height: 46px; padding: 0 6px; border: 1px solid #c9d2de; border-radius: 8px; background: #fff; color: #1d2a3a; }
+  #status { margin: 10px 0 0; padding: 10px 12px; border-radius: 10px; font-size: 15px; line-height: 1.6; }
+  #status.ok { background: #e4f4f1; color: #1d6b61; font-weight: 700; }
+  #status.ng { background: #fff3f4; color: #a51d2d; }
+  #bench { margin: 8px 2px 0; font-size: 15px; }
+  pre#preview { white-space: pre-wrap; background: #fff; border: 1px solid #d5dce6; border-radius: 10px; padding: 12px; font-size: 15px; line-height: 1.7; margin: 0 0 10px; font-family: inherit; }
+  .btn { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 52px; border: 0; border-radius: 12px; font-size: 17px; font-weight: 700; text-decoration: none; margin-bottom: 8px; cursor: pointer; font-family: inherit; }
+  .line { background: #06c755; color: #fff; }
+  .sub { background: #1d3557; color: #fff; }
+  .plain { background: #fff; color: #1d3557; border: 2px solid #c9d2de; }
+  #toast { min-height: 22px; text-align: center; font-size: 15px; color: #1d6b61; font-weight: 700; margin-bottom: 6px; }
+  details { margin-top: 22px; background: #fff; border: 1px solid #d5dce6; border-radius: 12px; padding: 10px 12px; }
+  summary { font-size: 16px; font-weight: 700; color: #1d3557; min-height: 32px; display: flex; align-items: center; cursor: pointer; }
+  details p { font-size: 14px; line-height: 1.6; margin: 8px 0; }
+  textarea#roster { width: 100%; height: 260px; border: 1px solid #c9d2de; border-radius: 8px; padding: 10px; line-height: 1.6; }
+  .empty { background: #fff7e8; border: 1px solid #f4a261; border-radius: 10px; padding: 10px 12px; font-size: 15px; line-height: 1.6; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>スタメン案づくり</h1>
+  <p class="lead">打順ごとに「選手」と「守備」を選んでください。できたら下の「LINEで送る」で、みんなに届きます。</p>
+
+  <div id="emptyNote" class="empty" hidden>選手の名簿がまだありません。いちばん下の「選手の名前を直す」に入れてください。</div>
+
+  <label class="coach">あなたの名前
+    <input id="coach" type="text" placeholder="例：森岡" autocomplete="off">
+  </label>
+
+  <div id="rows"></div>
+  <div id="status"></div>
+  <div id="bench"></div>
+
+  <h2>送る文</h2>
+  <pre id="preview"></pre>
+  <div id="toast"></div>
+  <a id="lineBtn" class="btn line" href="#">LINEで送る</a>
+  <button id="copyBtn" class="btn sub" type="button">文をコピー</button>
+  <button id="resetBtn" class="btn plain" type="button">はじめからやり直す</button>
+
+  <details id="rosterBox">
+    <summary>選手の名前を直す</summary>
+    <p>1行に1人、「名前 背番号」の形で入れてください。</p>
+    <textarea id="roster" spellcheck="false"></textarea>
+    <button id="applyBtn" class="btn sub" type="button">この名簿にする</button>
+    <button id="linkBtn" class="btn plain" type="button">この名簿入りのリンクをコピー</button>
+  </details>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  // 名前はこのファイルに書かない。リンクの # の後ろ（#m=）か、この端末の保存から読む。
+  var DEFAULT_PLAYERS = [];
+  var POS = ['ピッチャー', 'キャッチャー', 'ファースト', 'セカンド', 'サード', 'ショート', 'レフト', 'センター', 'ライト'];
+  var KEY = 'stamen-v1';
+
+  var store = { get: function () { try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { return null; } },
+                set: function (v) { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {} } };
+
+  function parseRosterText(t) {
+    var out = [];
+    String(t).split(/\r?\n/).forEach(function (line) {
+      var s = line.replace(/[０-９]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); }).trim();
+      if (!s) return;
+      var m = s.match(/^(.+?)[\s　.:：、,#＃（(]*(\d{1,3})[)）]?$/);
+      if (m) out.push({ name: m[1].trim(), num: m[2] });
+      else out.push({ name: s, num: '' });
+    });
+    return out.slice(0, 20);
+  }
+  function rosterFromHash() {
+    var m = location.hash.match(/[#&]m=([^&]*)/);
+    if (!m) return null;
+    try {
+      return decodeURIComponent(m[1]).split('~').filter(Boolean).map(function (x) {
+        var i = x.lastIndexOf('.');
+        return i > 0 ? { name: x.slice(0, i), num: x.slice(i + 1) } : { name: x, num: '' };
+      }).slice(0, 20);
+    } catch (e) { return null; }
+  }
+  function rosterToHash(r) {
+    return 'm=' + encodeURIComponent(r.map(function (p) { return p.name + '.' + p.num; }).join('~'));
+  }
+  function key(p) { return p.name + '.' + p.num; }
+  function label(p) { return p.num !== '' ? p.name + '（' + p.num + '）' : p.name; }
+
+  var saved = store.get() || {};
+  var roster = rosterFromHash() || saved.roster || DEFAULT_PLAYERS.slice();
+  var state = { coach: saved.coach || '', rows: [] };
+  for (var i = 0; i < 9; i++) {
+    var r = (saved.rows && saved.rows[i]) || {};
+    state.rows.push({ p: r.p || '', d: r.d || '' });
+  }
+
+  var $ = function (id) { return document.getElementById(id); };
+  var rowsEl = $('rows');
+
+  function save() { store.set({ coach: state.coach, rows: state.rows, roster: roster }); }
+
+  function buildRows() {
+    rowsEl.textContent = '';
+    for (var i = 0; i < 9; i++) {
+      var row = document.createElement('div');
+      row.className = 'row';
+      var no = document.createElement('div');
+      no.className = 'no';
+      no.textContent = (i + 1) + '番';
+      var ps = document.createElement('select');
+      ps.setAttribute('aria-label', (i + 1) + '番の選手');
+      ps.dataset.i = i; ps.className = 'ps';
+      var ds = document.createElement('select');
+      ds.setAttribute('aria-label', (i + 1) + '番の守備');
+      ds.dataset.i = i; ds.className = 'ds';
+      ps.addEventListener('change', function (e) { state.rows[+e.target.dataset.i].p = e.target.value; refresh(); });
+      ds.addEventListener('change', function (e) { state.rows[+e.target.dataset.i].d = e.target.value; refresh(); });
+      row.appendChild(no); row.appendChild(ps); row.appendChild(ds);
+      rowsEl.appendChild(row);
+    }
+  }
+
+  function opt(sel, value, text) {
+    var o = document.createElement('option');
+    o.value = value; o.textContent = text;
+    sel.appendChild(o);
+    return o;
+  }
+
+  function findPlayer(k) {
+    for (var i = 0; i < roster.length; i++) if (key(roster[i]) === k) return roster[i];
+    return null;
+  }
+
+  function refresh() {
+    // 名簿から消えた選手は外す
+    state.rows.forEach(function (r) { if (r.p && !findPlayer(r.p)) r.p = ''; });
+
+    var usedP = {}, usedD = {};
+    state.rows.forEach(function (r, i) {
+      if (r.p) (usedP[r.p] = usedP[r.p] || []).push(i);
+      if (r.d) (usedD[r.d] = usedD[r.d] || []).push(i);
+    });
+
+    var rowEls = rowsEl.children;
+    for (var i = 0; i < 9; i++) {
+      var r = state.rows[i];
+      var ps = rowEls[i].querySelector('.ps');
+      var ds = rowEls[i].querySelector('.ds');
+      ps.textContent = '';
+      opt(ps, '', '選手を選ぶ');
+      roster.forEach(function (p) {
+        var k = key(p), others = (usedP[k] || []).filter(function (j) { return j !== i; });
+        opt(ps, k, label(p) + (others.length ? '（' + (others[0] + 1) + '番）' : ''));
+      });
+      ps.value = r.p;
+      ds.textContent = '';
+      opt(ds, '', '守備を選ぶ');
+      POS.forEach(function (name, n) {
+        var others = (usedD[name] || []).filter(function (j) { return j !== i; });
+        opt(ds, name, (n + 1) + ' ' + name + (others.length ? '（使用中）' : ''));
+      });
+      ds.value = r.d;
+      var bad = (r.p && usedP[r.p].length > 1) || (r.d && usedD[r.d].length > 1);
+      rowEls[i].classList.toggle('bad', !!bad);
+    }
+
+    // そろっているか
+    var msgs = [];
+    Object.keys(usedP).forEach(function (k) { if (usedP[k].length > 1) msgs.push(findPlayer(k).name + 'が' + usedP[k].length + '回入っています'); });
+    Object.keys(usedD).forEach(function (d) { if (usedD[d].length > 1) msgs.push(d + 'が' + usedD[d].length + '人います'); });
+    var emptyP = state.rows.filter(function (r) { return !r.p; }).length;
+    var missingD = POS.filter(function (d) { return !usedD[d]; });
+    if (emptyP) msgs.push('選手がまだ決まっていない打順：' + emptyP + 'つ');
+    if (missingD.length) msgs.push('まだ決まっていない守備：' + missingD.join('・'));
+    var st = $('status');
+    if (msgs.length) { st.className = 'ng'; st.textContent = msgs.join('\n'); st.style.whiteSpace = 'pre-line'; }
+    else { st.className = 'ok'; st.textContent = '9人と守備がそろいました'; }
+
+    // 控え
+    var bench = roster.filter(function (p) { return !usedP[key(p)]; });
+    $('bench').textContent = '控え：' + (bench.length ? bench.map(label).join('、') : 'なし');
+
+    // 送る文
+    var lines = ['【スタメン案】' + (state.coach.trim() ? state.coach.trim() + 'コーチ' : '（名前なし）')];
+    state.rows.forEach(function (r, i) {
+      var p = r.p ? findPlayer(r.p) : null;
+      lines.push((i + 1) + '番 ' + (r.d || '未定') + ' ' + (p ? label(p) : '未定'));
+    });
+    lines.push('控え：' + (bench.length ? bench.map(label).join('、') : 'なし'));
+    var text = lines.join('\n');
+    $('preview').textContent = text;
+    $('lineBtn').href = 'https://line.me/R/share?text=' + encodeURIComponent(text);
+
+    $('emptyNote').hidden = roster.length > 0;
+    save();
+    return text;
+  }
+
+  function toast(s) { var t = $('toast'); t.textContent = s; setTimeout(function () { if (t.textContent === s) t.textContent = ''; }, 2500); }
+
+  function copyText(s, done) {
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = s; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '-1000px';
+      document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, s.length);
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+      toast(ok ? done : 'コピーできませんでした。文を長押ししてコピーしてください');
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(s).then(function () { toast(done); }, fallback);
+    } else fallback();
+  }
+
+  function rosterText() { return roster.map(function (p) { return p.name + ' ' + p.num; }).join('\n'); }
+
+  // つなぐ
+  $('coach').value = state.coach;
+  $('coach').addEventListener('input', function (e) { state.coach = e.target.value; refresh(); });
+  $('copyBtn').addEventListener('click', function () { copyText(refresh(), 'コピーしました'); });
+  $('resetBtn').addEventListener('click', function () {
+    if (!confirm('選んだ打順と守備を、全部消しますか？')) return;
+    state.rows.forEach(function (r) { r.p = ''; r.d = ''; });
+    refresh();
+  });
+  $('roster').value = rosterText();
+  $('applyBtn').addEventListener('click', function () {
+    roster = parseRosterText($('roster').value);
+    $('roster').value = rosterText();
+    if (history.replaceState) history.replaceState(null, '', '#' + rosterToHash(roster));
+    refresh();
+    toast('名簿を変えました');
+  });
+  $('linkBtn').addEventListener('click', function () {
+    var base = location.href.split('#')[0];
+    copyText(base + '#' + rosterToHash(roster), 'リンクをコピーしました');
+  });
+  if (!roster.length) $('rosterBox').open = true;
+  buildRows();
+  refresh();
+})();
+</script>
+</body>
+</html>
